@@ -21,6 +21,7 @@ import SerachPara from 'src/models/BaseModel/SerachPara';
 import { AuthGuard } from 'src/Guard/auth.guard';
 import { Roles } from 'src/decorator/roles.decorator';
 import * as argon2 from 'argon2';
+import { IUserService } from 'src/services/user/IUserService';
 
 @Controller('user')
 @UseGuards(AuthGuard)

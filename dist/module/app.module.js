@@ -20,6 +20,7 @@ const jwt_1 = require("@nestjs/jwt");
 const serve_static_1 = require("@nestjs/serve-static");
 const path_1 = require("path");
 const throttler_1 = require("@nestjs/throttler");
+const carousel_module_1 = require("./carousel/carousel.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer.apply(logger_middleware_1.LoggerMiddleware).forRoutes('*');
@@ -35,6 +36,7 @@ exports.AppModule = AppModule = __decorate([
             user_module_1.UsersModule,
             jwt_1.JwtModule,
             file_module_1.FileModule,
+            carousel_module_1.CarouselModule,
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, '..', '../public'),
                 serveRoot: '/public/',

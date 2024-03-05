@@ -4,6 +4,7 @@ import { userlogin } from './../../models/viewmodel/auth/userlogin';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as argon2 from 'argon2';
 import { JwtService } from '@nestjs/jwt';
+import { IUserService } from '../user/IUserService';
 
 @Injectable()
 export class AuthService {

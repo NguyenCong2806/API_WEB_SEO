@@ -11,6 +11,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { CarouselModule } from './carousel/carousel.module';
 // import { MailModule } from './mail/mail.module';
 
 @Module({
@@ -23,6 +24,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     UsersModule,
     JwtModule,
     FileModule,
+    CarouselModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '../public'),
       serveRoot: '/public/',
