@@ -17,6 +17,11 @@ import { CarouselModule } from './carousel/carousel.module';
 import { AboutModule } from './about/about.module';
 import { ContentModule } from './content/content.module';
 import { ContenttypeModule } from './contenttype/contenttype.module';
+import { CoursesModule } from './courses/courses.module';
+import { ExpertModule } from './expert/expert.module';
+import { FeedbackModule } from './feedback/feedback.module';
+import { PopularModule } from './popular/popular.module';
+import { MediaModule } from './media/media.module';
 // import { MailModule } from './mail/mail.module';
 
 @Module({
@@ -35,6 +40,11 @@ import { ContenttypeModule } from './contenttype/contenttype.module';
     ContactModule,
     ContentModule,
     ContenttypeModule,
+    CoursesModule,
+    ExpertModule,
+    FeedbackModule,
+    PopularModule,
+    MediaModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '../public'),
       serveRoot: '/public/',

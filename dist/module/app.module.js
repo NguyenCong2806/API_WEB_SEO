@@ -26,6 +26,11 @@ const carousel_module_1 = require("./carousel/carousel.module");
 const about_module_1 = require("./about/about.module");
 const content_module_1 = require("./content/content.module");
 const contenttype_module_1 = require("./contenttype/contenttype.module");
+const courses_module_1 = require("./courses/courses.module");
+const expert_module_1 = require("./expert/expert.module");
+const feedback_module_1 = require("./feedback/feedback.module");
+const popular_module_1 = require("./popular/popular.module");
+const media_module_1 = require("./media/media.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer.apply(logger_middleware_1.LoggerMiddleware).forRoutes('*');
@@ -47,6 +52,11 @@ exports.AppModule = AppModule = __decorate([
             contact_module_1.ContactModule,
             content_module_1.ContentModule,
             contenttype_module_1.ContenttypeModule,
+            courses_module_1.CoursesModule,
+            expert_module_1.ExpertModule,
+            feedback_module_1.FeedbackModule,
+            popular_module_1.PopularModule,
+            media_module_1.MediaModule,
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, '..', '../public'),
                 serveRoot: '/public/',
