@@ -7,6 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
+const contact_module_1 = require("./contact/contact.module");
+const card_module_1 = require("./card/card.module");
 const file_module_1 = require("./file/file.module");
 const common_1 = require("@nestjs/common");
 const app_controller_1 = require("../controllers/app.controller");
@@ -21,6 +23,9 @@ const serve_static_1 = require("@nestjs/serve-static");
 const path_1 = require("path");
 const throttler_1 = require("@nestjs/throttler");
 const carousel_module_1 = require("./carousel/carousel.module");
+const about_module_1 = require("./about/about.module");
+const content_module_1 = require("./content/content.module");
+const contenttype_module_1 = require("./contenttype/contenttype.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer.apply(logger_middleware_1.LoggerMiddleware).forRoutes('*');
@@ -37,6 +42,11 @@ exports.AppModule = AppModule = __decorate([
             jwt_1.JwtModule,
             file_module_1.FileModule,
             carousel_module_1.CarouselModule,
+            about_module_1.AboutModule,
+            card_module_1.CardModule,
+            contact_module_1.ContactModule,
+            content_module_1.ContentModule,
+            contenttype_module_1.ContenttypeModule,
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, '..', '../public'),
                 serveRoot: '/public/',

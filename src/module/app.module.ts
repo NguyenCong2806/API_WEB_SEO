@@ -1,3 +1,5 @@
+import { ContactModule } from './contact/contact.module';
+import { CardModule } from './card/card.module';
 import { FileModule } from './file/file.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from '../controllers/app.controller';
@@ -12,6 +14,9 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { CarouselModule } from './carousel/carousel.module';
+import { AboutModule } from './about/about.module';
+import { ContentModule } from './content/content.module';
+import { ContenttypeModule } from './contenttype/contenttype.module';
 // import { MailModule } from './mail/mail.module';
 
 @Module({
@@ -25,6 +30,11 @@ import { CarouselModule } from './carousel/carousel.module';
     JwtModule,
     FileModule,
     CarouselModule,
+    AboutModule,
+    CardModule,
+    ContactModule,
+    ContentModule,
+    ContenttypeModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '../public'),
       serveRoot: '/public/',
