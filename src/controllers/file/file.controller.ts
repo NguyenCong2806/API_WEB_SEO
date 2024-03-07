@@ -57,8 +57,7 @@ export class UploadController {
     mediaInfo.originalname = file.originalname;
     mediaInfo.path = file.path;
     mediaInfo.size = file.size;
-    mediaInfo.link =
-      process.env.API_URL + process.env.FILE_URL + file.filename;
+    mediaInfo.link = process.env.API_URL + process.env.FILE_URL + file.filename;
     mediaInfo.status = true;
     res.status(HttpStatus.OK).json(mediaInfo);
   }
