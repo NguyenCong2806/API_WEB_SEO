@@ -13,12 +13,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UploadController = void 0;
+const mediainfo_1 = require("./../../models/viewmodel/mediainfo/mediainfo");
 const common_1 = require("@nestjs/common");
 const multer = require("multer");
 const platform_express_1 = require("@nestjs/platform-express");
 const fs = require("fs");
 const path = require("path");
-const auth_guard_1 = require("../../Guard/auth.guard");
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, process.env.FILE_ROOT);
@@ -39,7 +39,19 @@ let UploadController = class UploadController {
         res.status(200).json('Xóa bỏ thành công file');
     }
     uploadFile(file, res) {
-        res.status(common_1.HttpStatus.OK).json(true);
+        const mediaInfo = new mediainfo_1.MediaInfo();
+        mediaInfo.destination = file.destination;
+        mediaInfo.encoding = file.encoding;
+        mediaInfo.fieldname = file.fieldname;
+        mediaInfo.filename = file.filename;
+        mediaInfo.mimetype = file.mimetype;
+        mediaInfo.originalname = file.originalname;
+        mediaInfo.path = file.path;
+        mediaInfo.size = file.size;
+        mediaInfo.link =
+            process.env.API_URL + process.env.FILE_URL + file.filename;
+        mediaInfo.status = true;
+        res.status(common_1.HttpStatus.OK).json(mediaInfo);
     }
     uploadMultiple(files, res) {
         res.status(common_1.HttpStatus.OK).json(true);
@@ -82,7 +94,6 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UploadController.prototype, "uploadMultiple", null);
 exports.UploadController = UploadController = __decorate([
-    (0, common_1.Controller)('upload'),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard)
+    (0, common_1.Controller)('upload')
 ], UploadController);
 //# sourceMappingURL=file.controller.js.map

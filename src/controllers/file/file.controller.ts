@@ -1,3 +1,4 @@
+import { MediaInfo } from './../../models/viewmodel/mediainfo/mediainfo';
 import {
   Controller,
   Post,
@@ -30,7 +31,7 @@ const storage = multer.diskStorage({
 });
 
 @Controller('upload')
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 export class UploadController {
   @Get('getallfile')
   async getallfile(@Res() res: Response) {
@@ -47,7 +48,18 @@ export class UploadController {
   @Post('file')
   @UseInterceptors(FileInterceptor('file', { storage: storage }))
   uploadFile(@UploadedFile() file, @Res() res: Response) {
-    res.status(HttpStatus.OK).json(true);
+    const mediaInfo = new MediaInfo();
+    mediaInfo.destination = file.destination;
+    mediaInfo.encoding = file.encoding;
+    mediaInfo.fieldname = file.fieldname;
+    mediaInfo.filename = file.filename;
+    mediaInfo.mimetype = file.mimetype;
+    mediaInfo.originalname = file.originalname;
+    mediaInfo.path = file.path;
+    mediaInfo.size = file.size;
+    mediaInfo.link = process.env.API_URL + process.env.FILE_URL + file.filename;
+    mediaInfo.status = true;
+    res.status(HttpStatus.OK).json(mediaInfo);
   }
 
   @Post('files')
