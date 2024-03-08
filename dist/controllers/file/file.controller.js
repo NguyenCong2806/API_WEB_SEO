@@ -19,6 +19,9 @@ const multer = require("multer");
 const platform_express_1 = require("@nestjs/platform-express");
 const fs = require("fs");
 const path = require("path");
+const ResultData_1 = require("../../models/BaseModel/ResultData");
+const message_1 = require("../../constants/message");
+const httpStatus_1 = require("../../constants/httpStatus");
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, process.env.FILE_ROOT);
@@ -36,10 +39,11 @@ let UploadController = class UploadController {
     }
     async deletefile(filename, res) {
         fs.unlinkSync(process.env.FILE_ROOT + '/' + filename);
-        res.status(200).json('Xóa bỏ thành công file');
+        res.status(200).json(message_1.message.Delete_Successful);
     }
     uploadFile(file, res) {
         const mediaInfo = new mediainfo_1.MediaInfo();
+        const _data = new ResultData_1.default();
         mediaInfo.destination = file.destination;
         mediaInfo.encoding = file.encoding;
         mediaInfo.fieldname = file.fieldname;
@@ -50,7 +54,11 @@ let UploadController = class UploadController {
         mediaInfo.size = file.size;
         mediaInfo.link = process.env.API_URL + process.env.FILE_URL + file.filename;
         mediaInfo.status = true;
-        res.status(common_1.HttpStatus.OK).json(mediaInfo);
+        _data.item = mediaInfo;
+        _data.message = message_1.message.Download_data_successfully;
+        _data.status = true;
+        _data.statuscode = httpStatus_1.httpstatus.Successful_responses;
+        res.status(common_1.HttpStatus.OK).json(_data);
     }
     uploadMultiple(files, res) {
         res.status(common_1.HttpStatus.OK).json(true);
