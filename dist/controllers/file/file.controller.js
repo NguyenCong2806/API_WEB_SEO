@@ -48,8 +48,7 @@ let UploadController = class UploadController {
         mediaInfo.originalname = file.originalname;
         mediaInfo.path = file.path;
         mediaInfo.size = file.size;
-        mediaInfo.link =
-            process.env.API_URL + process.env.FILE_URL + file.filename;
+        mediaInfo.link = process.env.API_URL + process.env.FILE_URL + file.filename;
         mediaInfo.status = true;
         res.status(common_1.HttpStatus.OK).json(mediaInfo);
     }
