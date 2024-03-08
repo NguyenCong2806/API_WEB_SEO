@@ -17,6 +17,9 @@ import { Response } from 'express';
 import * as fs from 'fs';
 import * as path from 'path';
 import { AuthGuard } from 'src/Guard/auth.guard';
+import ResultData from 'src/models/BaseModel/ResultData';
+import { message } from 'src/constants/message';
+import { httpstatus } from 'src/constants/httpStatus';
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -43,12 +46,14 @@ export class UploadController {
   @Get('deletefile/:filename')
   async deletefile(@Param('filename') filename: string, @Res() res: Response) {
     fs.unlinkSync(process.env.FILE_ROOT + '/' + filename);
-    res.status(200).json('Xóa bỏ thành công file');
+    res.status(200).json(message.Delete_Successful);
   }
   @Post('file')
   @UseInterceptors(FileInterceptor('file', { storage: storage }))
   uploadFile(@UploadedFile() file, @Res() res: Response) {
     const mediaInfo = new MediaInfo();
+    const _data = new ResultData();
+
     mediaInfo.destination = file.destination;
     mediaInfo.encoding = file.encoding;
     mediaInfo.fieldname = file.fieldname;
@@ -59,7 +64,12 @@ export class UploadController {
     mediaInfo.size = file.size;
     mediaInfo.link = process.env.API_URL + process.env.FILE_URL + file.filename;
     mediaInfo.status = true;
-    res.status(HttpStatus.OK).json(mediaInfo);
+    _data.item = mediaInfo;
+    _data.message = message.Download_data_successfully;
+    _data.status =true;
+    _data.statuscode = httpstatus.Successful_responses;
+
+    res.status(HttpStatus.OK).json(_data);
   }
 
   @Post('files')

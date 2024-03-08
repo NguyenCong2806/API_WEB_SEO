@@ -67,7 +67,8 @@ export abstract class BaseRepository<T extends BaseEntity>
       const counts = (await this._model.find()).length;
       result.pageIndex = item.perPage;
       result.totalCount = counts;
-      result.totalPage = Math.ceil(counts / item.page);
+      //result.totalPage = Math.ceil(counts / item.page);
+      result.totalPage = Math.ceil(counts / 10);
       if (item.condition != null) {
         result.items = await this._model
           .find(item.condition)
