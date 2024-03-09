@@ -11,7 +11,7 @@ export class Contenttype extends BaseEntity {
   @Prop()
   detail: string;
   @Prop()
-  Oder: number;
+  oder: number;
   @Prop()
   link: string;
 }
