@@ -25,8 +25,8 @@ import {
     async get(@Query() serachPara: SerachPara, @Res() res: Response) {
       const pagination = new Paginations<Content>();
   
-      pagination.perPage = serachPara.pageindex;
-      pagination.page = serachPara.pagesize;
+      pagination.pageindex = serachPara.pageindex;
+      pagination.pagesize = serachPara.pagesize;
       if (serachPara.keyword != null) {
         pagination.condition = { username: { $regex: serachPara.keyword } };
       }

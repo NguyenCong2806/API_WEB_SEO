@@ -1,1 +1,1 @@
-{"version":3,"file":"Paginations.js","sourceRoot":"","sources":["../../../src/models/BaseModel/Paginations.ts"],"names":[],"mappings":";;AAEA,MAAqB,WAAW;IAAhC;QACE,YAAO,GAAW,CAAC,CAAC;QACpB,SAAI,GAAW,EAAE,CAAC;QAClB,YAAO,GAAY,IAAI,CAAC;IAE1B,CAAC;CAAA;AALD,8BAKC"}
+{"version":3,"file":"Paginations.js","sourceRoot":"","sources":["../../../src/models/BaseModel/Paginations.ts"],"names":[],"mappings":";;AAEA,MAAqB,WAAW;IAAhC;QACE,cAAS,GAAW,CAAC,CAAC;QACtB,aAAQ,GAAW,EAAE,CAAC;QACtB,YAAO,GAAY,IAAI,CAAC;IAE1B,CAAC;CAAA;AALD,8BAKC"}

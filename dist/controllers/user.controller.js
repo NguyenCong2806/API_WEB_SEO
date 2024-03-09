@@ -28,8 +28,8 @@ let UsersController = class UsersController {
     }
     async get(serachPara, res) {
         const pagination = new Paginations_1.default();
-        pagination.perPage = serachPara.pageindex;
-        pagination.page = serachPara.pagesize;
+        pagination.pageindex = serachPara.pageindex;
+        pagination.pagesize = serachPara.pagesize;
         if (serachPara.keyword != null) {
             pagination.condition = { username: { $regex: serachPara.keyword } };
         }
