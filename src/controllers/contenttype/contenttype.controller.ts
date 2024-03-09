@@ -26,7 +26,6 @@ export class ContenttypeController {
 
     pagination.pageindex = serachPara.pageindex;
     pagination.pagesize = serachPara.pagesize;
-    console.log(serachPara);
     if (serachPara.keyword != null) {
       pagination.condition = { username: { $regex: serachPara.keyword } };
     }

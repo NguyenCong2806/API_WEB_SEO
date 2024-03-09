@@ -68,7 +68,7 @@ export abstract class BaseRepository<T extends BaseEntity>
       result.pageIndex = item.pageindex;
       result.totalCount = counts;
       result.totalPage = Math.ceil(counts / item.pagesize);
-      if (item.condition != null) {
+      if (item.keyword != null) {
         result.items = await this._model
           .find(item.condition)
           .skip(item.pagesize * (item.pageindex - 1))
