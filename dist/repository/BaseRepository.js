@@ -65,21 +65,21 @@ class BaseRepository {
         const result = new Results_1.default();
         try {
             const counts = (await this._model.find()).length;
-            result.pageIndex = item.perPage;
+            result.pageIndex = item.pageindex;
             result.totalCount = counts;
-            result.totalPage = Math.ceil(counts / 10);
-            if (item.condition != null) {
+            result.totalPage = Math.ceil(counts / item.pagesize);
+            if (item.keyword != null) {
                 result.items = await this._model
                     .find(item.condition)
-                    .skip(item.page * (item.perPage - 1))
-                    .limit(item.page)
+                    .skip(item.pagesize * (item.pageindex - 1))
+                    .limit(item.pagesize)
                     .sort({ createddate: -1 });
             }
             else {
                 result.items = await this._model
                     .find()
-                    .skip(item.page * (item.perPage - 1))
-                    .limit(item.page)
+                    .skip(item.pagesize * (item.pageindex - 1))
+                    .limit(item.pagesize)
                     .sort({ createddate: -1 });
             }
         }

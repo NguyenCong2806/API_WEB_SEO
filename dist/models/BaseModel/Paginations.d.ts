@@ -24,8 +24,8 @@
 /// <reference types="mongoose/types/inferschematype" />
 import { FilterQuery } from 'mongoose';
 export default class Paginations<T> {
-    perPage: number;
-    page: number;
+    pageindex: number;
+    pagesize: number;
     keyword?: string;
     condition?: FilterQuery<T>;
 }

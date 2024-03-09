@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class Paginations {
     constructor() {
-        this.perPage = 1;
-        this.page = 10;
+        this.pageindex = 1;
+        this.pagesize = 10;
         this.keyword = null;
     }
 }
