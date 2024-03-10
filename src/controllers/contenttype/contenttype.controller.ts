@@ -23,11 +23,13 @@ export class ContenttypeController {
   @Get('getall')
   async get(@Query() serachPara: SerachPara, @Res() res: Response) {
     const pagination = new Paginations<Contenttype>();
-
     pagination.pageindex = serachPara.pageindex;
     pagination.pagesize = serachPara.pagesize;
+    pagination.keyword = serachPara.keyword;
     if (serachPara.keyword != null) {
-      pagination.condition = { username: { $regex: serachPara.keyword } };
+      pagination.condition = {
+        title: { $regex: '.*' + serachPara.keyword + '.*' },
+      };
     }
     const respo = await this.contenttypeService.finds(pagination);
     res.status(HttpStatus.OK).json(respo);
