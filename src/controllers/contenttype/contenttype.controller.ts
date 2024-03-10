@@ -1,3 +1,4 @@
+//import { AuthGuard } from './../../Guard/auth.guard';
 import { Contenttype } from './../../models/database/Contenttype';
 import {
   Body,
@@ -17,6 +18,7 @@ import SerachPara from 'src/models/BaseModel/SerachPara';
 import { ContenttypeService } from 'src/services/contenttype/contenttype.service';
 
 @Controller('contenttype')
+//@UseGuards(AuthGuard)
 export class ContenttypeController {
   constructor(private readonly contenttypeService: ContenttypeService) {}
 
