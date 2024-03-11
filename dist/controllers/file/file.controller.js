@@ -73,7 +73,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UploadController.prototype, "getallfile", null);
 __decorate([
-    (0, common_1.Get)('deletefile/:filename'),
+    (0, common_1.Delete)('deletefile/:filename'),
     __param(0, (0, common_1.Param)('filename')),
     __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),

@@ -9,6 +9,7 @@ import {
   HttpStatus,
   Get,
   Param,
+  Delete,
   //UseGuards,
 } from '@nestjs/common';
 import * as multer from 'multer';
@@ -43,7 +44,7 @@ export class UploadController {
     });
     res.status(200).json(data);
   }
-  @Get('deletefile/:filename')
+  @Delete('deletefile/:filename')
   async deletefile(@Param('filename') filename: string, @Res() res: Response) {
     fs.unlinkSync(process.env.FILE_ROOT + '/' + filename);
     res.status(200).json(message.Delete_Successful);

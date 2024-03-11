@@ -22,8 +22,8 @@ import {
   
     @Get('getall')
     async get(@Query() serachPara: SerachPara, @Res() res: Response) {
+      console.log(serachPara);
       const pagination = new Paginations<Media>();
-  
       pagination.pageindex = serachPara.pageindex;
       pagination.pagesize = serachPara.pagesize;
       if (serachPara.keyword != null) {
