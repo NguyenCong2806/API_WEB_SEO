@@ -10,9 +10,9 @@ exports.message = {
     Delete_Failure: 'Xóa bỏ thất bại!',
     Errors_Message: 'Có lỗi sảy ra!',
     Server_Errors: 'Máy chủ bị lỗi!',
-    Exist_Message: "Tồn tại dữ liệu!",
-    NotExist_Message: "Không tồn tại dữ liệu!",
-    Download_data_successfully: "Tải dữ liệu thành công",
-    Download_data_failed: "Tải dữ liệu thất bại!",
+    Exist_Message: 'Tồn tại dữ liệu!',
+    NotExist_Message: 'Không tồn tại dữ liệu!',
+    Download_data_successfully: 'Tải dữ liệu thành công',
+    Download_data_failed: 'Tải dữ liệu thất bại!',
 };
 //# sourceMappingURL=message.js.map
