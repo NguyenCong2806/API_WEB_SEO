@@ -24,7 +24,6 @@ import { ContactService } from 'src/services/Contact/Contact.service';
     @Get('getall')
     async get(@Query() serachPara: SerachPara, @Res() res: Response) {
       const pagination = new Paginations<Contact>();
-  
       pagination.pageindex = serachPara.pageindex;
       pagination.pagesize = serachPara.pagesize;
       if (serachPara.keyword != null) {
