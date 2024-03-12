@@ -30,7 +30,7 @@ export declare class Courses extends BaseEntity {
     title: string;
     img: string;
     detail: string;
-    Oder: number;
+    oder: number;
     link: string;
 }
 export declare const CoursesSchema: import("mongoose").Schema<Courses, import("mongoose").Model<Courses, any, any, any, Document<unknown, any, Courses> & Courses & Required<{

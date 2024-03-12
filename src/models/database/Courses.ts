@@ -15,7 +15,7 @@ export class Courses extends BaseEntity {
   @Prop()
   detail: string;
   @Prop()
-  Oder: number;
+  oder: number;
   @Prop()
   link: string;
 }
