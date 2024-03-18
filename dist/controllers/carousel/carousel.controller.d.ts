@@ -6,6 +6,7 @@ export declare class CarouselController {
     private readonly carouselService;
     constructor(carouselService: CarouselService);
     get(serachPara: SerachPara, res: Response): Promise<void>;
+    gets(res: Response): Promise<void>;
     find(id: string, res: Response): Promise<void>;
     create(carouseldto: Carousel, res: Response): Promise<void>;
     update(carouseldto: Carousel, res: Response): Promise<void>;

@@ -1,4 +1,4 @@
-import  ResultData  from 'src/models/BaseModel/ResultData';
+import ResultData from 'src/models/BaseModel/ResultData';
 import { FilterQuery } from 'mongoose';
 import Paginations from 'src/models/BaseModel/Paginations';
 import Results from 'src/models/BaseModel/Results';
