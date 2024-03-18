@@ -32,6 +32,10 @@ let CarouselController = class CarouselController {
         const respo = await this.carouselService.finds(pagination);
         res.status(common_1.HttpStatus.OK).json(respo);
     }
+    async gets(res) {
+        const respo = await this.carouselService.find();
+        res.status(common_1.HttpStatus.OK).json(respo);
+    }
     async find(id, res) {
         const respo = await this.carouselService.findOne(id);
         res.status(common_1.HttpStatus.OK).json(respo);
@@ -58,6 +62,13 @@ __decorate([
     __metadata("design:paramtypes", [SerachPara_1.default, Object]),
     __metadata("design:returntype", Promise)
 ], CarouselController.prototype, "get", null);
+__decorate([
+    (0, common_1.Get)('getalls'),
+    __param(0, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], CarouselController.prototype, "gets", null);
 __decorate([
     (0, common_1.Get)('getbycarousel/:id'),
     __param(0, (0, common_1.Param)('id')),
