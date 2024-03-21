@@ -14,6 +14,10 @@ export class Card extends BaseEntity {
   detail: string;
   @Prop({ required: true })
   link: string;
+  @Prop()
+  fontsize: number;
+  @Prop()
+  fontweight: number;
 }
 
 export const CardSchema = SchemaFactory.createForClass(Card);
