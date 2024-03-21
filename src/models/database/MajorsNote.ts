@@ -7,13 +7,13 @@ export type MajorsNoteDocument = MajorsNote & Document;
 @Schema()
 export class MajorsNote extends BaseEntity {
   @Prop()
-  image: string;
-  @Prop()
   heading: string;
   @Prop()
   note: string;
   @Prop()
-  location: number;
+  fontsize: number;
+  @Prop()
+  fontweight: number;
 }
 
 export const MajorsNoteSchema = SchemaFactory.createForClass(MajorsNote);
