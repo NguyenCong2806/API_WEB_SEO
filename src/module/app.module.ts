@@ -1,3 +1,4 @@
+import { ArticleHeaderModule } from './articleheader/articleheader.module';
 import { ContactModule } from './contact/contact.module';
 import { CardModule } from './card/card.module';
 import { FileModule } from './file/file.module';
@@ -45,6 +46,7 @@ import { MediaModule } from './media/media.module';
     FeedbackModule,
     PopularModule,
     MediaModule,
+    ArticleHeaderModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '../public'),
       serveRoot: '/public/',
