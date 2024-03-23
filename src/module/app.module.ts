@@ -1,3 +1,4 @@
+import { CardNumbersModule } from './cardnumbers/cardnumbers.module';
 import { ArticleHeaderModule } from './articleheader/articleheader.module';
 import { ContactModule } from './contact/contact.module';
 import { CardModule } from './card/card.module';
@@ -47,6 +48,7 @@ import { MediaModule } from './media/media.module';
     PopularModule,
     MediaModule,
     ArticleHeaderModule,
+    CardNumbersModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '../public'),
       serveRoot: '/public/',
