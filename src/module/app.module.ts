@@ -1,3 +1,4 @@
+import { BoxImageTextModule } from './boximagetext/boximagetext.module';
 import { MajorsNoteModule } from './majorsnote/majorsnote.module';
 import { CardNumbersModule } from './cardnumbers/cardnumbers.module';
 import { ArticleHeaderModule } from './articleheader/articleheader.module';
@@ -53,6 +54,7 @@ import { CtaModule } from './cta/cta.module';
     CardNumbersModule,
     CtaModule,
     MajorsNoteModule,
+    BoxImageTextModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '../public'),
       serveRoot: '/public/',
