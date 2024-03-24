@@ -5,7 +5,6 @@ import { Model } from 'mongoose';
 import { BaseRepository } from '../BaseRepository';
 import { IFeedbackRepository } from './IFeedbackRepository';
 
-
 @Injectable()
 export class FeedbackRepository
   extends BaseRepository<Feedback>

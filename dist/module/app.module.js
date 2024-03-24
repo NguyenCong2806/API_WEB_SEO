@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
+const majorsnote_module_1 = require("./majorsnote/majorsnote.module");
 const cardnumbers_module_1 = require("./cardnumbers/cardnumbers.module");
 const articleheader_module_1 = require("./articleheader/articleheader.module");
 const contact_module_1 = require("./contact/contact.module");
@@ -33,6 +34,7 @@ const expert_module_1 = require("./expert/expert.module");
 const feedback_module_1 = require("./feedback/feedback.module");
 const popular_module_1 = require("./popular/popular.module");
 const media_module_1 = require("./media/media.module");
+const cta_module_1 = require("./cta/cta.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer.apply(logger_middleware_1.LoggerMiddleware).forRoutes('*');
@@ -61,6 +63,8 @@ exports.AppModule = AppModule = __decorate([
             media_module_1.MediaModule,
             articleheader_module_1.ArticleHeaderModule,
             cardnumbers_module_1.CardNumbersModule,
+            cta_module_1.CtaModule,
+            majorsnote_module_1.MajorsNoteModule,
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, '..', '../public'),
                 serveRoot: '/public/',

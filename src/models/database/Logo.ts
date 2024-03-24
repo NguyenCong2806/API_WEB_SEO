@@ -14,6 +14,8 @@ export class Logo extends BaseEntity {
   width: number;
   @Prop()
   link: string;
+  @Prop()
+  order: number;
 }
 
 export const LogoSchema = SchemaFactory.createForClass(Logo);

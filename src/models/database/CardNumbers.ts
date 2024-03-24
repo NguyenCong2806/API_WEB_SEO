@@ -20,6 +20,8 @@ export class CardNumbers extends BaseEntity {
   fontsize: number;
   @Prop()
   fontweight: number;
+  @Prop()
+  text: string;
 }
 
 export const CardNumbersSchema = SchemaFactory.createForClass(CardNumbers);

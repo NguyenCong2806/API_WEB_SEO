@@ -1,3 +1,4 @@
+import { MajorsNoteModule } from './majorsnote/majorsnote.module';
 import { CardNumbersModule } from './cardnumbers/cardnumbers.module';
 import { ArticleHeaderModule } from './articleheader/articleheader.module';
 import { ContactModule } from './contact/contact.module';
@@ -24,6 +25,7 @@ import { ExpertModule } from './expert/expert.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { PopularModule } from './popular/popular.module';
 import { MediaModule } from './media/media.module';
+import { CtaModule } from './cta/cta.module';
 // import { MailModule } from './mail/mail.module';
 
 @Module({
@@ -49,6 +51,8 @@ import { MediaModule } from './media/media.module';
     MediaModule,
     ArticleHeaderModule,
     CardNumbersModule,
+    CtaModule,
+    MajorsNoteModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '../public'),
       serveRoot: '/public/',
