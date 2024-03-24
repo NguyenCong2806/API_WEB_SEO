@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
+const logo_module_1 = require("./logo/logo.module");
 const boximagetext_module_1 = require("./boximagetext/boximagetext.module");
 const majorsnote_module_1 = require("./majorsnote/majorsnote.module");
 const cardnumbers_module_1 = require("./cardnumbers/cardnumbers.module");
@@ -67,6 +68,7 @@ exports.AppModule = AppModule = __decorate([
             cta_module_1.CtaModule,
             majorsnote_module_1.MajorsNoteModule,
             boximagetext_module_1.BoxImageTextModule,
+            logo_module_1.LogoModule,
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, '..', '../public'),
                 serveRoot: '/public/',

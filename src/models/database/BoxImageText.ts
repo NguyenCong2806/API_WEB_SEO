@@ -14,6 +14,8 @@ export class BoxImageText extends BaseEntity {
   note: string;
   @Prop()
   location: number;
+  @Prop()
+  position: number;
 }
 
 export const BoxImageTextSchema = SchemaFactory.createForClass(BoxImageText);
