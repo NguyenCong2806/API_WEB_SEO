@@ -5,10 +5,7 @@ import { Media } from 'src/models/database/Media';
 import { IMediaService } from './IMediaService';
 
 @Injectable()
-export class MediaService
-  extends BaseService<Media>
-  implements IMediaService
-{
+export class MediaService extends BaseService<Media> implements IMediaService {
   constructor(
     @Inject('IMediaRepository')
     private readonly media_repository: MediaRepository,

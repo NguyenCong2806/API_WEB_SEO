@@ -1,3 +1,4 @@
+import { ModalPopupModule } from './modalpopup/modalpopup.module';
 import { LogoModule } from './logo/logo.module';
 import { BoxImageTextModule } from './boximagetext/boximagetext.module';
 import { MajorsNoteModule } from './majorsnote/majorsnote.module';
@@ -28,6 +29,7 @@ import { FeedbackModule } from './feedback/feedback.module';
 import { PopularModule } from './popular/popular.module';
 import { MediaModule } from './media/media.module';
 import { CtaModule } from './cta/cta.module';
+import { AccordionModule } from './accordion/accordion.module';
 // import { MailModule } from './mail/mail.module';
 
 @Module({
@@ -57,6 +59,8 @@ import { CtaModule } from './cta/cta.module';
     MajorsNoteModule,
     BoxImageTextModule,
     LogoModule,
+    ModalPopupModule,
+    AccordionModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '../public'),
       serveRoot: '/public/',
