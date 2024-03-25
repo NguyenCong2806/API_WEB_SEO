@@ -30,6 +30,7 @@ import { PopularModule } from './popular/popular.module';
 import { MediaModule } from './media/media.module';
 import { CtaModule } from './cta/cta.module';
 import { AccordionModule } from './accordion/accordion.module';
+import { TabsModule } from './tabs/tabs.module';
 // import { MailModule } from './mail/mail.module';
 
 @Module({
@@ -61,6 +62,7 @@ import { AccordionModule } from './accordion/accordion.module';
     LogoModule,
     ModalPopupModule,
     AccordionModule,
+    TabsModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '../public'),
       serveRoot: '/public/',

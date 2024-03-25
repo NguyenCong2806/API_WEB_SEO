@@ -39,6 +39,7 @@ const popular_module_1 = require("./popular/popular.module");
 const media_module_1 = require("./media/media.module");
 const cta_module_1 = require("./cta/cta.module");
 const accordion_module_1 = require("./accordion/accordion.module");
+const tabs_module_1 = require("./tabs/tabs.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer.apply(logger_middleware_1.LoggerMiddleware).forRoutes('*');
@@ -73,6 +74,7 @@ exports.AppModule = AppModule = __decorate([
             logo_module_1.LogoModule,
             modalpopup_module_1.ModalPopupModule,
             accordion_module_1.AccordionModule,
+            tabs_module_1.TabsModule,
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, '..', '../public'),
                 serveRoot: '/public/',
