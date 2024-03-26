@@ -47,7 +47,7 @@ export class AccordionController {
     const respo = await this.accordionService.create(Accordiondto);
     res.status(HttpStatus.CREATED).json(respo);
   }
-  @Put('editAacordion')
+  @Put('editacordion')
   async update(@Body() Accordiondto: Accordion, @Res() res: Response) {
     const respo = await this.accordionService.update(Accordiondto);
     res.status(HttpStatus.OK).json(respo);
