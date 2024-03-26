@@ -31,6 +31,7 @@ import { MediaModule } from './media/media.module';
 import { CtaModule } from './cta/cta.module';
 import { AccordionModule } from './accordion/accordion.module';
 import { TabsModule } from './tabs/tabs.module';
+import { ImagelistinfoModule } from './imagelistinfo/imagelistinfo.module';
 // import { MailModule } from './mail/mail.module';
 
 @Module({
@@ -63,6 +64,7 @@ import { TabsModule } from './tabs/tabs.module';
     ModalPopupModule,
     AccordionModule,
     TabsModule,
+    ImagelistinfoModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '../public'),
       serveRoot: '/public/',
