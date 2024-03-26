@@ -2,10 +2,12 @@ import { BaseEntity } from './BaseEntity';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type CtaDocument = Cta & Document;
+export type ImageListInfoDocument = ImageListInfo & Document;
 
 @Schema()
-export class Cta extends BaseEntity {
+export class ImageListInfo extends BaseEntity {
+  @Prop()
+  img: string;
   @Prop()
   link: string;
   @Prop()
@@ -14,4 +16,4 @@ export class Cta extends BaseEntity {
   isshow: boolean;
 }
 
-export const CtaSchema = SchemaFactory.createForClass(Cta);
+export const ImageListInfoSchema = SchemaFactory.createForClass(ImageListInfo);
