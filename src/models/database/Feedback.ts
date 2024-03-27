@@ -13,8 +13,6 @@ export class Feedback extends BaseEntity {
   @Prop({ required: true })
   detail: string;
   @Prop()
-  link: string;
-  @Prop()
   job: string;
   @Prop()
   img: string;
