@@ -20,6 +20,10 @@ export class ModalPopup extends BaseEntity {
   time: number;
   @Prop()
   position: number;
+  @Prop()
+  scrollstart: number;
+  @Prop()
+  scrollend: number;
 }
 
 export const ModalPopupSchema = SchemaFactory.createForClass(ModalPopup);

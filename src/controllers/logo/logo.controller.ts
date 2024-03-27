@@ -32,23 +32,23 @@ export class LogoController {
     const respo = await this.logoService.finds(pagination);
     res.status(HttpStatus.OK).json(respo);
   }
-  @Get('getbyLogo/:id')
+  @Get('getbylogo/:id')
   async find(@Param('id') id: string, @Res() res: Response) {
     const respo = await this.logoService.findOne(id);
     res.status(HttpStatus.OK).json(respo);
   }
-  @Post('addLogo')
+  @Post('addlogo')
   async create(@Body() Logodto: Logo, @Res() res: Response) {
     const respo = await this.logoService.create(Logodto);
     res.status(HttpStatus.CREATED).json(respo);
   }
-  @Put('editLogo')
+  @Put('editlogo')
   async update(@Body() Logodto: Logo, @Res() res: Response) {
     const respo = await this.logoService.update(Logodto);
     res.status(HttpStatus.OK).json(respo);
   }
 
-  @Delete('delLogo/:id')
+  @Delete('dellogo/:id')
   async delete(@Param('id') id: string, @Res() res: Response) {
     const respo = await this.logoService.remove(id);
     res.status(HttpStatus.OK).json(respo);
