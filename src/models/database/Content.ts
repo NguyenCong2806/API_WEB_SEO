@@ -9,9 +9,11 @@ export class Content extends BaseEntity {
   @Prop()
   title: string;
   @Prop()
+  author: string;
+  @Prop()
   detail: string;
   @Prop()
-  Oder: number;
+  oder: number;
   @Prop()
   link: string;
   @Prop()
