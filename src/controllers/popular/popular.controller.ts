@@ -32,6 +32,11 @@ export class PopularController {
     const respo = await this.popularService.finds(pagination);
     res.status(HttpStatus.OK).json(respo);
   }
+  @Get('getalls')
+  async getalls(@Res() res: Response) {
+    const respo = await this.popularService.find();
+    res.status(HttpStatus.OK).json(respo);
+  }
   @Get('getbypopular/:id')
   async find(@Param('id') id: string, @Res() res: Response) {
     const respo = await this.popularService.findOne(id);

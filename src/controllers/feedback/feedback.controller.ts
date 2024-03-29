@@ -32,6 +32,11 @@ export class FeedbackController {
     const respo = await this.feedbackService.finds(pagination);
     res.status(HttpStatus.OK).json(respo);
   }
+  @Get('getalls')
+  async getalls(@Res() res: Response) {
+    const respo = await this.feedbackService.find();
+    res.status(HttpStatus.OK).json(respo);
+  }
   @Get('getbyfeedback/:id')
   async find(@Param('id') id: string, @Res() res: Response) {
     const respo = await this.feedbackService.findOne(id);

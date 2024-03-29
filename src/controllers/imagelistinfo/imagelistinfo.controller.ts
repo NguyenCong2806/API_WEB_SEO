@@ -32,6 +32,11 @@ export class ImagelistinfoController {
     const respo = await this.imagelistinfoService.finds(pagination);
     res.status(HttpStatus.OK).json(respo);
   }
+  @Get('getalls')
+  async getalls(@Res() res: Response) {
+    const respo = await this.imagelistinfoService.find();
+    res.status(HttpStatus.OK).json(respo);
+  }
   @Get('getbyimagelistinfo/:id')
   async find(@Param('id') id: string, @Res() res: Response) {
     const respo = await this.imagelistinfoService.findOne(id);

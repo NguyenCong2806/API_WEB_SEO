@@ -19,7 +19,7 @@ import { ContactService } from 'src/services/Contact/Contact.service';
   
   @Controller('contact')
   export class ContactController {
-    constructor(private readonly ContactService: ContactService) {}
+    constructor(private readonly contactService: ContactService) {}
   
     @Get('getall')
     async get(@Query() serachPara: SerachPara, @Res() res: Response) {
@@ -29,28 +29,33 @@ import { ContactService } from 'src/services/Contact/Contact.service';
       if (serachPara.keyword != null) {
         pagination.condition = { username: { $regex: serachPara.keyword } };
       }
-      const respo = await this.ContactService.finds(pagination);
+      const respo = await this.contactService.finds(pagination);
+      res.status(HttpStatus.OK).json(respo);
+    }
+    @Get('getalls')
+    async getalls(@Res() res: Response) {
+      const respo = await this.contactService.find();
       res.status(HttpStatus.OK).json(respo);
     }
     @Get('getbycontact/:id')
     async find(@Param('id') id: string, @Res() res: Response) {
-      const respo = await this.ContactService.findOne(id);
+      const respo = await this.contactService.findOne(id);
       res.status(HttpStatus.OK).json(respo);
     }
     @Post('addcontact')
     async create(@Body() Contactdto: Contact, @Res() res: Response) {
-      const respo = await this.ContactService.create(Contactdto);
+      const respo = await this.contactService.create(Contactdto);
       res.status(HttpStatus.CREATED).json(respo);
     }
     @Put('editcontact')
     async update(@Body() Contactdto: Contact, @Res() res: Response) {
-      const respo = await this.ContactService.update(Contactdto);
+      const respo = await this.contactService.update(Contactdto);
       res.status(HttpStatus.OK).json(respo);
     }
     
     @Delete('delcontact/:id')
     async delete(@Param('id') id: string, @Res() res: Response) {
-      const respo = await this.ContactService.remove(id);
+      const respo = await this.contactService.remove(id);
       res.status(HttpStatus.OK).json(respo);
     }
   }

@@ -32,6 +32,11 @@ export class TabsController {
     const respo = await this.tabsService.finds(pagination);
     res.status(HttpStatus.OK).json(respo);
   }
+  @Get('getalls')
+  async getalls(@Res() res: Response) {
+    const respo = await this.tabsService.find();
+    res.status(HttpStatus.OK).json(respo);
+  }
   @Get('getbytabs/:id')
   async find(@Param('id') id: string, @Res() res: Response) {
     const respo = await this.tabsService.findOne(id);

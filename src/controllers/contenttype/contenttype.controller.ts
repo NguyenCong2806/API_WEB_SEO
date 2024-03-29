@@ -36,6 +36,11 @@ export class ContenttypeController {
     const respo = await this.contenttypeService.finds(pagination);
     res.status(HttpStatus.OK).json(respo);
   }
+  @Get('getalls')
+  async getalls(@Res() res: Response) {
+    const respo = await this.contenttypeService.find();
+    res.status(HttpStatus.OK).json(respo);
+  }
   @Get('getbycontenttype/:id')
   async find(@Param('id') id: string, @Res() res: Response) {
     const respo = await this.contenttypeService.findOne(id);
