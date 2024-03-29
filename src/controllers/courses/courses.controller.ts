@@ -18,7 +18,7 @@ import { CoursesService } from 'src/services/Courses/Courses.service';
 
 @Controller('courses')
 export class CoursesController {
-  constructor(private readonly CoursesService: CoursesService) {}
+  constructor(private readonly coursesService: CoursesService) {}
 
   @Get('getall')
   async get(@Query() serachPara: SerachPara, @Res() res: Response) {
@@ -29,28 +29,33 @@ export class CoursesController {
     if (serachPara.keyword != null) {
       pagination.condition = { username: { $regex: serachPara.keyword } };
     }
-    const respo = await this.CoursesService.finds(pagination);
+    const respo = await this.coursesService.finds(pagination);
+    res.status(HttpStatus.OK).json(respo);
+  }
+  @Get('getalls')
+  async getalls(@Res() res: Response) {
+    const respo = await this.coursesService.find();
     res.status(HttpStatus.OK).json(respo);
   }
   @Get('getbycourses/:id')
   async find(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.CoursesService.findOne(id);
+    const respo = await this.coursesService.findOne(id);
     res.status(HttpStatus.OK).json(respo);
   }
   @Post('addcourses')
   async create(@Body() Coursesdto: Courses, @Res() res: Response) {
-    const respo = await this.CoursesService.create(Coursesdto);
+    const respo = await this.coursesService.create(Coursesdto);
     res.status(HttpStatus.CREATED).json(respo);
   }
   @Put('editcourses')
   async update(@Body() Coursesdto: Courses, @Res() res: Response) {
-    const respo = await this.CoursesService.update(Coursesdto);
+    const respo = await this.coursesService.update(Coursesdto);
     res.status(HttpStatus.OK).json(respo);
   }
 
   @Delete('delcourses/:id')
   async delete(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.CoursesService.remove(id);
+    const respo = await this.coursesService.remove(id);
     res.status(HttpStatus.OK).json(respo);
   }
 }

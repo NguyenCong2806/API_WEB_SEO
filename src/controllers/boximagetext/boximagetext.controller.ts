@@ -18,7 +18,7 @@ import { BoximagetextService } from 'src/services/boximagetext/boximagetext.serv
 
 @Controller('boximagetext')
 export class BoxImageTextController {
-  constructor(private readonly BoxImageTextService: BoximagetextService) {}
+  constructor(private readonly boxImageTextService: BoximagetextService) {}
 
   @Get('getall')
   async get(@Query() serachPara: SerachPara, @Res() res: Response) {
@@ -29,33 +29,33 @@ export class BoxImageTextController {
     if (serachPara.keyword != null) {
       pagination.condition = { username: { $regex: serachPara.keyword } };
     }
-    const respo = await this.BoxImageTextService.finds(pagination);
+    const respo = await this.boxImageTextService.finds(pagination);
     res.status(HttpStatus.OK).json(respo);
   }
   @Get('getalls')
   async getalls(@Res() res: Response) {
-    const respo = await this.BoxImageTextService.find();
+    const respo = await this.boxImageTextService.find();
     res.status(HttpStatus.OK).json(respo);
   }
   @Get('getbyboximagetext/:id')
   async find(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.BoxImageTextService.findOne(id);
+    const respo = await this.boxImageTextService.findOne(id);
     res.status(HttpStatus.OK).json(respo);
   }
   @Post('addboximagetext')
   async create(@Body() BoxImageTextdto: BoxImageText, @Res() res: Response) {
-    const respo = await this.BoxImageTextService.create(BoxImageTextdto);
+    const respo = await this.boxImageTextService.create(BoxImageTextdto);
     res.status(HttpStatus.CREATED).json(respo);
   }
   @Put('editboximagetext')
   async update(@Body() BoxImageTextdto: BoxImageText, @Res() res: Response) {
-    const respo = await this.BoxImageTextService.update(BoxImageTextdto);
+    const respo = await this.boxImageTextService.update(BoxImageTextdto);
     res.status(HttpStatus.OK).json(respo);
   }
 
   @Delete('delboximagetext/:id')
   async delete(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.BoxImageTextService.remove(id);
+    const respo = await this.boxImageTextService.remove(id);
     res.status(HttpStatus.OK).json(respo);
   }
 }

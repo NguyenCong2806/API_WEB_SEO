@@ -32,6 +32,11 @@ export class ExpertController {
     const respo = await this.expertService.finds(pagination);
     res.status(HttpStatus.OK).json(respo);
   }
+  @Get('getalls')
+  async getalls(@Res() res: Response) {
+    const respo = await this.expertService.find();
+    res.status(HttpStatus.OK).json(respo);
+  }
   @Get('getbyexpert/:id')
   async find(@Param('id') id: string, @Res() res: Response) {
     const respo = await this.expertService.findOne(id);
