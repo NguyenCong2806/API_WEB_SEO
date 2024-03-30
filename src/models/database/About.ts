@@ -18,6 +18,8 @@ export class About extends BaseEntity {
   textlist: Array<string>;
   @Prop()
   link: string;
+  @Prop()
+  site: string;
 }
 
 export const AboutSchema = SchemaFactory.createForClass(About);

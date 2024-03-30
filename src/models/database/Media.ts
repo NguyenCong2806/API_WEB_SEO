@@ -14,6 +14,8 @@ export class Media extends BaseEntity {
   formatfile: string;
   @Prop()
   namefile: string;
+  @Prop()
+  site: string;
 }
 
 export const MediaSchema = SchemaFactory.createForClass(Media);

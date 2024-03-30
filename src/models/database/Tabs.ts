@@ -12,6 +12,8 @@ export class Tabs extends BaseEntity {
   label: string;
   @Prop()
   content: string;
+  @Prop()
+  site: string;
 }
 
 export const TabsSchema = SchemaFactory.createForClass(Tabs);

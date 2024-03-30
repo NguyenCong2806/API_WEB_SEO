@@ -16,6 +16,8 @@ export class Feedback extends BaseEntity {
   job: string;
   @Prop()
   img: string;
+  @Prop()
+  site: string;
 }
 
 export const FeedbackSchema = SchemaFactory.createForClass(Feedback);

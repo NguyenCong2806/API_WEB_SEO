@@ -24,6 +24,8 @@ export class Popular extends BaseEntity {
   time: number;
   @Prop()
   quantity: string;
+  @Prop()
+  site: string;
 }
 
 export const PopularSchema = SchemaFactory.createForClass(Popular);

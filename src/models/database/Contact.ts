@@ -22,6 +22,8 @@ export class Contact extends BaseEntity {
   linkin: string;
   @Prop()
   linktwitter: string;
+  @Prop()
+  site: string;
 }
 
 export const ContactSchema = SchemaFactory.createForClass(Contact);

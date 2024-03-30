@@ -14,6 +14,8 @@ export class MajorsNote extends BaseEntity {
   fontsize: number;
   @Prop()
   fontweight: number;
+  @Prop()
+  site: string;
 }
 
 export const MajorsNoteSchema = SchemaFactory.createForClass(MajorsNote);

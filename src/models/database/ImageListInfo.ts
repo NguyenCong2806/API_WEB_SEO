@@ -14,6 +14,8 @@ export class ImageListInfo extends BaseEntity {
   text: string;
   @Prop()
   isshow: boolean;
+  @Prop()
+  site: string;
 }
 
 export const ImageListInfoSchema = SchemaFactory.createForClass(ImageListInfo);

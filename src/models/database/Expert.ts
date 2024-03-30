@@ -16,6 +16,8 @@ export class Expert extends BaseEntity {
   link: string;
   @Prop()
   icon: string;
+  @Prop()
+  site: string;
 }
 
 export const ExpertSchema = SchemaFactory.createForClass(Expert);

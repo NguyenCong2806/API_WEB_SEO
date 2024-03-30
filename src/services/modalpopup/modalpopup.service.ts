@@ -1,8 +1,8 @@
-import { ModalpopupRepository } from './../../repository/modalpopup/ModalpopupRepository';
 import { ModalPopup } from './../../models/database/ModalPopup';
 import { Injectable, Inject } from '@nestjs/common';
 import { BaseService } from '../BaseService';
 import { IModalPopupservice } from './IModalPopupservice';
+import { IModalpopupRepository } from 'src/repository/modalpopup/IModalpopupRepository';
 
 @Injectable()
 export class ModalPopupService
@@ -11,7 +11,7 @@ export class ModalPopupService
 {
   constructor(
     @Inject('IModalpopupRepository')
-    private readonly modalpopup_repository: ModalpopupRepository,
+    private readonly modalpopup_repository: IModalpopupRepository,
   ) {
     super(modalpopup_repository);
   }

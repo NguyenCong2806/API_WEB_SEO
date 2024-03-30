@@ -41,6 +41,7 @@ const cta_module_1 = require("./cta/cta.module");
 const accordion_module_1 = require("./accordion/accordion.module");
 const tabs_module_1 = require("./tabs/tabs.module");
 const imagelistinfo_module_1 = require("./imagelistinfo/imagelistinfo.module");
+const menu_module_1 = require("./menu/menu.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer.apply(logger_middleware_1.LoggerMiddleware).forRoutes('*');
@@ -77,6 +78,7 @@ exports.AppModule = AppModule = __decorate([
             accordion_module_1.AccordionModule,
             tabs_module_1.TabsModule,
             imagelistinfo_module_1.ImagelistinfoModule,
+            menu_module_1.MenuModule,
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, '..', '../public'),
                 serveRoot: '/public/',

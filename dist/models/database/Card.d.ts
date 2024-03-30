@@ -32,6 +32,7 @@ export declare class Card extends BaseEntity {
     link: string;
     fontsize: number;
     fontweight: number;
+    site: string;
 }
 export declare const CardSchema: import("mongoose").Schema<Card, import("mongoose").Model<Card, any, any, any, Document<unknown, any, Card> & Card & Required<{
     _id: import("mongoose").Types.ObjectId;

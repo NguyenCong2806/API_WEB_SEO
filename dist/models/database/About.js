@@ -39,6 +39,10 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], About.prototype, "link", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], About.prototype, "site", void 0);
 exports.About = About = __decorate([
     (0, mongoose_1.Schema)()
 ], About);

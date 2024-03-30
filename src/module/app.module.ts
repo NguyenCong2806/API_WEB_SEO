@@ -32,6 +32,7 @@ import { CtaModule } from './cta/cta.module';
 import { AccordionModule } from './accordion/accordion.module';
 import { TabsModule } from './tabs/tabs.module';
 import { ImagelistinfoModule } from './imagelistinfo/imagelistinfo.module';
+import { MenuModule } from './menu/menu.module';
 // import { MailModule } from './mail/mail.module';
 
 @Module({
@@ -65,6 +66,7 @@ import { ImagelistinfoModule } from './imagelistinfo/imagelistinfo.module';
     AccordionModule,
     TabsModule,
     ImagelistinfoModule,
+    MenuModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '../public'),
       serveRoot: '/public/',

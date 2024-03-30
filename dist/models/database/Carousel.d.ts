@@ -31,6 +31,7 @@ export declare class Carousel extends BaseEntity {
     img: string;
     detail: string;
     link: string;
+    site: string;
 }
 export declare const CarouselSchema: import("mongoose").Schema<Carousel, import("mongoose").Model<Carousel, any, any, any, Document<unknown, any, Carousel> & Carousel & Required<{
     _id: import("mongoose").Types.ObjectId;

@@ -2,22 +2,20 @@ import { BaseEntity } from './BaseEntity';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type LogoDocument = Logo & Document;
+export type PageContentDocument = PageContent & Document;
 
 @Schema()
-export class Logo extends BaseEntity {
+export class PageContent extends BaseEntity {
   @Prop()
-  image: string;
+  title: string;
   @Prop()
-  height: number;
+  content: string;
   @Prop()
-  width: number;
+  heading: string;
   @Prop()
   link: string;
-  @Prop()
-  order: number;
   @Prop()
   site: string;
 }
 
-export const LogoSchema = SchemaFactory.createForClass(Logo);
+export const PageContentSchema = SchemaFactory.createForClass(PageContent);
