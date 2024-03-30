@@ -35,6 +35,10 @@ __decorate([
     (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
 ], Carousel.prototype, "link", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Carousel.prototype, "site", void 0);
 exports.Carousel = Carousel = __decorate([
     (0, mongoose_1.Schema)()
 ], Carousel);

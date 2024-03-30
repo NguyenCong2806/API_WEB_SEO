@@ -39,6 +39,10 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", Number)
 ], Card.prototype, "fontweight", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Card.prototype, "site", void 0);
 exports.Card = Card = __decorate([
     (0, mongoose_1.Schema)()
 ], Card);

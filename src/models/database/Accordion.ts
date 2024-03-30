@@ -14,6 +14,8 @@ export class Accordion extends BaseEntity {
   detail: string;
   @Prop()
   defaultindex: number;
+  @Prop()
+  site: string;
 }
 
 export const AccordionSchema = SchemaFactory.createForClass(Accordion);

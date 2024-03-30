@@ -24,6 +24,8 @@ export class ModalPopup extends BaseEntity {
   scrollstart: number;
   @Prop()
   scrollend: number;
+  @Prop()
+  site: string;
 }
 
 export const ModalPopupSchema = SchemaFactory.createForClass(ModalPopup);

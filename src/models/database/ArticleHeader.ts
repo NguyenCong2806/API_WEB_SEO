@@ -20,6 +20,8 @@ export class ArticleHeader extends BaseEntity {
   fontweight: number;
   @Prop()
   isdivider: boolean;
+  @Prop()
+  site: string;
 }
 
 export const ArticleHeaderSchema = SchemaFactory.createForClass(ArticleHeader);

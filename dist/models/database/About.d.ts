@@ -32,6 +32,7 @@ export declare class About extends BaseEntity {
     detail: string;
     textlist: Array<string>;
     link: string;
+    site: string;
 }
 export declare const AboutSchema: import("mongoose").Schema<About, import("mongoose").Model<About, any, any, any, Document<unknown, any, About> & About & Required<{
     _id: import("mongoose").Types.ObjectId;

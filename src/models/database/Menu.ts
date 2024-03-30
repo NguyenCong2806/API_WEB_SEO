@@ -2,28 +2,28 @@ import { BaseEntity } from './BaseEntity';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type CardNumbersDocument = CardNumbers & Document;
+export type MenuDocument = Menu & Document;
 
 @Schema()
-export class CardNumbers extends BaseEntity {
-  @Prop({ required: true })
+export class Menu extends BaseEntity {
+  @Prop()
   icon: string;
   @Prop()
-  start: number;
+  title: string;
   @Prop()
-  end: number;
+  menuid: number;
   @Prop()
-  suffix: string;
+  menuchildid: number;
   @Prop()
-  prefix: string;
+  heading: string;
+  @Prop()
+  link: string;
   @Prop()
   fontsize: number;
   @Prop()
   fontweight: number;
   @Prop()
-  text: string;
-  @Prop()
   site: string;
 }
 
-export const CardNumbersSchema = SchemaFactory.createForClass(CardNumbers);
+export const MenuSchema = SchemaFactory.createForClass(Menu);

@@ -12,6 +12,8 @@ export class Cta extends BaseEntity {
   text: string;
   @Prop()
   isshow: boolean;
+  @Prop()
+  site: string;
 }
 
 export const CtaSchema = SchemaFactory.createForClass(Cta);

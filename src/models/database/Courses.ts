@@ -18,6 +18,8 @@ export class Courses extends BaseEntity {
   oder: number;
   @Prop()
   link: string;
+  @Prop()
+  site: string;
 }
 
 export const CoursesSchema = SchemaFactory.createForClass(Courses);
