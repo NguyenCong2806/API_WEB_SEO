@@ -13,6 +13,8 @@ export class PageContent extends BaseEntity {
   @Prop()
   heading: string;
   @Prop()
+  menuid: number;
+  @Prop()
   link: string;
   @Prop()
   location: number;
