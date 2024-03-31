@@ -17,6 +17,7 @@ const Carousel_1 = require("./../../models/database/Carousel");
 const common_1 = require("@nestjs/common");
 const Paginations_1 = require("../../models/BaseModel/Paginations");
 const SerachPara_1 = require("../../models/BaseModel/SerachPara");
+const SiteParameter_1 = require("../../models/BaseModel/SiteParameter");
 const carousel_service_1 = require("../../services/carousel/carousel.service");
 let CarouselController = class CarouselController {
     constructor(carouselService) {
@@ -30,6 +31,13 @@ let CarouselController = class CarouselController {
             pagination.condition = { username: { $regex: serachPara.keyword } };
         }
         const respo = await this.carouselService.finds(pagination);
+        res.status(common_1.HttpStatus.OK).json(respo);
+    }
+    async finds(parainfo, res) {
+        const _datasite = { site: { $regex: parainfo.sitename } };
+        const _dataloca = { location: { $regex: parainfo.location } };
+        const _datas = [_datasite, _dataloca];
+        const respo = await this.carouselService.findconditions(_datas);
         res.status(common_1.HttpStatus.OK).json(respo);
     }
     async gets(res) {
@@ -62,6 +70,14 @@ __decorate([
     __metadata("design:paramtypes", [SerachPara_1.default, Object]),
     __metadata("design:returntype", Promise)
 ], CarouselController.prototype, "get", null);
+__decorate([
+    (0, common_1.Get)('getfind'),
+    __param(0, (0, common_1.Query)()),
+    __param(1, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [SiteParameter_1.default, Object]),
+    __metadata("design:returntype", Promise)
+], CarouselController.prototype, "finds", null);
 __decorate([
     (0, common_1.Get)('getalls'),
     __param(0, (0, common_1.Res)()),
