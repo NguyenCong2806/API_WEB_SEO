@@ -24,6 +24,8 @@ export class Content extends BaseEntity {
   tophot: boolean;
   @Prop()
   site: string;
+  @Prop()
+  location: number;
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Contenttype' })
   contenttypes: Types.ObjectId;
 }

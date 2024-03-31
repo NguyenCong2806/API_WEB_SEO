@@ -2,24 +2,24 @@ import { BaseEntity } from './BaseEntity';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type ExpertDocument = Expert & Document;
+export type ParallaxDocument = Parallax & Document;
 
 @Schema()
-export class Expert extends BaseEntity {
+export class Parallax extends BaseEntity {
   @Prop()
-  img: string;
+  bgimage: string;
   @Prop()
-  title: string;
+  bgimagealt: string;
   @Prop()
-  detail: string;
+  strength: number;
   @Prop()
-  link: string;
+  blurmin: number;
   @Prop()
-  icon: string;
+  blurmax: number;
   @Prop()
   location: number;
   @Prop()
   site: string;
 }
 
-export const ExpertSchema = SchemaFactory.createForClass(Expert);
+export const ParallaxSchema = SchemaFactory.createForClass(Parallax);

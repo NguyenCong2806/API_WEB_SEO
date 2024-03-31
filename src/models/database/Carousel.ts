@@ -18,6 +18,8 @@ export class Carousel extends BaseEntity {
   link: string;
   @Prop()
   site: string;
+  @Prop()
+  location: number;
 }
 
 export const CarouselSchema = SchemaFactory.createForClass(Carousel);

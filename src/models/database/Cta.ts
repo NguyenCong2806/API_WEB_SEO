@@ -13,6 +13,8 @@ export class Cta extends BaseEntity {
   @Prop()
   isshow: boolean;
   @Prop()
+  location: number;
+  @Prop()
   site: string;
 }
 

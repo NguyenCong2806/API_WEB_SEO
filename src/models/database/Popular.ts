@@ -25,6 +25,8 @@ export class Popular extends BaseEntity {
   @Prop()
   quantity: string;
   @Prop()
+  location: number;
+  @Prop()
   site: string;
 }
 

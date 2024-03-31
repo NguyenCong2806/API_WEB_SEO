@@ -1,5 +1,3 @@
-import { PageContent } from './../../models/database/PageContent';
-import { PageContentService } from './../../services/pagecontent/Pagecontent.serice';
 import {
   Body,
   Controller,
@@ -15,47 +13,49 @@ import {
 import { Response } from 'express';
 import Paginations from 'src/models/BaseModel/Paginations';
 import SerachPara from 'src/models/BaseModel/SerachPara';
+import { Parallax } from 'src/models/database/Parallax';
+import { ParallaxService } from 'src/services/parallax/Parallax.service';
 
-@Controller('pagecontent')
-export class PageContentController {
-  constructor(private readonly pagecontentService: PageContentService) {}
+@Controller('parallax')
+export class ParallaxController {
+  constructor(private readonly parallaxService: ParallaxService) {}
 
   @Get('getall')
   async get(@Query() serachPara: SerachPara, @Res() res: Response) {
-    const pagination = new Paginations<PageContent>();
+    const pagination = new Paginations<Parallax>();
 
     pagination.pageindex = serachPara.pageindex;
     pagination.pagesize = serachPara.pagesize;
     if (serachPara.keyword != null) {
       pagination.condition = { username: { $regex: serachPara.keyword } };
     }
-    const respo = await this.pagecontentService.finds(pagination);
+    const respo = await this.parallaxService.finds(pagination);
     res.status(HttpStatus.OK).json(respo);
   }
   @Get('getalls')
   async gets(@Res() res: Response) {
-    const respo = await this.pagecontentService.find();
+    const respo = await this.parallaxService.find();
     res.status(HttpStatus.OK).json(respo);
   }
-  @Get('getbypagecontent/:id')
+  @Get('getbyparallax/:id')
   async find(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.pagecontentService.findOne(id);
+    const respo = await this.parallaxService.findOne(id);
     res.status(HttpStatus.OK).json(respo);
   }
-  @Post('addpagecontent')
-  async create(@Body() dto: PageContent, @Res() res: Response) {
-    const respo = await this.pagecontentService.create(dto);
+  @Post('addparallax')
+  async create(@Body() dto: Parallax, @Res() res: Response) {
+    const respo = await this.parallaxService.create(dto);
     res.status(HttpStatus.CREATED).json(respo);
   }
-  @Put('editpagecontent')
-  async update(@Body() dto: PageContent, @Res() res: Response) {
-    const respo = await this.pagecontentService.update(dto);
+  @Put('editparallax')
+  async update(@Body() dto: Parallax, @Res() res: Response) {
+    const respo = await this.parallaxService.update(dto);
     res.status(HttpStatus.OK).json(respo);
   }
 
-  @Delete('delpagecontent/:id')
+  @Delete('delparallax/:id')
   async delete(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.pagecontentService.remove(id);
+    const respo = await this.parallaxService.remove(id);
     res.status(HttpStatus.OK).json(respo);
   }
 }

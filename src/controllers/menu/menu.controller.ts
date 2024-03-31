@@ -1,5 +1,3 @@
-import { ModalPopup } from './../../models/database/ModalPopup';
-import { ModalPopupService } from './../../services/modalpopup/modalpopup.service';
 import {
   Body,
   Controller,
@@ -45,12 +43,12 @@ export class MenuController {
     res.status(HttpStatus.OK).json(respo);
   }
   @Post('addmenu')
-  async create(@Body() dto: ModalPopup, @Res() res: Response) {
+  async create(@Body() dto: Menu, @Res() res: Response) {
     const respo = await this.menuService.create(dto);
     res.status(HttpStatus.CREATED).json(respo);
   }
   @Put('editmenu')
-  async update(@Body() dto: ModalPopup, @Res() res: Response) {
+  async update(@Body() dto: Menu, @Res() res: Response) {
     const respo = await this.menuService.update(dto);
     res.status(HttpStatus.OK).json(respo);
   }

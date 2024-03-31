@@ -43,6 +43,10 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Courses.prototype, "site", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", Number)
+], Courses.prototype, "location", void 0);
 exports.Courses = Courses = __decorate([
     (0, mongoose_1.Schema)()
 ], Courses);

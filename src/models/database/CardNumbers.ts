@@ -24,6 +24,8 @@ export class CardNumbers extends BaseEntity {
   text: string;
   @Prop()
   site: string;
+  @Prop()
+  location: number;
 }
 
 export const CardNumbersSchema = SchemaFactory.createForClass(CardNumbers);
