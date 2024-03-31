@@ -23,6 +23,8 @@ export class Menu extends BaseEntity {
   @Prop()
   fontweight: number;
   @Prop()
+  location: number;
+  @Prop()
   site: string;
 }
 

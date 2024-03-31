@@ -42,6 +42,8 @@ const accordion_module_1 = require("./accordion/accordion.module");
 const tabs_module_1 = require("./tabs/tabs.module");
 const imagelistinfo_module_1 = require("./imagelistinfo/imagelistinfo.module");
 const menu_module_1 = require("./menu/menu.module");
+const pagecontent_module_1 = require("./pagecontent/pagecontent.module");
+const parallax_module_1 = require("./parallax/parallax.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer.apply(logger_middleware_1.LoggerMiddleware).forRoutes('*');
@@ -79,6 +81,8 @@ exports.AppModule = AppModule = __decorate([
             tabs_module_1.TabsModule,
             imagelistinfo_module_1.ImagelistinfoModule,
             menu_module_1.MenuModule,
+            pagecontent_module_1.PageContentModule,
+            parallax_module_1.ParallaxModule,
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, '..', '../public'),
                 serveRoot: '/public/',

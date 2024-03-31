@@ -17,6 +17,8 @@ export class Logo extends BaseEntity {
   @Prop()
   order: number;
   @Prop()
+  location: number;
+  @Prop()
   site: string;
 }
 

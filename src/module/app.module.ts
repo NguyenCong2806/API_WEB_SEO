@@ -33,6 +33,8 @@ import { AccordionModule } from './accordion/accordion.module';
 import { TabsModule } from './tabs/tabs.module';
 import { ImagelistinfoModule } from './imagelistinfo/imagelistinfo.module';
 import { MenuModule } from './menu/menu.module';
+import { PageContentModule } from './pagecontent/pagecontent.module';
+import { ParallaxModule } from './parallax/parallax.module';
 // import { MailModule } from './mail/mail.module';
 
 @Module({
@@ -67,6 +69,8 @@ import { MenuModule } from './menu/menu.module';
     TabsModule,
     ImagelistinfoModule,
     MenuModule,
+    PageContentModule,
+    ParallaxModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '../public'),
       serveRoot: '/public/',

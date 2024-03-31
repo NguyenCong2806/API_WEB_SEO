@@ -39,6 +39,10 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Carousel.prototype, "site", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", Number)
+], Carousel.prototype, "location", void 0);
 exports.Carousel = Carousel = __decorate([
     (0, mongoose_1.Schema)()
 ], Carousel);

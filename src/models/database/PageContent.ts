@@ -15,6 +15,8 @@ export class PageContent extends BaseEntity {
   @Prop()
   link: string;
   @Prop()
+  location: number;
+  @Prop()
   site: string;
 }
 

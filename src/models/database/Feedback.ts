@@ -17,6 +17,8 @@ export class Feedback extends BaseEntity {
   @Prop()
   img: string;
   @Prop()
+  location: number;
+  @Prop()
   site: string;
 }
 

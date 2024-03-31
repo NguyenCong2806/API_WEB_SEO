@@ -16,6 +16,8 @@ export class Contenttype extends BaseEntity {
   link: string;
   @Prop()
   site: string;
+  @Prop()
+  location: number;
 }
 
 export const ContenttypeSchema = SchemaFactory.createForClass(Contenttype);

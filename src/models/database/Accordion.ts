@@ -15,6 +15,8 @@ export class Accordion extends BaseEntity {
   @Prop()
   defaultindex: number;
   @Prop()
+  location: number;
+  @Prop()
   site: string;
 }
 

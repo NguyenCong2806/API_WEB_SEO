@@ -25,6 +25,8 @@ export class ModalPopup extends BaseEntity {
   @Prop()
   scrollend: number;
   @Prop()
+  location: number;
+  @Prop()
   site: string;
 }
 

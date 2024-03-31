@@ -15,6 +15,8 @@ export class ImageListInfo extends BaseEntity {
   @Prop()
   isshow: boolean;
   @Prop()
+  location: number;
+  @Prop()
   site: string;
 }
 
