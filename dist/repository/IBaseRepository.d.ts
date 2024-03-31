@@ -32,6 +32,7 @@ export interface IBaseRepository<T> {
     findcondition(condition?: FilterQuery<T>): Promise<ResultData>;
     findOne(id: any): Promise<ResultData>;
     findOneValue(condition?: FilterQuery<T>): Promise<ResultData>;
+    findconditions(condition?: Array<FilterQuery<T>>): Promise<ResultData>;
     create(item: T): Promise<ResultData>;
     checkkeyword(condition?: FilterQuery<T>): Promise<ResultData>;
     count(): Promise<ResultData>;
