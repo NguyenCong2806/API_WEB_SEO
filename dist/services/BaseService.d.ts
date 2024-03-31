@@ -32,6 +32,7 @@ import { FilterQuery } from 'mongoose';
 export declare abstract class BaseService<M extends BaseEntity> implements IBaseService<M> {
     private readonly repository;
     constructor(repository: IBaseRepository<M>);
+    findconditions(condition?: FilterQuery<M>[]): Promise<ResultData>;
     findcondition(condition?: FilterQuery<M>): Promise<ResultData>;
     checkkeyword(condition?: FilterQuery<M>): Promise<ResultData>;
     countcondition(condition?: FilterQuery<M>): Promise<ResultData>;

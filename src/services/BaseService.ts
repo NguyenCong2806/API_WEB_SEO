@@ -5,11 +5,13 @@ import Results from 'src/models/BaseModel/Results';
 import { BaseEntity } from './../models/database/BaseEntity';
 import { IBaseService } from './IBaseService';
 import { FilterQuery } from 'mongoose';
-
 export abstract class BaseService<M extends BaseEntity>
   implements IBaseService<M>
 {
   constructor(private readonly repository: IBaseRepository<M>) {}
+  async findconditions(condition?: FilterQuery<M>[]): Promise<ResultData> {
+    return await this.repository.findconditions(condition);
+  }
   async findcondition(condition?: FilterQuery<M>): Promise<ResultData> {
     return await this.repository.findcondition(condition);
   }

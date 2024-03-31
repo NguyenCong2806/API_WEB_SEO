@@ -13,6 +13,23 @@ export abstract class BaseRepository<T extends BaseEntity>
   protected constructor(private readonly _model: Model<T>) {
     this._model = _model;
   }
+  async findconditions(conditions?: FilterQuery<T>[]): Promise<ResultData> {
+    const _data = new ResultData();
+    try {
+      _data.status = true;
+      _data.message = message.Download_data_successfully;
+      _data.statuscode = httpstatus.Successful_responses;
+      for (const item of conditions) {
+        _data.item = await this._model.find(item);
+      }
+    } catch (error: any) {
+      _data.status = false;
+      _data.message = error.message as string;
+      _data.statuscode = httpstatus.Server_errors;
+      _data.item = false;
+    }
+    return _data;
+  }
   async findcondition(condition?: FilterQuery<T>): Promise<ResultData> {
     const _data = new ResultData();
     try {

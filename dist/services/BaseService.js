@@ -5,6 +5,9 @@ class BaseService {
     constructor(repository) {
         this.repository = repository;
     }
+    async findconditions(condition) {
+        return await this.repository.findconditions(condition);
+    }
     async findcondition(condition) {
         return await this.repository.findcondition(condition);
     }

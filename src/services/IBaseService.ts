@@ -12,6 +12,7 @@ export interface Write<M> {
 export interface Read<M> {
   finds(item: Paginations<M>): Promise<Results<M>>;
   find(): Promise<ResultData>;
+  findconditions(condition?: Array<FilterQuery<M>>): Promise<ResultData>;
   findcondition(condition?: FilterQuery<M>): Promise<ResultData>;
   findOne(id: string): Promise<ResultData>;
   findOneValue(condition?: FilterQuery<M>): Promise<ResultData>;
