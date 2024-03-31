@@ -13,6 +13,7 @@ import {
 import { Response } from 'express';
 import Paginations from 'src/models/BaseModel/Paginations';
 import SerachPara from 'src/models/BaseModel/SerachPara';
+import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { Menu } from 'src/models/database/Menu';
 import { MenuService } from 'src/services/menu/menu.service';
 
@@ -35,6 +36,14 @@ export class MenuController {
   @Get('getalls')
   async gets(@Res() res: Response) {
     const respo = await this.menuService.find();
+    res.status(HttpStatus.OK).json(respo);
+  }
+  @Get('getfind')
+  async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
+    const _datasite = { site: { $regex: parainfo.sitename } } as any;
+    const _dataloca = { location: { $regex: parainfo.location } } as any;
+    const _datas = [_datasite, _dataloca];
+    const respo = await this.menuService.findconditions(_datas);
     res.status(HttpStatus.OK).json(respo);
   }
   @Get('getbymenu/:id')
