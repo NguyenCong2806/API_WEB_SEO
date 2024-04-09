@@ -31,6 +31,7 @@ import { FilterQuery, Model } from 'mongoose';
 export declare abstract class BaseRepository<T extends BaseEntity> implements IBaseRepository<T> {
     private readonly _model;
     protected constructor(_model: Model<T>);
+    deletefile(condition?: FilterQuery<T>): Promise<ResultData>;
     findconditions(conditions?: FilterQuery<T>[]): Promise<ResultData>;
     findcondition(condition?: FilterQuery<T>): Promise<ResultData>;
     checkkeyword(condition?: FilterQuery<T>): Promise<ResultData>;

@@ -10,6 +10,22 @@ class BaseRepository {
         this._model = _model;
         this._model = _model;
     }
+    async deletefile(condition) {
+        const _data = new ResultData_1.default();
+        try {
+            _data.status = true;
+            _data.message = message_1.message.Download_data_successfully;
+            _data.statuscode = httpStatus_1.httpstatus.Successful_responses;
+            _data.item = await this._model.findOneAndDelete(condition);
+        }
+        catch (error) {
+            _data.status = false;
+            _data.message = error.message;
+            _data.statuscode = httpStatus_1.httpstatus.Server_errors;
+            _data.item = false;
+        }
+        return _data;
+    }
     async findconditions(conditions) {
         const _data = new ResultData_1.default();
         try {

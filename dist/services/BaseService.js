@@ -5,6 +5,9 @@ class BaseService {
     constructor(repository) {
         this.repository = repository;
     }
+    async deletefile(condition) {
+        return await this.repository.deletefile(condition);
+    }
     async findconditions(condition) {
         return await this.repository.findconditions(condition);
     }
