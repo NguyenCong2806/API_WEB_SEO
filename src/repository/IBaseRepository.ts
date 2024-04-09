@@ -16,4 +16,5 @@ export interface IBaseRepository<T> {
   countcondition(condition?: FilterQuery<T>): Promise<ResultData>;
   update(id: any, item: Partial<T>): Promise<ResultData>;
   delete(id: any): Promise<ResultData>;
+  deletefile(condition?: FilterQuery<T>): Promise<ResultData>;
 }

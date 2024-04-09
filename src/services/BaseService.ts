@@ -9,6 +9,9 @@ export abstract class BaseService<M extends BaseEntity>
   implements IBaseService<M>
 {
   constructor(private readonly repository: IBaseRepository<M>) {}
+  async deletefile(condition?: FilterQuery<M>): Promise<ResultData> {
+    return await this.repository.deletefile(condition);
+  }
   async findconditions(condition?: FilterQuery<M>[]): Promise<ResultData> {
     return await this.repository.findconditions(condition);
   }

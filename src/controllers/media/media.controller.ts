@@ -10,6 +10,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { FilterQuery } from 'mongoose';
 import Paginations from 'src/models/BaseModel/Paginations';
 import SerachPara from 'src/models/BaseModel/SerachPara';
 import { Media } from 'src/models/database/Media';
@@ -43,6 +44,17 @@ export class MediaController {
   @Delete('delmedia/:id')
   async delete(@Param('id') id: string, @Res() res: Response) {
     const respo = await this.mediaService.remove(id);
+    res.status(HttpStatus.OK).json(respo);
+  }
+  @Delete('delfilename/:filename')
+  async deletefilename(
+    @Param('filename') filename: string,
+    @Res() res: Response,
+  ) {
+    const condition: FilterQuery<Media> = {
+      namefile: { $regex: filename },
+    };
+    const respo = await this.mediaService.deletefile(condition);
     res.status(HttpStatus.OK).json(respo);
   }
 }
