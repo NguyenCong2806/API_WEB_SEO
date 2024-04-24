@@ -34,8 +34,9 @@ let CarouselController = class CarouselController {
         res.status(common_1.HttpStatus.OK).json(respo);
     }
     async finds(parainfo, res) {
+        console.log(parainfo);
         const _datasite = { site: { $regex: parainfo.sitename } };
-        const _dataloca = { location: { $regex: parainfo.location } };
+        const _dataloca = { location: parseInt(parainfo.location, 10) };
         const _datas = [_datasite, _dataloca];
         const respo = await this.carouselService.findconditions(_datas);
         res.status(common_1.HttpStatus.OK).json(respo);
