@@ -1,4 +1,4 @@
 export default class SiteParameter {
-  location: number = 1;
+  location: string = null;
   sitename: string = null;
 }

@@ -38,10 +38,10 @@ export class AccordionController {
     const respo = await this.accordionService.find();
     res.status(HttpStatus.OK).json(respo);
   }
-  @Get('find')
+  @Get('getfind')
   async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
     const _datasite = { site: { $regex: parainfo.sitename } } as any;
-    const _dataloca = { location: { $regex: parainfo.location } } as any;
+    const _dataloca = { location: parseInt(parainfo.location, 10) } as any;
     const _datas = [_datasite, _dataloca];
     const respo = await this.accordionService.findconditions(_datas);
     res.status(HttpStatus.OK).json(respo);
