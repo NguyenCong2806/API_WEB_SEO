@@ -44,6 +44,8 @@ const imagelistinfo_module_1 = require("./imagelistinfo/imagelistinfo.module");
 const menu_module_1 = require("./menu/menu.module");
 const pagecontent_module_1 = require("./pagecontent/pagecontent.module");
 const parallax_module_1 = require("./parallax/parallax.module");
+const advertisement_module_1 = require("./advertisement/advertisement.module");
+const footerbox_module_1 = require("./footerbox/footerbox.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer.apply(logger_middleware_1.LoggerMiddleware).forRoutes('*');
@@ -83,6 +85,8 @@ exports.AppModule = AppModule = __decorate([
             menu_module_1.MenuModule,
             pagecontent_module_1.PageContentModule,
             parallax_module_1.ParallaxModule,
+            advertisement_module_1.AdvertisementModule,
+            footerbox_module_1.FooterBoxModule,
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, '..', '../public'),
                 serveRoot: '/public/',
