@@ -56,8 +56,8 @@ export class BoxImageTextController {
   @Get('getfind')
   async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
     const _datasite = { site: { $regex: parainfo.sitename } } as any;
-    const _dataloca = { location: parseInt(parainfo.location, 10) } as any;
-    const _datas = [_datasite, _dataloca];
+    //const _dataloca = { location: parseInt(parainfo.location, 10) } as any;
+    const _datas = [_datasite];
     const respo = await this.boxImageTextService.findconditions(_datas);
     res.status(HttpStatus.OK).json(respo);
   }
