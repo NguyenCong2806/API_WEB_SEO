@@ -35,6 +35,8 @@ import { ImagelistinfoModule } from './imagelistinfo/imagelistinfo.module';
 import { MenuModule } from './menu/menu.module';
 import { PageContentModule } from './pagecontent/pagecontent.module';
 import { ParallaxModule } from './parallax/parallax.module';
+import { AdvertisementModule } from './advertisement/advertisement.module';
+import { FooterBoxModule } from './footerbox/footerbox.module';
 // import { MailModule } from './mail/mail.module';
 
 @Module({
@@ -71,6 +73,8 @@ import { ParallaxModule } from './parallax/parallax.module';
     MenuModule,
     PageContentModule,
     ParallaxModule,
+    AdvertisementModule,
+    FooterBoxModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '../public'),
       serveRoot: '/public/',
