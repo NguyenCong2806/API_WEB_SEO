@@ -17,7 +17,9 @@ export class ModalPopup extends BaseEntity {
   @Prop()
   titel: string;
   @Prop()
-  time: number;
+  timestart: number;
+  @Prop()
+  timeend: number;
   @Prop()
   position: number;
   @Prop()
