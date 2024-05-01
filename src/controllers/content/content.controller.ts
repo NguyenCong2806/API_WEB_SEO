@@ -42,6 +42,13 @@ export class ContentController {
     const respo = await this.contentService.findconditions(_datas);
     res.status(HttpStatus.OK).json(respo);
   }
+  @Get('getlink/:link')
+  async findlink(@Param('link') link: string, @Res() res: Response) {
+    const _datalink = { link: { $regex: link } } as any;
+    const _datas = [_datalink];
+    const respo = await this.contentService.findconditions(_datas);
+    res.status(HttpStatus.OK).json(respo);
+  }
   @Get('getbycontent/:id')
   async find(@Param('id') id: string, @Res() res: Response) {
     const respo = await this.contentService.findOne(id);
