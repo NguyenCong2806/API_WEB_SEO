@@ -13,6 +13,7 @@ const CarouselRepository_1 = require("./../../repository/carousel/CarouselReposi
 const carousel_controller_1 = require("./../../controllers/carousel/carousel.controller");
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
+const jwt_1 = require("@nestjs/jwt");
 let CarouselModule = class CarouselModule {
 };
 exports.CarouselModule = CarouselModule;
@@ -20,6 +21,7 @@ exports.CarouselModule = CarouselModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mongoose_1.MongooseModule.forFeature([{ name: 'Carousel', schema: Carousel_1.CarouselSchema }]),
+            jwt_1.JwtModule,
         ],
         controllers: [carousel_controller_1.CarouselController],
         providers: [

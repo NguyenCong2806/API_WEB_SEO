@@ -9,6 +9,7 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import Paginations from 'src/models/BaseModel/Paginations';
@@ -16,8 +17,9 @@ import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { Advertisement } from 'src/models/database/Advertisement';
 import { AdvertisementService } from 'src/services/advertisement/Advertisement.Service';
-
+import { AuthGuard } from 'src/Guard/auth.guard';
 @Controller('advertisement')
+@UseGuards(AuthGuard)
 export class AdvertisementController {
   constructor(private readonly advertisementService: AdvertisementService) {}
 

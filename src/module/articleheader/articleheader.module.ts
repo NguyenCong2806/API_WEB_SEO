@@ -4,12 +4,14 @@ import { ArticleHeaderRespository } from './../../repository/articleheader/Artic
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ArticleHeaderSchema } from 'src/models/database/ArticleHeader';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: 'ArticleHeader', schema: ArticleHeaderSchema },
     ]),
+    JwtModule,
   ],
   controllers: [ArticleHeaderController],
   providers: [

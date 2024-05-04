@@ -5,7 +5,6 @@ import { ContenttypeRepository } from 'src/repository/contenttype/ContenttypeRep
 import { ContenttypeService } from 'src/services/contenttype/contenttype.service';
 import { ContenttypeController } from 'src/controllers/contenttype/contenttype.controller';
 import { JwtModule } from '@nestjs/jwt';
-
 @Module({
   imports: [
     MongooseModule.forFeature([

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { authvm } from './../../models/viewmodel/auth/authvm';
 import { UserService } from './../user/user.service';
 import { userlogin } from './../../models/viewmodel/auth/userlogin';

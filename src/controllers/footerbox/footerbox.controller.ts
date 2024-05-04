@@ -9,6 +9,7 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import Paginations from 'src/models/BaseModel/Paginations';
@@ -16,7 +17,8 @@ import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { FooterBox } from 'src/models/database/FooterBox';
 import { FooterBoxService } from 'src/services/footerbox/footerbox.service';
-
+import { AuthGuard } from 'src/Guard/auth.guard';
+@UseGuards(AuthGuard)
 @Controller('footerbox')
 export class FooterBoxController {
   constructor(private readonly footerboxService: FooterBoxService) {}

@@ -4,12 +4,13 @@ import { ModalPopupController } from './../../controllers/modalpopup/modalpopup.
 import { ModalPopupSchema } from './../../models/database/ModalPopup';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Module } from '@nestjs/common';
-
+import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: 'ModalPopup', schema: ModalPopupSchema },
     ]),
+    JwtModule,
   ],
   controllers: [ModalPopupController],
   providers: [

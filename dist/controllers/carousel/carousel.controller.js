@@ -19,6 +19,7 @@ const Paginations_1 = require("../../models/BaseModel/Paginations");
 const SerachPara_1 = require("../../models/BaseModel/SerachPara");
 const SiteParameter_1 = require("../../models/BaseModel/SiteParameter");
 const carousel_service_1 = require("../../services/carousel/carousel.service");
+const auth_guard_1 = require("../../Guard/auth.guard");
 let CarouselController = class CarouselController {
     constructor(carouselService) {
         this.carouselService = carouselService;
@@ -119,6 +120,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CarouselController.prototype, "delete", null);
 exports.CarouselController = CarouselController = __decorate([
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Controller)('carousel'),
     __metadata("design:paramtypes", [carousel_service_1.CarouselService])
 ], CarouselController);

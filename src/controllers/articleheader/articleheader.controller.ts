@@ -10,14 +10,16 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import Paginations from 'src/models/BaseModel/Paginations';
 import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { ArticleHeaderService } from 'src/services/articleheader/articleheader.service';
-
+import { AuthGuard } from 'src/Guard/auth.guard';
 @Controller('articleheader')
+@UseGuards(AuthGuard)
 export class ArticleHeaderController {
   constructor(private readonly articleheaderService: ArticleHeaderService) {}
 

@@ -11,12 +11,15 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from 'src/Guard/auth.guard';
 import { Response } from 'express';
 import Paginations from 'src/models/BaseModel/Paginations';
 import SerachPara from 'src/models/BaseModel/SerachPara';
 
 @Controller('about')
+@UseGuards(AuthGuard)
 export class AboutController {
   constructor(private readonly aboutService: AboutService) {}
 

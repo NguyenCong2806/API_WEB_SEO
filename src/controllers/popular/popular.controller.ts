@@ -10,13 +10,15 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import Paginations from 'src/models/BaseModel/Paginations';
 import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { PopularService } from 'src/services/popular/popular.service';
-
+import { AuthGuard } from 'src/Guard/auth.guard';
+@UseGuards(AuthGuard)
 @Controller('popular')
 export class PopularController {
   constructor(private readonly popularService: PopularService) {}

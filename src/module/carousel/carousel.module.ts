@@ -4,10 +4,11 @@ import { CarouselRepository } from './../../repository/carousel/CarouselReposito
 import { CarouselController } from './../../controllers/carousel/carousel.controller';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-
+import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Carousel', schema: CarouselSchema }]),
+    JwtModule,
   ],
   controllers: [CarouselController],
   providers: [

@@ -4,12 +4,13 @@ import { AdvertisementController } from 'src/controllers/advertisement/advertise
 import { AdvertisementSchema } from 'src/models/database/Advertisement';
 import { AdvertisementRepository } from 'src/repository/advertisement/AdvertisementRepository';
 import { AdvertisementService } from 'src/services/advertisement/Advertisement.Service';
-
+import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: 'Advertisement', schema: AdvertisementSchema },
     ]),
+    JwtModule,
   ],
   controllers: [AdvertisementController],
   providers: [

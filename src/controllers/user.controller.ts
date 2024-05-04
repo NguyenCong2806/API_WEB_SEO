@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
@@ -10,6 +11,7 @@ import {
   Query,
   Res,
   UseGuards,
+  // UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { User } from './../models/database/User';
@@ -21,7 +23,6 @@ import SerachPara from 'src/models/BaseModel/SerachPara';
 import { AuthGuard } from 'src/Guard/auth.guard';
 import { Roles } from 'src/decorator/roles.decorator';
 import * as argon2 from 'argon2';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IUserService } from 'src/services/user/IUserService';
 
 @Controller('user')
