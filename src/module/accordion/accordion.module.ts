@@ -4,10 +4,11 @@ import { AccordionController } from './../../controllers/accordion/accordion.con
 import { AccordionSchema } from './../../models/database/Accordion';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-
+import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Accordion', schema: AccordionSchema }]),
+    JwtModule,
   ],
   controllers: [AccordionController],
   providers: [

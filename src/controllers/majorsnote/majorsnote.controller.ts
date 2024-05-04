@@ -11,13 +11,15 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import Paginations from 'src/models/BaseModel/Paginations';
 import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { MajorsNoteService } from 'src/services/majorsnote/majorsnote.service';
-
+import { AuthGuard } from 'src/Guard/auth.guard';
+@UseGuards(AuthGuard)
 @Controller('majorsnote')
 export class MajorsNoteController {
   constructor(private readonly majorsnoteService: MajorsNoteService) {}

@@ -19,6 +19,7 @@ const multer = require("multer");
 const platform_express_1 = require("@nestjs/platform-express");
 const fs = require("fs");
 const path = require("path");
+const auth_guard_1 = require("../../Guard/auth.guard");
 const ResultData_1 = require("../../models/BaseModel/ResultData");
 const message_1 = require("../../constants/message");
 const httpStatus_1 = require("../../constants/httpStatus");
@@ -101,6 +102,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UploadController.prototype, "uploadMultiple", null);
 exports.UploadController = UploadController = __decorate([
-    (0, common_1.Controller)('upload')
+    (0, common_1.Controller)('upload'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard)
 ], UploadController);
 //# sourceMappingURL=file.controller.js.map

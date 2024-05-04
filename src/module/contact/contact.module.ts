@@ -4,10 +4,11 @@ import { ContactController } from './../../controllers/contact/contact.controlle
 import { ContactSchema } from './../../models/database/Contact';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-
+import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Contact', schema: ContactSchema }]),
+    JwtModule,
   ],
   controllers: [ContactController],
   providers: [

@@ -10,12 +10,15 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    UsersModule, PassportModule,JwtModule.register({
-    secret: process.env.JWT_SECRET,
-    signOptions: { expiresIn:process.env.JWT_EXPIRE  },
-  })],
+    UsersModule,
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: process.env.JWT_EXPIRE },
+    }),
+  ],
   controllers: [AuthController],
   providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],
- exports:[AuthService]
+  exports: [AuthService],
 })
 export class AuthModule {}

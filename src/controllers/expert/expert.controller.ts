@@ -9,6 +9,7 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import Paginations from 'src/models/BaseModel/Paginations';
@@ -16,7 +17,8 @@ import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { Expert } from 'src/models/database/Expert';
 import { ExpertService } from 'src/services/expert/expert.service';
-
+import { AuthGuard } from 'src/Guard/auth.guard';
+@UseGuards(AuthGuard)
 @Controller('expert')
 export class ExpertController {
   constructor(private readonly expertService: ExpertService) {}

@@ -13,6 +13,7 @@ const handlebars_adapter_1 = require("@nestjs-modules/mailer/dist/adapters/handl
 const common_1 = require("@nestjs/common");
 const path_1 = require("path");
 const config_1 = require("@nestjs/config");
+const jwt_1 = require("@nestjs/jwt");
 let MailModule = class MailModule {
 };
 exports.MailModule = MailModule;
@@ -20,6 +21,7 @@ exports.MailModule = MailModule = __decorate([
     (0, common_1.Global)(),
     (0, common_1.Module)({
         imports: [
+            jwt_1.JwtModule,
             mailer_1.MailerModule.forRootAsync({
                 useFactory: async (config) => ({
                     transport: {

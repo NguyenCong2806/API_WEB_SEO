@@ -4,9 +4,13 @@ import { CardSchema } from './../../models/database/Card';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CardController } from 'src/controllers/card/card.controller';
-
+import { JwtModule } from '@nestjs/jwt';
 @Module({
-  imports: [MongooseModule.forFeature([{ name: 'Card', schema: CardSchema }])],
+  imports: [
+    MongooseModule.forFeature([{ name: 'Card', schema: CardSchema }]),
+    JwtModule,
+  ],
+
   controllers: [CardController],
   providers: [
     CardService,

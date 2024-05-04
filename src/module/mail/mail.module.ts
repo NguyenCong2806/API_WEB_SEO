@@ -4,10 +4,11 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { Global, Module } from '@nestjs/common';
 import { join } from 'path';
 import { ConfigService } from '@nestjs/config';
-
+import { JwtModule } from '@nestjs/jwt';
 @Global()
 @Module({
   imports: [
+    JwtModule,
     MailerModule.forRootAsync({
       useFactory: async (config: ConfigService) => ({
         transport: {

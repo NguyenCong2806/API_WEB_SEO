@@ -19,6 +19,7 @@ const Paginations_1 = require("../models/BaseModel/Paginations");
 const UpdateUserDto_1 = require("../models/viewmodel/user/UpdateUserDto");
 const CreateUserDto_1 = require("../models/viewmodel/user/CreateUserDto");
 const SerachPara_1 = require("../models/BaseModel/SerachPara");
+const auth_guard_1 = require("../Guard/auth.guard");
 const roles_decorator_1 = require("../decorator/roles.decorator");
 const argon2 = require("argon2");
 let UsersController = class UsersController {
@@ -109,6 +110,7 @@ __decorate([
 ], UsersController.prototype, "delete", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('user'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, roles_decorator_1.Roles)('admin', 'member'),
     __metadata("design:paramtypes", [user_service_1.UserService])
 ], UsersController);
