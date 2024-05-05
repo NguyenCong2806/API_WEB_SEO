@@ -18,6 +18,7 @@ import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { Feedback } from 'src/models/database/Feedback';
 import { FeedbackService } from 'src/services/feedback/feedback.service';
 import { AuthGuard } from 'src/Guard/auth.guard';
+import { AuthMetaData } from 'src/decorator/auth.decorator';
 @UseGuards(AuthGuard)
 @Controller('feedback')
 export class FeedbackController {
@@ -55,6 +56,7 @@ export class FeedbackController {
     const respo = await this.feedbackService.update(Feedbackdto);
     res.status(HttpStatus.OK).json(respo);
   }
+  @AuthMetaData('skipAuthCheck')
   @Get('getfind')
   async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
     const _datasite = { site: { $regex: parainfo.sitename } } as any;

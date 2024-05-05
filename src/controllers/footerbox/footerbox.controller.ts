@@ -18,6 +18,7 @@ import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { FooterBox } from 'src/models/database/FooterBox';
 import { FooterBoxService } from 'src/services/footerbox/footerbox.service';
 import { AuthGuard } from 'src/Guard/auth.guard';
+import { AuthMetaData } from 'src/decorator/auth.decorator';
 @UseGuards(AuthGuard)
 @Controller('footerbox')
 export class FooterBoxController {
@@ -40,6 +41,7 @@ export class FooterBoxController {
     const respo = await this.footerboxService.find();
     res.status(HttpStatus.OK).json(respo);
   }
+  @AuthMetaData('skipAuthCheck')
   @Get('getfind')
   async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
     const _datasite = { site: { $regex: parainfo.sitename } } as any;

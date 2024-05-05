@@ -18,6 +18,7 @@ import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { Parallax } from 'src/models/database/Parallax';
 import { ParallaxService } from 'src/services/parallax/Parallax.service';
 import { AuthGuard } from 'src/Guard/auth.guard';
+import { AuthMetaData } from 'src/decorator/auth.decorator';
 @UseGuards(AuthGuard)
 @Controller('parallax')
 export class ParallaxController {
@@ -35,6 +36,7 @@ export class ParallaxController {
     const respo = await this.parallaxService.finds(pagination);
     res.status(HttpStatus.OK).json(respo);
   }
+  @AuthMetaData('skipAuthCheck')
   @Get('getfind')
   async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
     const _datasite = { site: { $regex: parainfo.sitename } } as any;

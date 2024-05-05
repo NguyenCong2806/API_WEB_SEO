@@ -20,6 +20,7 @@ const SerachPara_1 = require("../../models/BaseModel/SerachPara");
 const SiteParameter_1 = require("../../models/BaseModel/SiteParameter");
 const carousel_service_1 = require("../../services/carousel/carousel.service");
 const auth_guard_1 = require("../../Guard/auth.guard");
+const auth_decorator_1 = require("../../decorator/auth.decorator");
 let CarouselController = class CarouselController {
     constructor(carouselService) {
         this.carouselService = carouselService;
@@ -73,6 +74,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CarouselController.prototype, "get", null);
 __decorate([
+    (0, auth_decorator_1.AuthMetaData)('skipAuthCheck'),
     (0, common_1.Get)('getfind'),
     __param(0, (0, common_1.Query)()),
     __param(1, (0, common_1.Res)()),
@@ -81,6 +83,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CarouselController.prototype, "finds", null);
 __decorate([
+    (0, auth_decorator_1.AuthMetaData)('skipAuthCheck'),
     (0, common_1.Get)('getalls'),
     __param(0, (0, common_1.Res)()),
     __metadata("design:type", Function),

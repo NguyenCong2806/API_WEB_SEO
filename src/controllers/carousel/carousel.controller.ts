@@ -18,6 +18,7 @@ import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { CarouselService } from 'src/services/carousel/carousel.service';
 import { AuthGuard } from 'src/Guard/auth.guard';
+import { AuthMetaData } from 'src/decorator/auth.decorator';
 @UseGuards(AuthGuard)
 @Controller('carousel')
 export class CarouselController {
@@ -35,6 +36,7 @@ export class CarouselController {
     const respo = await this.carouselService.finds(pagination);
     res.status(HttpStatus.OK).json(respo);
   }
+  @AuthMetaData('skipAuthCheck')
   @Get('getfind')
   async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
     console.log(parainfo);
@@ -44,6 +46,7 @@ export class CarouselController {
     const respo = await this.carouselService.findconditions(_datas);
     res.status(HttpStatus.OK).json(respo);
   }
+  @AuthMetaData('skipAuthCheck')
   @Get('getalls')
   async gets(@Res() res: Response) {
     const respo = await this.carouselService.find();

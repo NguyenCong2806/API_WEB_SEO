@@ -17,7 +17,10 @@ let RolesGuard = class RolesGuard {
         this.reflector = reflector;
     }
     canActivate(context) {
-        const roles = this.reflector.getAllAndOverride('roles', [context.getHandler(), context.getClass()]);
+        const roles = this.reflector.getAllAndOverride('roles', [
+            context.getHandler(),
+            context.getClass(),
+        ]);
         if (!roles) {
             return false;
         }
@@ -26,7 +29,7 @@ let RolesGuard = class RolesGuard {
         return this.validateRoles(roles, userRoles);
     }
     validateRoles(roles, userRoles) {
-        return roles.some(role => userRoles.includes(role));
+        return roles.some((role) => userRoles.includes(role));
     }
 };
 exports.RolesGuard = RolesGuard;
