@@ -18,6 +18,7 @@ import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { PopularService } from 'src/services/popular/popular.service';
 import { AuthGuard } from 'src/Guard/auth.guard';
+import { AuthMetaData } from 'src/decorator/auth.decorator';
 @UseGuards(AuthGuard)
 @Controller('popular')
 export class PopularController {
@@ -35,6 +36,7 @@ export class PopularController {
     const respo = await this.popularService.finds(pagination);
     res.status(HttpStatus.OK).json(respo);
   }
+  @AuthMetaData('skipAuthCheck')
   @Get('getfind')
   async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
     const _datasite = { site: { $regex: parainfo.sitename } } as any;

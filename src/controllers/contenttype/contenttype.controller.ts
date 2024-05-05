@@ -19,6 +19,7 @@ import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { ContenttypeService } from 'src/services/contenttype/contenttype.service';
 import { AuthGuard } from 'src/Guard/auth.guard';
+import { AuthMetaData } from 'src/decorator/auth.decorator';
 @UseGuards(AuthGuard)
 @Controller('contenttype')
 export class ContenttypeController {
@@ -38,6 +39,7 @@ export class ContenttypeController {
     const respo = await this.contenttypeService.finds(pagination);
     res.status(HttpStatus.OK).json(respo);
   }
+  @AuthMetaData('skipAuthCheck')
   @Get('getfind')
   async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
     const _datasite = { site: { $regex: parainfo.sitename } } as any;
@@ -46,6 +48,7 @@ export class ContenttypeController {
     const respo = await this.contenttypeService.findconditions(_datas);
     res.status(HttpStatus.OK).json(respo);
   }
+  @AuthMetaData('skipAuthCheck')
   @Get('getalls')
   async getalls(@Res() res: Response) {
     const respo = await this.contenttypeService.find();

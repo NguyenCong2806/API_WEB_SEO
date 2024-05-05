@@ -18,6 +18,7 @@ import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { Expert } from 'src/models/database/Expert';
 import { ExpertService } from 'src/services/expert/expert.service';
 import { AuthGuard } from 'src/Guard/auth.guard';
+import { AuthMetaData } from 'src/decorator/auth.decorator';
 @UseGuards(AuthGuard)
 @Controller('expert')
 export class ExpertController {
@@ -40,6 +41,7 @@ export class ExpertController {
     const respo = await this.expertService.find();
     res.status(HttpStatus.OK).json(respo);
   }
+  @AuthMetaData('skipAuthCheck')
   @Get('getfind')
   async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
     const _datasite = { site: { $regex: parainfo.sitename } } as any;

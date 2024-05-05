@@ -18,6 +18,7 @@ import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { CoursesService } from 'src/services/Courses/Courses.service';
 import { AuthGuard } from 'src/Guard/auth.guard';
+import { AuthMetaData } from 'src/decorator/auth.decorator';
 @UseGuards(AuthGuard)
 @Controller('courses')
 export class CoursesController {
@@ -35,6 +36,7 @@ export class CoursesController {
     const respo = await this.coursesService.finds(pagination);
     res.status(HttpStatus.OK).json(respo);
   }
+  @AuthMetaData('skipAuthCheck')
   @Get('getfind')
   async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
     const _datasite = { site: { $regex: parainfo.sitename } } as any;

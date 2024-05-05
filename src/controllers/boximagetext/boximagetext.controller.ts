@@ -18,6 +18,7 @@ import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { BoximagetextService } from 'src/services/boximagetext/boximagetext.service';
 import { AuthGuard } from 'src/Guard/auth.guard';
+import { AuthMetaData } from 'src/decorator/auth.decorator';
 @Controller('boximagetext')
 @UseGuards(AuthGuard)
 export class BoxImageTextController {
@@ -55,6 +56,7 @@ export class BoxImageTextController {
     const respo = await this.boxImageTextService.update(BoxImageTextdto);
     res.status(HttpStatus.OK).json(respo);
   }
+  @AuthMetaData('skipAuthCheck')
   @Get('getfind')
   async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
     const _datasite = { site: { $regex: parainfo.sitename } } as any;

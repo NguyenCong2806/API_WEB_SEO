@@ -18,6 +18,7 @@ import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { AccordionService } from 'src/services/accordion/accordion.service';
 import { AuthGuard } from 'src/Guard/auth.guard';
+import { AuthMetaData } from 'src/decorator/auth.decorator';
 @Controller('accordion')
 @UseGuards(AuthGuard)
 export class AccordionController {
@@ -35,11 +36,13 @@ export class AccordionController {
     const respo = await this.accordionService.finds(pagination);
     res.status(HttpStatus.OK).json(respo);
   }
+  @AuthMetaData('skipAuthCheck')
   @Get('getalls')
   async getalls(@Res() res: Response) {
     const respo = await this.accordionService.find();
     res.status(HttpStatus.OK).json(respo);
   }
+  @AuthMetaData('skipAuthCheck')
   @Get('getfind')
   async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
     const _datasite = { site: { $regex: parainfo.sitename } } as any;

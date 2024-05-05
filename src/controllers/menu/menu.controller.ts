@@ -18,6 +18,7 @@ import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { Menu } from 'src/models/database/Menu';
 import { MenuService } from 'src/services/menu/menu.service';
 import { AuthGuard } from 'src/Guard/auth.guard';
+import { AuthMetaData } from 'src/decorator/auth.decorator';
 @UseGuards(AuthGuard)
 @Controller('menu')
 export class MenuController {
@@ -40,6 +41,7 @@ export class MenuController {
     const respo = await this.menuService.find();
     res.status(HttpStatus.OK).json(respo);
   }
+  @AuthMetaData('skipAuthCheck')
   @Get('getfind')
   async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
     const _datasite = { site: { $regex: parainfo.sitename } } as any;
