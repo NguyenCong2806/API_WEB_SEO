@@ -1,20 +1,20 @@
-# Sử dụng image chính thức của Node.js làm base image
-FROM node:12.18-alpine
+# Use a base image with Node.js installed
+FROM node:latest
 
-# Tạo thư mục làm việc trong container
-WORKDIR /app
+# Create and set the working directory inside the container
+WORKDIR /usr/src/app
 
-# Sao chép package.json và package-lock.json vào thư mục làm việc
-COPY ["package.json", "package-lock.json*", "./"]
+# Copy package.json and package-lock.json to the container
+COPY package*.json ./
 
-# Cài đặt các phụ thuộc của ứng dụng
+# Install application dependencies from package-lock
 RUN npm install
 
-# Sao chép mã nguồn ứng dụng vào thư mục làm việc
-COPY  . /app
+# Copy the application source code to the container
+COPY . .
 
-# Mở cổng 8088 để truy cập ứng dụng
+# Expose the port that the application runs on (change as needed)
 EXPOSE 8088
 
-#Chạy ứng dụng khi container khởi động
-CMD [ "node", "main.js" ]
+# Command to start the Nest.js application
+CMD ["npm", "run", "start:dev"]
