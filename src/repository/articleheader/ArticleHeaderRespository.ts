@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { ArticleHeader } from './../../models/database/ArticleHeader';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
