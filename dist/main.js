@@ -9,8 +9,10 @@ async function bootstrap() {
     app.useGlobalFilters(new AllExceptionFilter_1.AllExceptionFilter());
     app.use((0, helmet_1.default)({ crossOriginResourcePolicy: false }));
     app.enableCors();
-    await app.listen(parseInt(process.env.PORT, 10) || 3000);
-    console.log('server runing', `http://localhost:${parseInt(process.env.PORT, 10) || 3000}`);
+    app.setGlobalPrefix('api/v1');
+    const port = parseInt(process.env.PORT, 10) || 3000;
+    await app.listen(port);
+    console.log('Server running', `http://localhost:${port}/api/v1`);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

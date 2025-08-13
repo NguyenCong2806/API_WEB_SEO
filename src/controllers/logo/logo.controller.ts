@@ -19,7 +19,7 @@ import { Logo } from 'src/models/database/Logo';
 import { LogoService } from 'src/services/logo/logo.service';
 import { AuthGuard } from 'src/Guard/auth.guard';
 import { AuthMetaData } from 'src/decorator/auth.decorator';
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 @Controller('logo')
 export class LogoController {
   constructor(private readonly logoService: LogoService) {}
