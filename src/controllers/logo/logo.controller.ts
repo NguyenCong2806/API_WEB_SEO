@@ -31,7 +31,7 @@ export class LogoController {
     pagination.pageindex = serachPara.pageindex;
     pagination.pagesize = serachPara.pagesize;
     if (serachPara.keyword != null) {
-      pagination.condition = { username: { $regex: serachPara.keyword } };
+      pagination.condition = { link: { $regex: serachPara.keyword } };
     }
     const respo = await this.logoService.finds(pagination);
     res.status(HttpStatus.OK).json(respo);

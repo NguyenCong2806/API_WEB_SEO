@@ -19,10 +19,10 @@ const multer = require("multer");
 const platform_express_1 = require("@nestjs/platform-express");
 const fs = require("fs");
 const path = require("path");
-const auth_guard_1 = require("../../Guard/auth.guard");
 const ResultData_1 = require("../../models/BaseModel/ResultData");
 const message_1 = require("../../constants/message");
 const httpStatus_1 = require("../../constants/httpStatus");
+const media_service_1 = require("../../services/media/media.service");
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, process.env.FILE_ROOT);
@@ -32,6 +32,9 @@ const storage = multer.diskStorage({
     },
 });
 let UploadController = class UploadController {
+    constructor(mediaService) {
+        this.mediaService = mediaService;
+    }
     async getallfile(res) {
         const data = fs.readdirSync(process.env.FILE_ROOT, {
             withFileTypes: true,
@@ -42,7 +45,7 @@ let UploadController = class UploadController {
         fs.unlinkSync(process.env.FILE_ROOT + '/' + filename);
         res.status(200).json(message_1.message.Delete_Successful);
     }
-    uploadFile(file, res) {
+    async uploadFile(file, res) {
         const mediaInfo = new mediainfo_1.MediaInfo();
         const _data = new ResultData_1.default();
         mediaInfo.destination = file.destination;
@@ -88,7 +91,7 @@ __decorate([
     __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], UploadController.prototype, "uploadFile", null);
 __decorate([
     (0, common_1.Post)('files'),
@@ -103,6 +106,6 @@ __decorate([
 ], UploadController.prototype, "uploadMultiple", null);
 exports.UploadController = UploadController = __decorate([
     (0, common_1.Controller)('upload'),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard)
+    __metadata("design:paramtypes", [media_service_1.MediaService])
 ], UploadController);
 //# sourceMappingURL=file.controller.js.map

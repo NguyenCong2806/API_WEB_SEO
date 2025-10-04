@@ -20,7 +20,7 @@ import { AdvertisementService } from 'src/services/advertisement/Advertisement.S
 import { AuthGuard } from 'src/Guard/auth.guard';
 import { AuthMetaData } from 'src/decorator/auth.decorator';
 @Controller('advertisement')
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 export class AdvertisementController {
   constructor(private readonly advertisementService: AdvertisementService) {}
 

@@ -20,7 +20,7 @@ import { AccordionService } from 'src/services/accordion/accordion.service';
 import { AuthGuard } from 'src/Guard/auth.guard';
 import { AuthMetaData } from 'src/decorator/auth.decorator';
 @Controller('accordion')
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 export class AccordionController {
   constructor(private readonly accordionService: AccordionService) {}
 
@@ -63,6 +63,7 @@ export class AccordionController {
   }
   @Put('editacordion')
   async update(@Body() Accordiondto: Accordion, @Res() res: Response) {
+    console.log(Accordiondto);
     const respo = await this.accordionService.update(Accordiondto);
     res.status(HttpStatus.OK).json(respo);
   }

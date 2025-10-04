@@ -20,7 +20,7 @@ import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { ContenttypeService } from 'src/services/contenttype/contenttype.service';
 import { AuthGuard } from 'src/Guard/auth.guard';
 import { AuthMetaData } from 'src/decorator/auth.decorator';
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 @Controller('contenttype')
 export class ContenttypeController {
   constructor(private readonly contenttypeService: ContenttypeService) {}

@@ -19,7 +19,7 @@ import { Feedback } from 'src/models/database/Feedback';
 import { FeedbackService } from 'src/services/feedback/feedback.service';
 import { AuthGuard } from 'src/Guard/auth.guard';
 import { AuthMetaData } from 'src/decorator/auth.decorator';
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 @Controller('feedback')
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}

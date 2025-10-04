@@ -19,7 +19,7 @@ import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { AuthGuard } from 'src/Guard/auth.guard';
 import { AuthMetaData } from 'src/decorator/auth.decorator';
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 @Controller('card')
 export class CardController {
   constructor(private readonly cardService: CardService) {}
@@ -40,7 +40,6 @@ export class CardController {
   @Get('getfind')
   async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
     const _datasite = { site: { $regex: parainfo.sitename } } as any;
-    //const _dataloca = { location: parseInt(parainfo.location, 10) } as any;
     const _datas = [_datasite];
     const respo = await this.cardService.findconditions(_datas);
     res.status(HttpStatus.OK).json(respo);

@@ -19,7 +19,7 @@ import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { AuthGuard } from 'src/Guard/auth.guard';
 import { AuthMetaData } from 'src/decorator/auth.decorator';
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 @Controller('cardnumbers')
 export class CardNumbersController {
   constructor(private readonly cardnumbersService: CardNumbersService) {}

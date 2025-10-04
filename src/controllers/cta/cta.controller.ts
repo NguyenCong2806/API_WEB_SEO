@@ -19,7 +19,7 @@ import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { CtaService } from 'src/services/Cta/Cta.service';
 import { AuthGuard } from 'src/Guard/auth.guard';
 import { AuthMetaData } from 'src/decorator/auth.decorator';
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 @Controller('cta')
 export class CtaController {
   constructor(private readonly ctaService: CtaService) {}

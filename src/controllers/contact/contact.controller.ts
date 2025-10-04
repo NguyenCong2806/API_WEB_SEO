@@ -19,7 +19,7 @@ import { ContactService } from 'src/services/Contact/Contact.service';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { AuthGuard } from 'src/Guard/auth.guard';
 import { AuthMetaData } from 'src/decorator/auth.decorator';
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 @Controller('contact')
 export class ContactController {
   constructor(private readonly contactService: ContactService) {}

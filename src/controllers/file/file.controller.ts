@@ -21,6 +21,7 @@ import { AuthGuard } from 'src/Guard/auth.guard';
 import ResultData from 'src/models/BaseModel/ResultData';
 import { message } from 'src/constants/message';
 import { httpstatus } from 'src/constants/httpStatus';
+import { MediaService } from 'src/services/media/media.service';
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -35,8 +36,10 @@ const storage = multer.diskStorage({
 });
 
 @Controller('upload')
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 export class UploadController {
+  constructor(private readonly mediaService: MediaService) { }
+
   @Get('getallfile')
   async getallfile(@Res() res: Response) {
     const data = fs.readdirSync(process.env.FILE_ROOT, {
@@ -51,10 +54,10 @@ export class UploadController {
   }
   @Post('file')
   @UseInterceptors(FileInterceptor('file', { storage: storage }))
-  uploadFile(@UploadedFile() file, @Res() res: Response) {
+  async uploadFile(@UploadedFile() file, @Res() res: Response) {
     const mediaInfo = new MediaInfo();
     const _data = new ResultData();
-
+    
     mediaInfo.destination = file.destination;
     mediaInfo.encoding = file.encoding;
     mediaInfo.fieldname = file.fieldname;
@@ -65,6 +68,8 @@ export class UploadController {
     mediaInfo.size = file.size;
     mediaInfo.link = process.env.API_URL + process.env.FILE_URL + file.filename;
     mediaInfo.status = true;
+    
+    //await this.mediaService.create(mediaInfo);
     _data.item = mediaInfo;
     _data.message = message.Download_data_successfully;
     _data.status = true;
