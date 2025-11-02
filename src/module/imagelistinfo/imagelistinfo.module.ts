@@ -4,19 +4,22 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Module } from '@nestjs/common';
 import { ImageListInfoService } from 'src/services/imagelistinfo/imagelistinfo.service';
 import { ImageListInfoSchema } from 'src/models/database/ImageListInfo';
-import { JwtModule } from '@nestjs/jwt';
+import { Iimagelistinfoservice } from 'src/services/imagelistinfo/Iimagelistinfoservice';
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: 'ImageListInfo', schema: ImageListInfoSchema },
     ]),
-    JwtModule,
+
   ],
   controllers: [ImagelistinfoController],
   providers: [
-    ImageListInfoService,
+    {
+      provide: Iimagelistinfoservice, // <-- Token (Giá trị)
+      useClass: ImageListInfoService,  // <-- Class (Thực thi)
+    },
     { provide: 'IImagelistinfoRepository', useClass: ImagelistinfoRepository },
   ],
-  exports: [ImageListInfoService],
+  exports: [Iimagelistinfoservice],
 })
 export class ImagelistinfoModule {}

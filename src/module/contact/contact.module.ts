@@ -4,17 +4,20 @@ import { ContactController } from './../../controllers/contact/contact.controlle
 import { ContactSchema } from './../../models/database/Contact';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { JwtModule } from '@nestjs/jwt';
+import { IContactService } from 'src/services/Contact/IContactService';
+
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Contact', schema: ContactSchema }]),
-    JwtModule,
   ],
   controllers: [ContactController],
   providers: [
-    ContactService,
+    {
+      provide: IContactService, // <-- Token (Giá trị)
+      useClass: ContactService,  // <-- Class (Thực thi)
+    },
     { provide: 'IContactRepository', useClass: ContactRepository },
   ],
-  exports: [ContactService],
+  exports: [IContactService],
 })
-export class ContactModule {}
+export class ContactModule { }

@@ -4,19 +4,22 @@ import { ModalPopupController } from './../../controllers/modalpopup/modalpopup.
 import { ModalPopupSchema } from './../../models/database/ModalPopup';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
+import { IModalPopupservice } from 'src/services/modalpopup/IModalPopupservice';
+
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: 'ModalPopup', schema: ModalPopupSchema },
     ]),
-    JwtModule,
   ],
   controllers: [ModalPopupController],
   providers: [
-    ModalPopupService,
+    {
+      provide: IModalPopupservice, // <-- Token (Giá trị)
+      useClass: ModalPopupService, // <-- Class (Thực thi)
+    },
     { provide: 'IModalpopupRepository', useClass: ModalpopupRepository },
   ],
-  exports: [ModalPopupService],
+  exports: [IModalPopupservice],
 })
 export class ModalPopupModule {}

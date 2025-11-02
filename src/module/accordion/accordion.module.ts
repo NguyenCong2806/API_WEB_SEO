@@ -4,7 +4,6 @@ import { AccordionController } from './../../controllers/accordion/accordion.con
 import { AccordionSchema } from './../../models/database/Accordion';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-// import { JwtModule } from '@nestjs/jwt'; // <-- 1. XÓA BỎ
 import { IAccordionService } from 'src/services/accordion/IAccordionService'; // <-- 2. IMPORT TOKEN
 
 @Module({
@@ -26,4 +25,4 @@ import { IAccordionService } from 'src/services/accordion/IAccordionService'; //
   // 4. EXPORT TOKEN
   exports: [IAccordionService],
 })
-export class AccordionModule {}
+export class AccordionModule { }

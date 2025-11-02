@@ -6,10 +6,10 @@ import { UsersModule } from '../user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from 'src/controllers/auth/auth.controller';
 import { PassportModule } from '@nestjs/passport';
-import { ConfigModule } from '@nestjs/config';
+import { IAuthService } from 'src/services/auth/IAuthService'; // <-- 2. IMPORT TOKEN
+
 @Module({
   imports: [
-    ConfigModule.forRoot(),
     UsersModule,
     PassportModule,
     JwtModule.register({
@@ -18,7 +18,14 @@ import { ConfigModule } from '@nestjs/config';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],
-  exports: [AuthService, JwtModule],
+  providers: [
+    {
+      provide: IAuthService, // <-- Token (Giá trị)
+      useClass: AuthService,  // <-- Class (Thực thi)
+    },
+    AccessTokenStrategy,
+    RefreshTokenStrategy,
+  ],
+  exports: [IAuthService, JwtModule],
 })
-export class AuthModule {}
+export class AuthModule { }

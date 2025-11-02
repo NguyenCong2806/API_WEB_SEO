@@ -4,19 +4,22 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Module } from '@nestjs/common';
 import { PageContentController } from 'src/controllers/pagecontent/pagecontent.controller';
 import { PageContentService } from 'src/services/pagecontent/Pagecontent.serice';
-import { JwtModule } from '@nestjs/jwt';
+import { IPageContentservice } from 'src/services/pagecontent/IPagecontent.serice';
+
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: 'PageContent', schema: PageContentSchema },
     ]),
-    JwtModule,
   ],
   controllers: [PageContentController],
   providers: [
-    PageContentService,
+    {
+      provide: IPageContentservice, // <-- Token (Giá trị)
+      useClass: PageContentService, // <-- Class (Thực thi)
+    },
     { provide: 'IPageContentRepository', useClass: PageContentRepository },
   ],
-  exports: [PageContentService],
+  exports: [IPageContentservice],
 })
 export class PageContentModule {}

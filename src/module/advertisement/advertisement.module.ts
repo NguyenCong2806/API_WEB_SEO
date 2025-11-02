@@ -4,22 +4,27 @@ import { AdvertisementController } from 'src/controllers/advertisement/advertise
 import { AdvertisementSchema } from 'src/models/database/Advertisement';
 import { AdvertisementRepository } from 'src/repository/advertisement/AdvertisementRepository';
 import { AdvertisementService } from 'src/services/advertisement/Advertisement.Service';
-import { JwtModule } from '@nestjs/jwt';
+import { IAdvertisementService } from 'src/services/advertisement/IAdvertisement.Service'; // <-- 2. IMPORT TOKEN
+
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: 'Advertisement', schema: AdvertisementSchema },
     ]),
-    JwtModule,
   ],
   controllers: [AdvertisementController],
   providers: [
-    AdvertisementService,
+    // 3. SỬA LẠI PROVIDER ĐỂ DÙNG TOKEN
+    {
+      provide: IAdvertisementService, 
+      useClass: AdvertisementService, 
+    },
     {
       provide: 'IAdvertisementRepository',
       useClass: AdvertisementRepository,
     },
   ],
-  exports: [AdvertisementService],
+  // 4. EXPORT TOKEN
+  exports: [IAdvertisementService],
 })
 export class AdvertisementModule {}

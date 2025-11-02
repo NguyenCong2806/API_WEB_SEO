@@ -4,17 +4,20 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { CtaSchema } from 'src/models/database/Cta';
 import { CtaService } from 'src/services/Cta/Cta.service';
 import { CtaController } from 'src/controllers/Cta/Cta.controller';
-import { JwtModule } from '@nestjs/jwt';
+import { ICtaService } from 'src/services/Cta/ICtaService';
+
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Cta', schema: CtaSchema }]),
-    JwtModule,
   ],
   controllers: [CtaController],
   providers: [
-    CtaService,
+    {
+      provide: ICtaService, // <-- Token (Giá trị)
+      useClass: CtaService,  // <-- Class (Thực thi)
+    },
     { provide: 'ICtaRepository', useClass: CtaRepository },
   ],
-  exports: [CtaService],
+  exports: [ICtaService],
 })
 export class CtaModule {}

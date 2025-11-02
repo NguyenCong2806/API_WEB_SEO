@@ -4,19 +4,22 @@ import { ContenttypeSchema } from 'src/models/database/Contenttype';
 import { ContenttypeRepository } from 'src/repository/contenttype/ContenttypeRepository';
 import { ContenttypeService } from 'src/services/contenttype/contenttype.service';
 import { ContenttypeController } from 'src/controllers/contenttype/contenttype.controller';
-import { JwtModule } from '@nestjs/jwt';
+import { IContenttypeService } from 'src/services/contenttype/IContenttypeService';
+
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: 'Contenttype', schema: ContenttypeSchema },
     ]),
-    JwtModule,
   ],
   controllers: [ContenttypeController],
   providers: [
-    ContenttypeService,
+    {
+      provide: IContenttypeService, // <-- Token (Giá trị)
+      useClass: ContenttypeService,  // <-- Class (Thực thi)
+    },
     { provide: 'IContenttypeRepository', useClass: ContenttypeRepository },
   ],
-  exports: [ContenttypeService],
+  exports: [IContenttypeService],
 })
 export class ContenttypeModule {}
