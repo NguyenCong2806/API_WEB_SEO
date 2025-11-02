@@ -1,76 +1,61 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
   Delete,
   Get,
+  HttpCode,
   HttpStatus,
+  Inject,
   Param,
   Post,
   Put,
   Query,
-  Res,
   UseGuards,
-  // UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
-import { User } from './../models/database/User';
-import { UserService } from 'src/services/user/user.service';
-import Paginations from 'src/models/BaseModel/Paginations';
-import { UpdateTodoDto } from '../models/viewmodel/user/UpdateUserDto';
-import { CreateTodoDto } from '../models/viewmodel/user/CreateUserDto';
+import { CreateUserDto } from '../models/viewmodel/user/CreateUserDto';
 import SerachPara from 'src/models/BaseModel/SerachPara';
-import { AuthGuard } from 'src/Guard/auth.guard';
+import { JwtAuthGuard } from 'src/Guard/jwt-auth.guard';
 import { Roles } from 'src/decorator/roles.decorator';
-import * as argon2 from 'argon2';
 import { IUserService } from 'src/services/user/IUserService';
+import { RolesGuard } from 'src/Guard/role.guard';
+import { UpdateUserDto } from 'src/models/viewmodel/user/UpdateUserDto';
 
 @Controller('user')
-@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Roles('admin', 'member')
 export class UsersController {
-  constructor(private readonly usersService: UserService) {}
+  constructor(
+    @Inject(IUserService)
+    private readonly usersService: IUserService,
+  ) {} 
 
-  @Get('getall')
-  async get(@Query() serachPara: SerachPara, @Res() res: Response) {
-    const pagination = new Paginations<User>();
+  @Get()
+  async get(@Query() serachPara: SerachPara) {
+    return this.usersService.finds(serachPara);
+  }
 
-    pagination.pageindex = serachPara.pageindex;
-    pagination.pagesize = serachPara.pagesize;
-    if (serachPara.keyword != null) {
-      pagination.condition = { username: { $regex: serachPara.keyword } };
-    }
-    const respo = await this.usersService.finds(pagination);
-    res.status(HttpStatus.OK).json(respo);
+  @Get(':id')
+  async find(@Param('id') id: string) {
+    return this.usersService.findOne(id);
   }
-  @Get('getbyuse/:id')
-  async find(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.usersService.findOne(id);
-    res.status(HttpStatus.OK).json(respo);
+
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() createUserDto: CreateUserDto) { // (Đã sửa tên DTO)
+    return this.usersService.create(createUserDto);
   }
-  @Post('adduser')
-  async create(@Body() createUserDto: CreateTodoDto, @Res() res: Response) {
-    createUserDto.password = await argon2.hash(createUserDto.password);
-    const respo = await this.usersService.create(createUserDto);
-    res.status(HttpStatus.CREATED).json(respo);
-  }
-  @Put('edituser')
-  async update(@Body() updateTodoDto: UpdateTodoDto, @Res() res: Response) {
-    const respo = await this.usersService.update(updateTodoDto);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Put('changpassword/:id')
-  async changpassword(
-    @Body() updateTodoDto: UpdateTodoDto,
-    @Res() res: Response,
+
+  @Put(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() updateTodoDto: UpdateUserDto, 
   ) {
-    updateTodoDto.password = await argon2.hash(updateTodoDto.password);
-    const respo = await this.usersService.update(updateTodoDto);
-    res.status(HttpStatus.OK).json(respo);
+    return this.usersService.update(id, updateTodoDto);
   }
-  @Delete('deluser/:id')
-  async delete(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.usersService.remove(id);
-    res.status(HttpStatus.OK).json(respo);
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id') id: string) {
+    return this.usersService.remove(id);
   }
 }

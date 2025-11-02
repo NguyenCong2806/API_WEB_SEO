@@ -1,59 +1,58 @@
-import { About } from './../../models/database/About';
-import { AboutService } from './../../services/about/about.service';
 import {
   Body,
   Controller,
   Delete,
   Get,
+  HttpCode, // <-- 1. Thêm HttpCode
   HttpStatus,
+  Inject, // <-- 2. Thêm Inject
   Param,
   Post,
   Put,
   Query,
-  Res,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from 'src/Guard/auth.guard';
-import { Response } from 'express';
-import Paginations from 'src/models/BaseModel/Paginations';
+import { JwtAuthGuard } from 'src/Guard/jwt-auth.guard';
 import SerachPara from 'src/models/BaseModel/SerachPara';
+import { AboutDto } from 'src/models/viewmodel/about/aboutDto';
+import { IAboutService } from 'src/services/about/IAboutService';
 
 @Controller('about')
-@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard)
 export class AboutController {
-  constructor(private readonly aboutService: AboutService) {}
+  constructor(
+    @Inject(IAboutService)
+    private readonly aboutService: IAboutService,
+  ) { }
 
-  @Get('getall')
-  async get(@Query() serachPara: SerachPara, @Res() res: Response) {
-    const pagination = new Paginations<About>();
-
-    pagination.pageindex = serachPara.pageindex;
-    pagination.pagesize = serachPara.pagesize;
-    if (serachPara.keyword != null) {
-      pagination.condition = { username: { $regex: serachPara.keyword } };
-    }
-    const respo = await this.aboutService.finds(pagination);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Get('getbyabout/:id')
-  async find(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.aboutService.findOne(id);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Post('addabout')
-  async create(@Body() aboutdto: About, @Res() res: Response) {
-    const respo = await this.aboutService.create(aboutdto);
-    res.status(HttpStatus.CREATED).json(respo);
-  }
-  @Put('editabout')
-  async update(@Body() aboutdto: About, @Res() res: Response) {
-    const respo = await this.aboutService.update(aboutdto);
-    res.status(HttpStatus.OK).json(respo);
+  @Get() // <-- 8. SỬA LẠI TÊN ROUTE
+  async get(@Query() serachPara: SerachPara) {
+    return this.aboutService.finds(serachPara);
   }
 
-  @Delete('delabout/:id')
-  async delete(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.aboutService.remove(id);
-    res.status(HttpStatus.OK).json(respo);
+  @Get(':id') // <-- 8. SỬA LẠI TÊN ROUTE
+  async find(@Param('id') id: string) {
+    // 10. CHỈ CẦN RETURN
+    return this.aboutService.findOne(id);
+  }
+
+  @Post() // <-- 8. SỬA LẠI TÊN ROUTE
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() createDto: AboutDto) {
+    return this.aboutService.create(createDto);
+  }
+
+  @Put(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() updateDto: AboutDto,
+  ) {
+    return this.aboutService.update(id, updateDto);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id') id: string) {
+    return this.aboutService.remove(id);
   }
 }

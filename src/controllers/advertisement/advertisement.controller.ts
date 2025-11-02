@@ -17,7 +17,7 @@ import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
 import { Advertisement } from 'src/models/database/Advertisement';
 import { AdvertisementService } from 'src/services/advertisement/Advertisement.Service';
-import { AuthGuard } from 'src/Guard/auth.guard';
+import { AuthGuard } from 'src/Guard/jwt-auth.guard';
 import { AuthMetaData } from 'src/decorator/auth.decorator';
 @Controller('advertisement')
 //@UseGuards(AuthGuard)

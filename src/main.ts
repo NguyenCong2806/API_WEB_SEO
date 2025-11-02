@@ -2,19 +2,37 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './module/app.module';
 import { AllExceptionFilter } from './Filter/AllExceptionFilter';
 import helmet from 'helmet';
+import { Logger, ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule);
+  const logger = new Logger('Bootstrap');
 
   app.useGlobalFilters(new AllExceptionFilter());
   app.use(helmet({ crossOriginResourcePolicy: false }));
-  app.enableCors();
+  // Cấu hình CORS chi tiết hơn
+  if (process.env.NODE_ENV === 'production') {
+    app.enableCors({
+      origin: process.env.CORS_ORIGIN, // Đọc từ biến môi trường
+    });
+  } else {
+    app.enableCors(); // Cho phép tất cả ở môi trường dev
+  }
   app.setGlobalPrefix('api/v1');
-
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+  }));
   const port = parseInt(process.env.PORT, 10) || 3000;
   await app.listen(port);
 
-  console.log('Server running', `http://localhost:${port}/api/v1`);
+  // Dùng logger thay vì console.log
+  logger.log(`Server running on http://localhost:${port}/api/v1`);
 }
 
 bootstrap();

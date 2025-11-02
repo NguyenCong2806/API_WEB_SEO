@@ -8,36 +8,17 @@ import { message } from 'src/constants/message';
 import { httpstatus } from 'src/constants/httpStatus';
 
 export abstract class BaseRepository<T extends BaseEntity>
-  implements IBaseRepository<T>
-{
+  implements IBaseRepository<T> {
   protected constructor(private readonly _model: Model<T>) {
     this._model = _model;
   }
-  async deletefile(condition?: FilterQuery<T>): Promise<ResultData> {
-    const _data = new ResultData();
-    try {
-      _data.status = true;
-      _data.message = message.Download_data_successfully;
-      _data.statuscode = httpstatus.Successful_responses;
-      _data.item = await this._model.findOneAndDelete<boolean>(condition);
-    } catch (error: any) {
-      _data.status = false;
-      _data.message = error.message as string;
-      _data.statuscode = httpstatus.Server_errors;
-      _data.item = false;
-    }
-    return _data;
-  }
-
   async findconditions(conditions?: FilterQuery<T>[]): Promise<ResultData> {
     const _data = new ResultData();
     try {
       _data.status = true;
       _data.message = message.Download_data_successfully;
       _data.statuscode = httpstatus.Successful_responses;
-      for (const item of conditions) {
-        _data.item = await this._model.find(item);
-      }
+      _data.item = await this._model.find({ $or: conditions });
     } catch (error: any) {
       _data.status = false;
       _data.message = error.message as string;
@@ -64,24 +45,31 @@ export abstract class BaseRepository<T extends BaseEntity>
   async checkkeyword(condition?: FilterQuery<T>): Promise<ResultData> {
     const _data = new ResultData();
     try {
-      const res = await this._model.find(condition);
+      // Dùng .exists() là nhanh nhất để kiểm tra sự tồn tại
+      const docExists = await this._model.exists(condition);
+
       _data.status = true;
-      _data.message =
-        res != null ? message.NotExist_Message : message.Exist_Message;
       _data.statuscode = httpstatus.Successful_responses;
-      _data.item = res != null ? false : true;
+
+      if (docExists) {
+        _data.message = message.Exist_Message;
+        _data.item = true; // Tồn tại -> true
+      } else {
+        _data.message = message.NotExist_Message;
+        _data.item = false; // Không tồn tại -> false
+      }
     } catch (error: any) {
       _data.status = false;
       _data.message = error.message as string;
       _data.statuscode = httpstatus.Server_errors;
-      _data.item = false;
+      _data.item = false; // Mặc định là false khi có lỗi
     }
     return _data;
   }
   async countcondition(condition?: FilterQuery<T>): Promise<ResultData> {
     const _data = new ResultData();
     try {
-      const num = (await this._model.find(condition)).length;
+      const num = await this._model.countDocuments(condition);
       _data.status = true;
       _data.message = message.Download_data_successfully;
       _data.statuscode = httpstatus.Successful_responses;
@@ -97,25 +85,17 @@ export abstract class BaseRepository<T extends BaseEntity>
   async finds(item: Paginations<T>): Promise<Results<T>> {
     const result = new Results<T>();
     try {
-      const counts = (await this._model.find()).length;
+      const counts = await this._model.countDocuments(item.condition);
       result.pageIndex = item.pageindex;
       result.totalCount = counts;
       result.totalPage = Math.ceil(counts / item.pagesize);
-      if (item.keyword != null) {
-        result.items = await this._model
-          .find(item.condition)
-          .skip(item.pagesize * (item.pageindex - 1))
-          .limit(item.pagesize)
-          .sort({ createddate: -1 });
-      } else {
-        result.items = await this._model
-          .find()
-          .skip(item.pagesize * (item.pageindex - 1))
-          .limit(item.pagesize)
-          .sort({ createddate: -1 });
-      }
+      result.items = await this._model
+        .find(item.condition)
+        .skip(item.pagesize * (item.pageindex - 1))
+        .limit(item.pagesize)
+        .sort({ createddate: -1 });
     } catch (error: any) {
-      throw new Error(error.message);
+      result.items = [];
     }
 
     return result;
@@ -170,7 +150,7 @@ export abstract class BaseRepository<T extends BaseEntity>
   async create(item: T): Promise<ResultData> {
     const _data = new ResultData();
     try {
-      await this._model.insertMany(item);
+      await this._model.create(item);
       _data.status = true;
       _data.message = message.Add_Successful;
       _data.statuscode = httpstatus.Successful_responses;
@@ -186,7 +166,7 @@ export abstract class BaseRepository<T extends BaseEntity>
   async count(): Promise<ResultData> {
     const _data = new ResultData();
     try {
-      const num = (await this._model.find()).length;
+      const num = await this._model.countDocuments();
       _data.status = true;
       _data.message = message.Download_data_successfully;
       _data.statuscode = httpstatus.Successful_responses;
@@ -199,10 +179,10 @@ export abstract class BaseRepository<T extends BaseEntity>
     }
     return _data;
   }
-  async update(id: any, item: T): Promise<ResultData> {
+  async update(id: any, item: Partial<T>): Promise<ResultData> {
     const _data = new ResultData();
     try {
-      await this._model.findOneAndUpdate({ _id: id }, item);
+      await this._model.findOneAndUpdate({ _id: id }, { $set: item });
       _data.status = true;
       _data.message = message.Edit_Successful;
       _data.statuscode = httpstatus.Successful_responses;
@@ -218,20 +198,17 @@ export abstract class BaseRepository<T extends BaseEntity>
   async delete(id: any): Promise<ResultData> {
     const _data = new ResultData();
     try {
-      const delete_item = await this._model.findById(id);
-      if (delete_item) {
-        await this._model.findByIdAndDelete(id);
-      }
+      await this._model.findByIdAndDelete(id);
       _data.status = true;
       _data.message = message.Delete_Successful;
       _data.statuscode = httpstatus.Successful_responses;
       _data.item = true;
-      return _data;
     } catch (error: any) {
       _data.status = false;
       _data.message = error.message as string;
       _data.statuscode = httpstatus.Server_errors;
       _data.item = false;
     }
+    return _data;
   }
 }

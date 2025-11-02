@@ -17,7 +17,7 @@ import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import * as fs from 'fs';
 import * as path from 'path';
-import { AuthGuard } from 'src/Guard/auth.guard';
+import { AuthGuard } from 'src/Guard/jwt-auth.guard';
 import ResultData from 'src/models/BaseModel/ResultData';
 import { message } from 'src/constants/message';
 import { httpstatus } from 'src/constants/httpStatus';

@@ -1,7 +1,7 @@
 import { Roles } from './../decorator/roles.decorator';
 import { Controller, UseGuards } from '@nestjs/common';
 import { AppService } from '../services/app/app.service';
-import { AuthGuard } from 'src/Guard/auth.guard';
+import { AuthGuard } from 'src/Guard/jwt-auth.guard';
 
 @Controller()
 @UseGuards(AuthGuard)

@@ -47,7 +47,6 @@ import { FooterBoxModule } from './footerbox/footerbox.module';
     ),
     AuthModule,
     UsersModule,
-    JwtModule,
     FileModule,
     CarouselModule,
     AboutModule,

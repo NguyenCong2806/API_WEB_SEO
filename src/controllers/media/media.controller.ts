@@ -16,7 +16,7 @@ import Paginations from 'src/models/BaseModel/Paginations';
 import SerachPara from 'src/models/BaseModel/SerachPara';
 import { Media } from 'src/models/database/Media';
 import { MediaService } from 'src/services/media/media.service';
-import { AuthGuard } from 'src/Guard/auth.guard';
+import { AuthGuard } from 'src/Guard/jwt-auth.guard';
 @UseGuards(AuthGuard)
 @Controller('media')
 export class MediaController {

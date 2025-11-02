@@ -14,7 +14,7 @@ import {
     IsString,
   } from 'class-validator';
 
-export class CreateTodoDto{
+export class CreateUserDto{
     @IsString()
     @IsNotEmpty({message:"Không được bỏ trống!"})
     username: string;

@@ -17,7 +17,7 @@ import { Response } from 'express';
 import Paginations from 'src/models/BaseModel/Paginations';
 import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
-import { AuthGuard } from 'src/Guard/auth.guard';
+import { AuthGuard } from 'src/Guard/jwt-auth.guard';
 import { AuthMetaData } from 'src/decorator/auth.decorator';
 //@UseGuards(AuthGuard)
 @Controller('card')
