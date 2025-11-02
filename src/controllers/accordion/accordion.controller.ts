@@ -1,76 +1,74 @@
-import { Accordion } from './../../models/database/Accordion';
 import {
   Body,
   Controller,
   Delete,
   Get,
+  HttpCode, // <-- 1. THÊM HttpCode
   HttpStatus,
+  Inject, // <-- 2. THÊM Inject
   Param,
   Post,
   Put,
   Query,
-  Res,
   UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
 import Paginations from 'src/models/BaseModel/Paginations';
 import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
-import { AccordionService } from 'src/services/accordion/accordion.service';
-import { AuthGuard } from 'src/Guard/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/Guard/jwt-auth.guard'; // <-- 4. DÙNG GUARD "CHUẨN"
 import { AuthMetaData } from 'src/decorator/auth.decorator';
+import { IAccordionService } from 'src/services/accordion/IAccordionService'; // <-- 5. DÙNG TOKEN
+import { AccordionDto } from 'src/models/viewmodel/accordion/AccordionDto';
+
+
 @Controller('accordion')
-//@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard)
 export class AccordionController {
-  constructor(private readonly accordionService: AccordionService) {}
+  constructor(
+    @Inject(IAccordionService)
+    private readonly accordionService: IAccordionService,
+  ) {}
 
-  @Get('getall')
-  async get(@Query() serachPara: SerachPara, @Res() res: Response) {
-    const pagination = new Paginations<Accordion>();
-
-    pagination.pageindex = serachPara.pageindex;
-    pagination.pagesize = serachPara.pagesize;
-    if (serachPara.keyword != null) {
-      pagination.condition = { username: { $regex: serachPara.keyword } };
-    }
-    const respo = await this.accordionService.finds(pagination);
-    res.status(HttpStatus.OK).json(respo);
+  // 9. SỬA ROUTE, BỎ @Res, BỎ LOGIC
+  @Get()
+  async get(@Query() serachPara: SerachPara) {
+    // Service "thông minh" sẽ lo việc tạo query
+    return this.accordionService.finds(serachPara);
   }
+
+  // 10. BỎ @Res
   @AuthMetaData('skipAuthCheck')
   @Get('getalls')
-  async getalls(@Res() res: Response) {
-    const respo = await this.accordionService.find();
-    res.status(HttpStatus.OK).json(respo);
+  async getalls() {
+    return this.accordionService.find();
   }
-  @AuthMetaData('skipAuthCheck')
-  @Get('getfind')
-  async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
-    const _datasite = { site: { $regex: parainfo.sitename } } as any;
-    const _dataloca = { location: parseInt(parainfo.location, 10) } as any;
-    const _datas = [_datasite, _dataloca];
-    const respo = await this.accordionService.findconditions(_datas);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Get('getbyaccordion/:id')
-  async find(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.accordionService.findOne(id);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Post('addaccordion')
-  async create(@Body() Accordiondto: Accordion, @Res() res: Response) {
-    const respo = await this.accordionService.create(Accordiondto);
-    res.status(HttpStatus.CREATED).json(respo);
-  }
-  @Put('editacordion')
-  async update(@Body() Accordiondto: Accordion, @Res() res: Response) {
-    console.log(Accordiondto);
-    const respo = await this.accordionService.update(Accordiondto);
-    res.status(HttpStatus.OK).json(respo);
+  // 12. SỬA ROUTE, BỎ @Res
+  @Get(':id')
+  async find(@Param('id') id: string) {
+    return this.accordionService.findOne(id);
   }
 
-  @Delete('delaccordion/:id')
-  async delete(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.accordionService.remove(id);
-    res.status(HttpStatus.OK).json(respo);
+  // 13. SỬA ROUTE, BỎ @Res, DÙNG DTO, DÙNG HttpCode
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() createDto: AccordionDto) {
+    return this.accordionService.create(createDto);
+  }
+
+  // 14. SỬA ROUTE, BỎ @Res, DÙNG DTO, SỬA HÀM "update"
+  @Put(':id')
+  async update(
+    @Param('id') id: string, // <-- Lấy id
+    @Body() updateDto: AccordionDto, // <-- Dùng DTO
+  ) {
+    // Gọi hàm update "chuẩn" (id, dto)
+    return this.accordionService.update(id, updateDto);
+  }
+
+  // 15. SỬA ROUTE, BỎ @Res, DÙNG HttpCode
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id') id: string) {
+    return this.accordionService.remove(id);
   }
 }

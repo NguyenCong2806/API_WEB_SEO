@@ -6,7 +6,7 @@ import { BaseRepository } from '../BaseRepository';
 import { IAccordionRespository } from './IAccordionRepository';
 
 @Injectable()
-export class AccordionRespository
+export class AccordionRepository
   extends BaseRepository<Accordion>
   implements IAccordionRespository
 {

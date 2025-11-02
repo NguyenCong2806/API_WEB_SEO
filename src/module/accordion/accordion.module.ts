@@ -1,23 +1,29 @@
-import { AccordionRespository } from './../../repository/accordion/AccordionRepository';
+import { AccordionRepository } from './../../repository/accordion/AccordionRepository';
 import { AccordionService } from './../../services/accordion/accordion.service';
 import { AccordionController } from './../../controllers/accordion/accordion.controller';
 import { AccordionSchema } from './../../models/database/Accordion';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { JwtModule } from '@nestjs/jwt';
+// import { JwtModule } from '@nestjs/jwt'; // <-- 1. XÓA BỎ
+import { IAccordionService } from 'src/services/accordion/IAccordionService'; // <-- 2. IMPORT TOKEN
+
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Accordion', schema: AccordionSchema }]),
-    JwtModule,
   ],
   controllers: [AccordionController],
   providers: [
-    AccordionService,
+    // 3. SỬA LẠI PROVIDER ĐỂ DÙNG TOKEN
+    {
+      provide: IAccordionService, // <-- Token (Giá trị)
+      useClass: AccordionService,  // <-- Class (Thực thi)
+    },
     {
       provide: 'IAccordionRespository',
-      useClass: AccordionRespository,
+      useClass: AccordionRepository,
     },
   ],
-  exports: [AccordionService],
+  // 4. EXPORT TOKEN
+  exports: [IAccordionService],
 })
 export class AccordionModule {}
