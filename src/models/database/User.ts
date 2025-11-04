@@ -17,10 +17,10 @@ export class User extends BaseEntity {
 
   @Prop({ required: true })
   password: string;
-  @Prop()
-  site: string;
-  @Prop()
-  location: number;
+  // @Prop()
+  // site: string;
+  // @Prop()
+  // location: number;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

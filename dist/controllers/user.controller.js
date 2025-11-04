@@ -21,6 +21,7 @@ const roles_decorator_1 = require("../decorator/roles.decorator");
 const IUserService_1 = require("../services/user/IUserService");
 const role_guard_1 = require("../Guard/role.guard");
 const UpdateUserDto_1 = require("../models/viewmodel/user/UpdateUserDto");
+const auth_decorator_1 = require("../decorator/auth.decorator");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -57,6 +58,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "find", null);
 __decorate([
+    (0, auth_decorator_1.AuthMetaData)('skipAuthCheck'),
     (0, common_1.Post)(),
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
     __param(0, (0, common_1.Body)()),

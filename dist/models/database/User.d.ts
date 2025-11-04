@@ -30,8 +30,6 @@ export declare class User extends BaseEntity {
     email: string;
     role: string;
     password: string;
-    site: string;
-    location: number;
 }
 export declare const UserSchema: import("mongoose").Schema<User, import("mongoose").Model<User, any, any, any, Document<unknown, any, User> & User & Required<{
     _id: import("mongoose").Types.ObjectId;
