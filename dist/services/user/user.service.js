@@ -34,8 +34,8 @@ let UserService = class UserService extends BaseService_1.BaseService {
         const hashedPassword = await argon2.hash(dto.password);
         const newUserModel = (0, class_transformer_1.plainToInstance)(User_1.User, dto);
         newUserModel.password = hashedPassword;
-        newUserModel.role = dto.role || 'user';
-        return await super.create(newUserModel);
+        newUserModel.role = dto.role || 'admin';
+        return await this.users_repository.create(newUserModel);
     }
     async update(id, dto) {
         const updateData = (0, class_transformer_1.plainToInstance)(User_1.User, dto);

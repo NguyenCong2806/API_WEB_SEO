@@ -39,8 +39,8 @@ export class UserService extends BaseService<User> implements IUserService {
     const hashedPassword = await argon2.hash(dto.password);
     const newUserModel = plainToInstance(User, dto);
     newUserModel.password = hashedPassword;
-    newUserModel.role = dto.role || 'user';
-    return await super.create(newUserModel);
+    newUserModel.role = dto.role || 'admin';
+    return  await this.users_repository.create(newUserModel);
   }
   async update(id: string, dto: UpdateUserDto): Promise<ResultData> {
     const updateData = plainToInstance(User, dto);

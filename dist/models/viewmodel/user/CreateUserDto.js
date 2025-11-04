@@ -11,7 +11,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateUserDto = void 0;
 const class_validator_1 = require("class-validator");
-class CreateUserDto {
+const BaseEntity_1 = require("../../database/BaseEntity");
+class CreateUserDto extends BaseEntity_1.BaseEntity {
 }
 exports.CreateUserDto = CreateUserDto;
 __decorate([

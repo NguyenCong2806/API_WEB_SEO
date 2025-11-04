@@ -19,6 +19,7 @@ import { Roles } from 'src/decorator/roles.decorator';
 import { IUserService } from 'src/services/user/IUserService';
 import { RolesGuard } from 'src/Guard/role.guard';
 import { UpdateUserDto } from 'src/models/viewmodel/user/UpdateUserDto';
+import { AuthMetaData } from 'src/decorator/auth.decorator';
 
 @Controller('user')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -38,7 +39,8 @@ export class UsersController {
   async find(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
-
+  
+  @AuthMetaData('skipAuthCheck')
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto) { // (Đã sửa tên DTO)
