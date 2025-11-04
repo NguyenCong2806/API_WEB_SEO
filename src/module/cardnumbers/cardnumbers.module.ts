@@ -5,6 +5,7 @@ import { CardNumbersController } from 'src/controllers/cardnumbers/cardnumbers.c
 import { CardNumbersService } from 'src/services/cardnumbers/cardnumbers.service';
 import { CardNumbersRepository } from 'src/repository/cardnumbers/CardNumbersRepository';
 import { JwtModule } from '@nestjs/jwt';
+import { ICardNumbersService } from 'src/services/cardnumbers/ICardNumbersService';
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -14,9 +15,12 @@ import { JwtModule } from '@nestjs/jwt';
   ],
   controllers: [CardNumbersController],
   providers: [
-    CardNumbersService,
+    {
+      provide: ICardNumbersService,
+      useClass: CardNumbersService,
+    },
     { provide: 'ICardNumbersRepository', useClass: CardNumbersRepository },
   ],
-  exports: [CardNumbersService],
+  exports: [ICardNumbersService],
 })
-export class CardNumbersModule {}
+export class CardNumbersModule { }

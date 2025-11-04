@@ -4,17 +4,19 @@ import { CarouselRepository } from './../../repository/carousel/CarouselReposito
 import { CarouselController } from './../../controllers/carousel/carousel.controller';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { JwtModule } from '@nestjs/jwt';
+import { ICarouselService } from 'src/services/carousel/ICarouselService';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Carousel', schema: CarouselSchema }]),
-    JwtModule,
   ],
   controllers: [CarouselController],
   providers: [
-    CarouselService,
+    {
+      provide: ICarouselService, // <-- Token (Giá trị)
+      useClass: CarouselService,  // <-- Class (Thực thi)
+    },
     { provide: 'ICarouselRepository', useClass: CarouselRepository },
   ],
-  exports: [CarouselService],
+  exports: [ICarouselService],
 })
 export class CarouselModule {}

@@ -1,26 +1,26 @@
-import { MediaInfo } from './../../models/viewmodel/mediainfo/mediainfo';
 import {
   Controller,
   Post,
   UseInterceptors,
   UploadedFile,
   UploadedFiles,
-  Res,
   HttpStatus,
   Get,
   Param,
   Delete,
   UseGuards,
+  HttpCode, // <-- THÊM HttpCode
+  ForbiddenException,
+  Inject, // <-- 2. THÊM Inject
+  Query, // <-- THÊM Query
 } from '@nestjs/common';
 import * as multer from 'multer';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { Response } from 'express';
-import * as fs from 'fs';
+import { promises as fs } from 'fs'; 
 import * as path from 'path';
-import { AuthGuard } from 'src/Guard/auth.guard';
-import ResultData from 'src/models/BaseModel/ResultData';
-import { message } from 'src/constants/message';
-import { httpstatus } from 'src/constants/httpStatus';
+import { JwtAuthGuard } from 'src/Guard/jwt-auth.guard'; // <-- Dùng Guard "chuẩn"
+import { IMediaService } from 'src/services/media/IMediaService'; // <-- 4. DÙNG TOKEN
+import SerachPara from 'src/models/BaseModel/SerachPara'; // <-- Import SerachPara
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -34,52 +34,73 @@ const storage = multer.diskStorage({
   },
 });
 
-@Controller('upload')
-@UseGuards(AuthGuard)
+@Controller('upload') // Tên route là 'upload'
+@UseGuards(JwtAuthGuard) // Kích hoạt bảo mật
 export class UploadController {
+  constructor(
+    @Inject(IMediaService) private readonly mediaService: IMediaService,
+  ) {}
+
   @Get('getallfile')
-  async getallfile(@Res() res: Response) {
-    const data = fs.readdirSync(process.env.FILE_ROOT, {
-      withFileTypes: true,
-    });
-    res.status(200).json(data);
+  async getallfile(@Query() serachPara: SerachPara) {
+    // Cách "chuẩn" là đọc danh sách file đã lưu trong DB
+    return this.mediaService.finds(serachPara);
   }
+
   @Delete('deletefile/:filename')
-  async deletefile(@Param('filename') filename: string, @Res() res: Response) {
-    fs.unlinkSync(process.env.FILE_ROOT + '/' + filename);
-    res.status(200).json(message.Delete_Successful);
+  @HttpCode(HttpStatus.NO_CONTENT) // Dùng 204
+  async deletefile(@Param('filename') filename: string) {
+    // VÁ LỖ HỔNG Path Traversal
+    const safeFilename = path.basename(filename);
+    const fullPath = path.join(process.env.FILE_ROOT, safeFilename);
+
+    if (!fullPath.startsWith(process.env.FILE_ROOT)) {
+      throw new ForbiddenException('Không được phép truy cập file!');
+    }
+
+    try {
+      // DÙNG BẤT ĐỒNG BỘ (async)
+      await fs.unlink(fullPath);
+      
+      // GỌI SERVICE (để xóa trong DB)
+      // (Bạn cần thêm hàm 'deleteByCondition' vào IMediaService/MediaService)
+
+      return; // Trả về 204
+    } catch (error) {
+      throw new ForbiddenException('Xóa file thất bại hoặc file không tồn tại.');
+    }
   }
+
+  /**
+   * 8. SỬA LẠI HOÀN TOÀN: ĐƯA LOGIC VỀ SERVICE
+   */
   @Post('file')
   @UseInterceptors(FileInterceptor('file', { storage: storage }))
-  uploadFile(@UploadedFile() file, @Res() res: Response) {
-    const mediaInfo = new MediaInfo();
-    const _data = new ResultData();
-
-    mediaInfo.destination = file.destination;
-    mediaInfo.encoding = file.encoding;
-    mediaInfo.fieldname = file.fieldname;
-    mediaInfo.filename = file.filename;
-    mediaInfo.mimetype = file.mimetype;
-    mediaInfo.originalname = file.originalname;
-    mediaInfo.path = file.path;
-    mediaInfo.size = file.size;
-    mediaInfo.link = process.env.API_URL + process.env.FILE_URL + file.filename;
-    mediaInfo.status = true;
-    _data.item = mediaInfo;
-    _data.message = message.Download_data_successfully;
-    _data.status = true;
-    _data.statuscode = httpstatus.Successful_responses;
-
-    res.status(HttpStatus.OK).json(_data);
+  @HttpCode(HttpStatus.CREATED) // Dùng 201
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+    // Controller "sạch" (dumb) chỉ gọi service
+    const link = process.env.API_URL + process.env.FILE_URL + file.filename;
   }
 
+  /**
+   * 9. SỬA LẠI: DÙNG RETURN VÀ TRẢ VỀ LINKS
+   */
   @Post('files')
   @UseInterceptors(
     FilesInterceptor('files', parseInt(process.env.FILE_UP_COUNT), {
       storage: storage,
     }),
   )
-  uploadMultiple(@UploadedFiles() files, @Res() res: Response) {
-    res.status(HttpStatus.OK).json(true);
+  @HttpCode(HttpStatus.CREATED)
+  uploadMultiple(@UploadedFiles() files: Express.Multer.File[]) {
+    // Trả về links cho client
+    const fileLinks = files.map(file => {
+      return process.env.API_URL + process.env.FILE_URL + file.filename;
+    });
+
+    return {
+      message: 'Upload thành công',
+      links: fileLinks
+    };
   }
 }

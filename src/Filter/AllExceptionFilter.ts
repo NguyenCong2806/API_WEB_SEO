@@ -1,57 +1,68 @@
 import {
-  ArgumentsHost,
-  Catch,
   ExceptionFilter,
+  Catch,
+  ArgumentsHost,
   HttpException,
   HttpStatus,
+  Logger, // <-- 1. Import Logger
 } from '@nestjs/common';
-import { HttpArgumentsHost } from '@nestjs/common/interfaces/features/arguments-host.interface';
-import { Response, Request } from 'express';
+import { Request, Response } from 'express';
 
-
-@Catch()
+@Catch() // Bắt tất cả các loại lỗi
 export class AllExceptionFilter implements ExceptionFilter {
-  catch(exception: HttpException | Error, host: ArgumentsHost): void {
-    const ctx: HttpArgumentsHost = host.switchToHttp();
-    const response: Response = ctx.getResponse();
-    const request: Request = ctx.getRequest();
-    // Handling error message and logging
-    this.handleMessage(exception);
+  // 2. Khởi tạo một Logger riêng cho Filter này
+  private readonly logger = new Logger(AllExceptionFilter.name);
 
-    // Response to client
-    AllExceptionFilter.handleResponse(request, response, exception);
-  }
+  catch(exception: unknown, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
 
-  private handleMessage(exception: HttpException | Error): void {
-    let message = 'Internal Server Error';
+    let statusCode: number;
+    let responseBody: { message: string; statusCode: number; path: string };
 
     if (exception instanceof HttpException) {
-      message = JSON.stringify(exception.getResponse());
-    } else if (exception instanceof Error) {
-      message = exception.stack.toString();
-    }
-  }
-
-  private static handleResponse(
-    request: Request,
-    response: Response,
-    exception: HttpException | Error,
-  ): void {
-    let responseBody: any = { message: 'Internal server error' };
-    let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-
-    if (exception instanceof HttpException) {
-      responseBody = exception.getResponse();
+      // 3. NẾU LÀ LỖI HTTP (Lỗi 400, 401, 403, 404, 409...)
+      // Đây là lỗi "có chủ đích" (ví dụ: throw new BadRequestException())
       statusCode = exception.getStatus();
-    } else if (exception instanceof Error) {
+      const errorResponse = exception.getResponse();
+      
       responseBody = {
         statusCode: statusCode,
-        timestamp: new Date().toISOString(),
         path: request.url,
-        message: exception.stack,
+        // (Xử lý trường hợp response là string hoặc object)
+        message:
+          typeof errorResponse === 'string'
+            ? errorResponse
+            : (errorResponse as any).message || 'Lỗi không xác định',
+      };
+    } else {
+      // 4. NẾU LÀ LỖI 500 (Lỗi server "bất ngờ")
+      // (ví dụ: code của bạn bị null pointer, database sập, v.v.)
+      statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+      
+      responseBody = {
+        statusCode: statusCode,
+        path: request.url,
+        message: 'Lỗi máy chủ nội bộ. Vui lòng thử lại sau.', // <-- Thông báo "an toàn"
       };
     }
 
+    // 5. GHI LOG LỖI RA SERVER (QUAN TRỌNG NHẤT)
+    // Log lỗi 500 (lỗi server) ra console để dev sửa
+    if (statusCode >= 500) {
+      this.logger.error(
+        `[${request.method} ${request.url}] Lỗi 500:`,
+        (exception as Error).stack, // <-- Log "stack trace" đầy đủ ra server
+      );
+    } else {
+      // Log lỗi 4xx (lỗi client)
+      this.logger.warn(
+        `[${request.method} ${request.url}] Lỗi ${statusCode}: ${responseBody.message}`,
+      );
+    }
+
+    // 6. GỬI PHẢN HỒI "AN TOÀN" VỀ CHO CLIENT
     response.status(statusCode).json(responseBody);
   }
 }

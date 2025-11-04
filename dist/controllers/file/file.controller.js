@@ -13,16 +13,14 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UploadController = void 0;
-const mediainfo_1 = require("./../../models/viewmodel/mediainfo/mediainfo");
 const common_1 = require("@nestjs/common");
 const multer = require("multer");
 const platform_express_1 = require("@nestjs/platform-express");
-const fs = require("fs");
+const fs_1 = require("fs");
 const path = require("path");
-const auth_guard_1 = require("../../Guard/auth.guard");
-const ResultData_1 = require("../../models/BaseModel/ResultData");
-const message_1 = require("../../constants/message");
-const httpStatus_1 = require("../../constants/httpStatus");
+const jwt_auth_guard_1 = require("../../Guard/jwt-auth.guard");
+const IMediaService_1 = require("../../services/media/IMediaService");
+const SerachPara_1 = require("../../models/BaseModel/SerachPara");
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, process.env.FILE_ROOT);
@@ -32,77 +30,79 @@ const storage = multer.diskStorage({
     },
 });
 let UploadController = class UploadController {
-    async getallfile(res) {
-        const data = fs.readdirSync(process.env.FILE_ROOT, {
-            withFileTypes: true,
+    constructor(mediaService) {
+        this.mediaService = mediaService;
+    }
+    async getallfile(serachPara) {
+        return this.mediaService.finds(serachPara);
+    }
+    async deletefile(filename) {
+        const safeFilename = path.basename(filename);
+        const fullPath = path.join(process.env.FILE_ROOT, safeFilename);
+        if (!fullPath.startsWith(process.env.FILE_ROOT)) {
+            throw new common_1.ForbiddenException('Không được phép truy cập file!');
+        }
+        try {
+            await fs_1.promises.unlink(fullPath);
+            return;
+        }
+        catch (error) {
+            throw new common_1.ForbiddenException('Xóa file thất bại hoặc file không tồn tại.');
+        }
+    }
+    async uploadFile(file) {
+        const link = process.env.API_URL + process.env.FILE_URL + file.filename;
+    }
+    uploadMultiple(files) {
+        const fileLinks = files.map(file => {
+            return process.env.API_URL + process.env.FILE_URL + file.filename;
         });
-        res.status(200).json(data);
-    }
-    async deletefile(filename, res) {
-        fs.unlinkSync(process.env.FILE_ROOT + '/' + filename);
-        res.status(200).json(message_1.message.Delete_Successful);
-    }
-    uploadFile(file, res) {
-        const mediaInfo = new mediainfo_1.MediaInfo();
-        const _data = new ResultData_1.default();
-        mediaInfo.destination = file.destination;
-        mediaInfo.encoding = file.encoding;
-        mediaInfo.fieldname = file.fieldname;
-        mediaInfo.filename = file.filename;
-        mediaInfo.mimetype = file.mimetype;
-        mediaInfo.originalname = file.originalname;
-        mediaInfo.path = file.path;
-        mediaInfo.size = file.size;
-        mediaInfo.link = process.env.API_URL + process.env.FILE_URL + file.filename;
-        mediaInfo.status = true;
-        _data.item = mediaInfo;
-        _data.message = message_1.message.Download_data_successfully;
-        _data.status = true;
-        _data.statuscode = httpStatus_1.httpstatus.Successful_responses;
-        res.status(common_1.HttpStatus.OK).json(_data);
-    }
-    uploadMultiple(files, res) {
-        res.status(common_1.HttpStatus.OK).json(true);
+        return {
+            message: 'Upload thành công',
+            links: fileLinks
+        };
     }
 };
 exports.UploadController = UploadController;
 __decorate([
     (0, common_1.Get)('getallfile'),
-    __param(0, (0, common_1.Res)()),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [SerachPara_1.default]),
     __metadata("design:returntype", Promise)
 ], UploadController.prototype, "getallfile", null);
 __decorate([
     (0, common_1.Delete)('deletefile/:filename'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.NO_CONTENT),
     __param(0, (0, common_1.Param)('filename')),
-    __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UploadController.prototype, "deletefile", null);
 __decorate([
     (0, common_1.Post)('file'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', { storage: storage })),
+    (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
     __param(0, (0, common_1.UploadedFile)()),
-    __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
 ], UploadController.prototype, "uploadFile", null);
 __decorate([
     (0, common_1.Post)('files'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files', parseInt(process.env.FILE_UP_COUNT), {
         storage: storage,
     })),
+    (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
     __param(0, (0, common_1.UploadedFiles)()),
-    __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Array]),
     __metadata("design:returntype", void 0)
 ], UploadController.prototype, "uploadMultiple", null);
 exports.UploadController = UploadController = __decorate([
     (0, common_1.Controller)('upload'),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard)
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Inject)(IMediaService_1.IMediaService)),
+    __metadata("design:paramtypes", [Object])
 ], UploadController);
 //# sourceMappingURL=file.controller.js.map

@@ -31,7 +31,6 @@ import { FilterQuery, Model } from 'mongoose';
 export declare abstract class BaseRepository<T extends BaseEntity> implements IBaseRepository<T> {
     private readonly _model;
     protected constructor(_model: Model<T>);
-    deletefile(condition?: FilterQuery<T>): Promise<ResultData>;
     findconditions(conditions?: FilterQuery<T>[]): Promise<ResultData>;
     findcondition(condition?: FilterQuery<T>): Promise<ResultData>;
     checkkeyword(condition?: FilterQuery<T>): Promise<ResultData>;
@@ -42,6 +41,6 @@ export declare abstract class BaseRepository<T extends BaseEntity> implements IB
     findOneValue(condition?: FilterQuery<T>): Promise<ResultData>;
     create(item: T): Promise<ResultData>;
     count(): Promise<ResultData>;
-    update(id: any, item: T): Promise<ResultData>;
+    update(id: any, item: Partial<T>): Promise<ResultData>;
     delete(id: any): Promise<ResultData>;
 }

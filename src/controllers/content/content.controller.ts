@@ -1,78 +1,71 @@
-import { Content } from './../../models/database/Content';
-
 import {
   Body,
   Controller,
   Delete,
   Get,
+  HttpCode, // <-- 1. THÊM HttpCode
   HttpStatus,
+  Inject, // <-- 2. THÊM Inject
   Param,
   Post,
   Put,
   Query,
-  Res,
   UseGuards,
+  // Res, // <-- 3. XÓA BỎ @Res
 } from '@nestjs/common';
-import { Response } from 'express';
-import Paginations from 'src/models/BaseModel/Paginations';
+// import { Response } from 'express'; // <-- 3. XÓA BỎ Response
+
 import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
-import { ContentService } from 'src/services/content/content.service';
-import { AuthGuard } from 'src/Guard/auth.guard';
+import { JwtAuthGuard } from 'src/Guard/jwt-auth.guard'; // <-- 4. DÙNG GUARD "CHUẨN"
 import { AuthMetaData } from 'src/decorator/auth.decorator';
-@UseGuards(AuthGuard)
+import { IContentService } from 'src/services/content/IContentService'; // <-- 5. DÙNG TOKEN
+import { ContentDto } from 'src/models/viewmodel/content/ContentDto';
+
 @Controller('content')
+@UseGuards(JwtAuthGuard) // <-- 7. Áp dụng Guard
 export class ContentController {
-  constructor(private readonly contentService: ContentService) {}
+  
+  // 8. SỬA CONSTRUCTOR ĐỂ DÙNG TOKEN
+  constructor(
+    @Inject(IContentService)
+    private readonly contentService: IContentService,
+  ) {}
 
-  @Get('getall')
-  async get(@Query() serachPara: SerachPara, @Res() res: Response) {
-    const pagination = new Paginations<Content>();
-
-    pagination.pageindex = serachPara.pageindex;
-    pagination.pagesize = serachPara.pagesize;
-    if (serachPara.keyword != null) {
-      pagination.condition = { username: { $regex: serachPara.keyword } };
-    }
-    const respo = await this.contentService.finds(pagination);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @AuthMetaData('skipAuthCheck')
-  @Get('getfind')
-  async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
-    const _datasite = { site: { $regex: parainfo.sitename } } as any;
-    const _dataloca = { location: parseInt(parainfo.location, 10) } as any;
-    const _datas = [_datasite, _dataloca];
-    const respo = await this.contentService.findconditions(_datas);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @AuthMetaData('skipAuthCheck')
-  @Get('getlink/:link')
-  async findlink(@Param('link') link: string, @Res() res: Response) {
-    const _datalink = { link: { $regex: link } } as any;
-    const _datas = [_datalink];
-    const respo = await this.contentService.findconditions(_datas);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Get('getbycontent/:id')
-  async find(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.contentService.findOne(id);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Post('addcontent')
-  async create(@Body() contentdto: Content, @Res() res: Response) {
-    const respo = await this.contentService.create(contentdto);
-    res.status(HttpStatus.CREATED).json(respo);
-  }
-  @Put('editcontent')
-  async update(@Body() contentdto: Content, @Res() res: Response) {
-    const respo = await this.contentService.update(contentdto);
-    res.status(HttpStatus.OK).json(respo);
+  // 9. SỬA ROUTE, BỎ @Res, BỎ LOGIC
+  @Get()
+  async get(@Query() serachPara: SerachPara) {
+    // Service "thông minh" sẽ lo việc tạo query
+    return this.contentService.finds(serachPara);
   }
 
-  @Delete('delcontent/:id')
-  async delete(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.contentService.remove(id);
-    res.status(HttpStatus.OK).json(respo);
+  // 12. SỬA ROUTE, BỎ @Res
+  @Get(':id')
+  async find(@Param('id') id: string) {
+    return this.contentService.findOne(id);
+  }
+
+  // 13. SỬA ROUTE, BỎ @Res, DÙNG DTO, DÙNG HttpCode
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() createDto: ContentDto) {
+    return this.contentService.create(createDto);
+  }
+
+  // 14. SỬA ROUTE, BỎ @Res, DÙNG DTO, SỬA HÀM "update"
+  @Put(':id')
+  async update(
+    @Param('id') id: string, // <-- Lấy id
+    @Body() updateDto: ContentDto, // <-- Dùng DTO
+  ) {
+    // Gọi hàm update "chuẩn" (id, dto)
+    return this.contentService.update(id, updateDto);
+  }
+
+  // 15. SỬA ROUTE, BỎ @Res, DÙNG HttpCode
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id') id: string) {
+    return this.contentService.remove(id);
   }
 }

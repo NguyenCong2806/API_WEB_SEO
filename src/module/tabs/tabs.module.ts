@@ -4,17 +4,17 @@ import { TabsSchema } from 'src/models/database/Tabs';
 import { TabsController } from 'src/controllers/tabs/tabs.controller';
 import { TabsService } from 'src/services/tabs/tabs.service';
 import { TabsRepository } from 'src/repository/tabs/TabsRepository';
-import { JwtModule } from '@nestjs/jwt';
+import { ITabsService } from 'src/services/tabs/ITabsService';
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: 'Tabs', schema: TabsSchema }]),
-    JwtModule,
-  ],
+  imports: [MongooseModule.forFeature([{ name: 'Tabs', schema: TabsSchema }])],
   controllers: [TabsController],
   providers: [
-    TabsService,
+    {
+      provide: ITabsService, // <-- Token (Giá trị)
+      useClass: TabsService, // <-- Class (Thực thi)
+    },
     { provide: 'ITabsRepository', useClass: TabsRepository },
   ],
-  exports: [TabsService],
+  exports: [ITabsService],
 })
 export class TabsModule {}

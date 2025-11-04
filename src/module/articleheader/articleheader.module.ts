@@ -1,26 +1,30 @@
 import { ArticleHeaderController } from './../../controllers/articleheader/articleheader.controller';
-import { ArticleHeaderService } from './../../services/articleheader/articleheader.service';
 import { ArticleHeaderRespository } from './../../repository/articleheader/ArticleHeaderRespository';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ArticleHeaderSchema } from 'src/models/database/ArticleHeader';
-import { JwtModule } from '@nestjs/jwt';
+import { ArticleHeaderService } from 'src/services/articleheader/articleheader.service';
+import { IArticleHeaderService } from 'src/services/articleheader/IArticleHeaderService';
+
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: 'ArticleHeader', schema: ArticleHeaderSchema },
     ]),
-    JwtModule,
+
   ],
   controllers: [ArticleHeaderController],
   providers: [
-    ArticleHeaderService,
+    {
+      provide: IArticleHeaderService,
+      useClass: ArticleHeaderService,
+    },
     {
       provide: 'IArticleHeaderRespository',
       useClass: ArticleHeaderRespository,
     },
   ],
-  exports: [ArticleHeaderService],
+  exports: [IArticleHeaderService],
 })
-export class ArticleHeaderModule {}
+export class ArticleHeaderModule { }

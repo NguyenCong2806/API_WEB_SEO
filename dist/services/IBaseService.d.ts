@@ -28,9 +28,8 @@ import Paginations from 'src/models/BaseModel/Paginations';
 import Results from 'src/models/BaseModel/Results';
 export interface Write<M> {
     create(item: M | any): Promise<ResultData>;
-    update(item: Partial<M>): Promise<ResultData>;
+    update(id: string, item: Partial<M>): Promise<ResultData>;
     remove(id: string): Promise<ResultData>;
-    deletefile(condition?: FilterQuery<M>): Promise<ResultData>;
 }
 export interface Read<M> {
     finds(item: Paginations<M>): Promise<Results<M>>;

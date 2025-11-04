@@ -1,20 +1,24 @@
 import { MediaRepository } from './../../repository/media/MediaRepository';
 import { MediaSchema } from './../../models/database/Media';
-import { MediaController } from './../../controllers/media/media.controller';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MediaService } from 'src/services/media/media.service';
-import { JwtModule } from '@nestjs/jwt';
+import { IMediaService } from 'src/services/media/IMediaService'; // <-- 2. IMPORT TOKEN
+import { MediaController } from 'src/controllers/media/media.controller';
+
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Media', schema: MediaSchema }]),
-    JwtModule,
   ],
   controllers: [MediaController],
   providers: [
-    MediaService,
+    {
+      provide: IMediaService, 
+      useClass: MediaService,  
+    },
     { provide: 'IMediaRepository', useClass: MediaRepository },
   ],
-  exports: [MediaService],
+  // 4. EXPORT TOKEN
+  exports: [IMediaService],
 })
 export class MediaModule {}

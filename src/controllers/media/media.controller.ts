@@ -3,60 +3,67 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode, // <-- 1. THÊM HttpCode
   HttpStatus,
+  Inject, // <-- 2. THÊM Inject
   Param,
   Post,
+  Put,
   Query,
-  Res,
   UseGuards,
+  // Res, // <-- 3. XÓA BỎ @Res
 } from '@nestjs/common';
-import { Response } from 'express';
-import { FilterQuery } from 'mongoose';
-import Paginations from 'src/models/BaseModel/Paginations';
-import SerachPara from 'src/models/BaseModel/SerachPara';
-import { Media } from 'src/models/database/Media';
-import { MediaService } from 'src/services/media/media.service';
-import { AuthGuard } from 'src/Guard/auth.guard';
-@UseGuards(AuthGuard)
-@Controller('media')
-export class MediaController {
-  constructor(private readonly mediaService: MediaService) {}
+// import { Response } from 'express'; // <-- 3. XÓA BỎ Response
 
-  @Get('getall')
-  async get(@Query() serachPara: SerachPara, @Res() res: Response) {
-    const pagination = new Paginations<Media>();
-    pagination.pageindex = serachPara.pageindex;
-    pagination.pagesize = serachPara.pagesize;
-    if (serachPara.keyword != null) {
-      pagination.condition = { username: { $regex: serachPara.keyword } };
-    }
-    const respo = await this.mediaService.finds(pagination);
-    res.status(HttpStatus.OK).json(respo);
+import SerachPara from 'src/models/BaseModel/SerachPara';
+import SiteParameter from 'src/models/BaseModel/SiteParameter';
+import { JwtAuthGuard } from 'src/Guard/jwt-auth.guard'; // <-- 4. DÙNG GUARD "CHUẨN"
+import { AuthMetaData } from 'src/decorator/auth.decorator';
+import { MediaDto } from 'src/models/viewmodel/media/MediaDto';
+import { IMediaService } from 'src/services/media/IMediaService';
+
+
+@Controller('media')
+@UseGuards(JwtAuthGuard) // <-- 7. Áp dụng Guard
+export class MediaController {
+  
+  // 8. SỬA CONSTRUCTOR ĐỂ DÙNG TOKEN
+  constructor(
+    @Inject(IMediaService)
+    private readonly mediaService: IMediaService,
+  ) {}
+  @Get()
+  async get(@Query() serachPara: SerachPara) {
+    return this.mediaService.finds(serachPara);
   }
-  @Get('getbymedia/:id')
-  async find(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.mediaService.findOne(id);
-    res.status(HttpStatus.OK).json(respo);
+
+  // 12. SỬA ROUTE, BỎ @Res
+  @Get(':id')
+  async find(@Param('id') id: string) {
+    return this.mediaService.findOne(id);
   }
-  @Post('addmedia')
-  async create(@Body() mediadto: Media, @Res() res: Response) {
-    const respo = await this.mediaService.create(mediadto);
-    res.status(HttpStatus.CREATED).json(respo);
+
+  // 13. SỬA ROUTE, BỎ @Res, DÙNG DTO, DÙNG HttpCode
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() createDto: MediaDto) {
+    return this.mediaService.create(createDto);
   }
-  @Delete('delmedia/:id')
-  async delete(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.mediaService.remove(id);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Delete('delfilename/:filename')
-  async deletefilename(
-    @Param('filename') filename: string,
-    @Res() res: Response,
+
+  // 14. SỬA ROUTE, BỎ @Res, DÙNG DTO, SỬA HÀM "update"
+  @Put(':id')
+  async update(
+    @Param('id') id: string, // <-- Lấy id
+    @Body() updateDto: MediaDto, // <-- Dùng DTO
   ) {
-    const condition: FilterQuery<Media> = {
-      namefile: { $regex: filename },
-    };
-    const respo = await this.mediaService.deletefile(condition);
-    res.status(HttpStatus.OK).json(respo);
+    // Gọi hàm update "chuẩn" (id, dto)
+    return this.mediaService.update(id, updateDto);
+  }
+
+  // 15. SỬA ROUTE, BỎ @Res, DÙNG HttpCode
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id') id: string) {
+    return this.mediaService.remove(id);
   }
 }

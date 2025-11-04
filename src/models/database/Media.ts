@@ -11,11 +11,17 @@ export class Media extends BaseEntity {
   @Prop()
   size: number;
   @Prop()
-  formatfile: string;
+  destination: string;
   @Prop()
-  namefile: string;
+  encoding: string;
   @Prop()
-  site: string;
+  fieldname: string;
+  @Prop()
+  filename: string;
+  @Prop()
+  mimetype: string;
+  @Prop()
+  originalname: string;
 }
 
 export const MediaSchema = SchemaFactory.createForClass(Media);

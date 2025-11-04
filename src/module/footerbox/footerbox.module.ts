@@ -4,17 +4,19 @@ import { FooterBoxController } from 'src/controllers/footerbox/footerbox.control
 import { FooterBoxSchema } from 'src/models/database/FooterBox';
 import { FooterBoxRepository } from 'src/repository/footerbox/FooterBoxRepository';
 import { FooterBoxService } from 'src/services/footerbox/footerbox.service';
-import { JwtModule } from '@nestjs/jwt';
+import { IFooterBoxService } from 'src/services/footerbox/Ifooterbox.service';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'FooterBox', schema: FooterBoxSchema }]),
-    JwtModule,
   ],
   controllers: [FooterBoxController],
   providers: [
-    FooterBoxService,
+    {
+      provide: IFooterBoxService, // <-- Token (Giá trị)
+      useClass: FooterBoxService,  // <-- Class (Thực thi)
+    },
     { provide: 'IfooterboxRepository', useClass: FooterBoxRepository },
   ],
-  exports: [FooterBoxService],
+  exports: [IFooterBoxService],
 })
 export class FooterBoxModule {}

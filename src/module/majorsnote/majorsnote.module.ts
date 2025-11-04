@@ -4,19 +4,22 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Module } from '@nestjs/common';
 import { MajorsNoteSchema } from 'src/models/database/MajorsNote';
 import { MajorsNoteController } from 'src/controllers/majorsnote/majorsnote.controller';
-import { JwtModule } from '@nestjs/jwt';
+import { IMajorsNoteService } from 'src/services/majorsnote/IMajorsNoteService';
+
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: 'MajorsNote', schema: MajorsNoteSchema },
     ]),
-    JwtModule,
   ],
   controllers: [MajorsNoteController],
   providers: [
-    MajorsNoteService,
+    {
+      provide: IMajorsNoteService, // <-- Token (Giá trị)
+      useClass: MajorsNoteService,  // <-- Class (Thực thi)
+    },
     { provide: 'IMajorsNoteRepository', useClass: MajorsNoteRepository },
   ],
-  exports: [MajorsNoteService],
+  exports: [IMajorsNoteService],
 })
 export class MajorsNoteModule {}

@@ -4,17 +4,19 @@ import { MenuSchema } from 'src/models/database/Menu';
 import { MenuController } from 'src/controllers/menu/menu.controller';
 import { MenuService } from 'src/services/menu/menu.service';
 import { MenuRepository } from 'src/repository/menu/menu.repository';
-import { JwtModule } from '@nestjs/jwt';
+import { IMenuService } from 'src/services/menu/IMenu.service';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Menu', schema: MenuSchema }]),
-    JwtModule,
   ],
   controllers: [MenuController],
   providers: [
-    MenuService,
+    {
+      provide: IMenuService, // <-- Token (Giá trị)
+      useClass: MenuService,  // <-- Class (Thực thi)
+    },
     { provide: 'IMenuRepository', useClass: MenuRepository },
   ],
-  exports: [MenuService],
+  exports: [IMenuService],
 })
-export class MenuModule {}
+export class MenuModule { }

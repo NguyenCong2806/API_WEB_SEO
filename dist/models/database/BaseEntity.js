@@ -20,7 +20,7 @@ __decorate([
     __metadata("design:type", mongoose_2.Types.ObjectId)
 ], BaseEntity.prototype, "_id", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ default: Date.now }),
     __metadata("design:type", Date)
 ], BaseEntity.prototype, "createddate", void 0);
 //# sourceMappingURL=BaseEntity.js.map

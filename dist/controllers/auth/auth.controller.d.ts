@@ -1,9 +1,10 @@
 import { userlogin } from 'src/models/viewmodel/auth/userlogin';
-import { AuthService } from './../../services/auth/auth.service';
-import { authvm } from 'src/models/viewmodel/auth/authvm';
+import ResultData from 'src/models/BaseModel/ResultData';
+import { IAuthService } from 'src/services/auth/IAuthService';
 export declare class AuthController {
-    private authService;
-    constructor(authService: AuthService);
-    signIn(signInDto: userlogin): Promise<authvm>;
-    logout(): void;
+    private readonly authService;
+    constructor(authService: IAuthService);
+    signIn(signInDto: userlogin): Promise<ResultData>;
+    refreshToken(userId: string, refreshToken: string): Promise<ResultData>;
+    logout(userId: string): Promise<ResultData>;
 }

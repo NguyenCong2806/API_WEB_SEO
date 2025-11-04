@@ -26,8 +26,8 @@ export class Content extends BaseEntity {
   site: string;
   @Prop()
   location: number;
-  @Prop({ type: SchemaTypes.ObjectId, ref: 'Contenttype' })
-  contenttypes: Types.ObjectId;
+  @Prop()
+  contenttypesId: string;
 }
 
 export const ContentSchema = SchemaFactory.createForClass(Content);

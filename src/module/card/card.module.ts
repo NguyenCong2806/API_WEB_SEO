@@ -4,18 +4,22 @@ import { CardSchema } from './../../models/database/Card';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CardController } from 'src/controllers/card/card.controller';
-import { JwtModule } from '@nestjs/jwt';
+import { ICardService } from 'src/services/card/ICardService';
+
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Card', schema: CardSchema }]),
-    JwtModule,
+
   ],
 
   controllers: [CardController],
   providers: [
-    CardService,
+    {
+      provide: ICardService, // <-- Token (Giá trị)
+      useClass: CardService,  // <-- Class (Thực thi)
+    },
     { provide: 'ICardRepository', useClass: CardRepository },
   ],
-  exports: [CardService],
+  exports: [ICardService],
 })
-export class CardModule {}
+export class CardModule { }

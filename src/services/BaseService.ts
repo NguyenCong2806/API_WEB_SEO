@@ -9,9 +9,7 @@ export abstract class BaseService<M extends BaseEntity>
   implements IBaseService<M>
 {
   constructor(private readonly repository: IBaseRepository<M>) {}
-  async deletefile(condition?: FilterQuery<M>): Promise<ResultData> {
-    return await this.repository.deletefile(condition);
-  }
+
   async findconditions(condition?: FilterQuery<M>[]): Promise<ResultData> {
     return await this.repository.findconditions(condition);
   }
@@ -27,11 +25,11 @@ export abstract class BaseService<M extends BaseEntity>
   async find(): Promise<ResultData> {
     return await this.repository.find();
   }
-  async create(item: M | any): Promise<ResultData> {
+  async create(item: M): Promise<ResultData> {
     return await this.repository.create(item);
   }
-  async update(item: Partial<M>): Promise<ResultData> {
-    return await this.repository.update(item._id, item);
+  async update(id: string,item: Partial<M>): Promise<ResultData> {
+    return await this.repository.update(id, item);
   }
   async remove(id: string): Promise<ResultData> {
     return await this.repository.delete(id);
