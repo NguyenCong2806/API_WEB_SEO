@@ -13,7 +13,8 @@ exports.AppController = void 0;
 const roles_decorator_1 = require("./../decorator/roles.decorator");
 const common_1 = require("@nestjs/common");
 const app_service_1 = require("../services/app/app.service");
-const auth_guard_1 = require("../Guard/auth.guard");
+const jwt_auth_guard_1 = require("../Guard/jwt-auth.guard");
+const role_guard_1 = require("../Guard/role.guard");
 let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
@@ -22,7 +23,7 @@ let AppController = class AppController {
 exports.AppController = AppController;
 exports.AppController = AppController = __decorate([
     (0, common_1.Controller)(),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, role_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)('admin', 'member'),
     __metadata("design:paramtypes", [app_service_1.AppService])
 ], AppController);

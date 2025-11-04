@@ -1,73 +1,77 @@
-import { Contact } from './../../models/database/Contact';
 import {
   Body,
   Controller,
   Delete,
   Get,
+  HttpCode, // <-- 1. THÊM HttpCode
   HttpStatus,
+  Inject, // <-- 2. THÊM Inject
   Param,
   Post,
   Put,
   Query,
-  Res,
   UseGuards,
+  // Res, // <-- 3. XÓA BỎ @Res
 } from '@nestjs/common';
-import { Response } from 'express';
-import Paginations from 'src/models/BaseModel/Paginations';
+// import { Response } from 'express'; // <-- 3. XÓA BỎ Response
+
 import SerachPara from 'src/models/BaseModel/SerachPara';
-import { ContactService } from 'src/services/Contact/Contact.service';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
-import { AuthGuard } from 'src/Guard/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/Guard/jwt-auth.guard'; // <-- 4. DÙNG GUARD "CHUẨN"
 import { AuthMetaData } from 'src/decorator/auth.decorator';
-//@UseGuards(AuthGuard)
+import { IContactService } from 'src/services/Contact/IContactService'; // <-- 5. DÙNG TOKEN
+import { ContactDto } from 'src/models/viewmodel/contact/ContactDto';
+
 @Controller('contact')
+@UseGuards(JwtAuthGuard) // <-- 7. Áp dụng Guard
 export class ContactController {
-  constructor(private readonly contactService: ContactService) {}
+  
+  // 8. SỬA CONSTRUCTOR ĐỂ DÙNG TOKEN
+  constructor(
+    @Inject(IContactService)
+    private readonly contactService: IContactService,
+  ) {}
 
-  @Get('getall')
-  async get(@Query() serachPara: SerachPara, @Res() res: Response) {
-    const pagination = new Paginations<Contact>();
-    pagination.pageindex = serachPara.pageindex;
-    pagination.pagesize = serachPara.pagesize;
-    if (serachPara.keyword != null) {
-      pagination.condition = { username: { $regex: serachPara.keyword } };
-    }
-    const respo = await this.contactService.finds(pagination);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Get('getalls')
-  async getalls(@Res() res: Response) {
-    const respo = await this.contactService.find();
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @AuthMetaData('skipAuthCheck')
-  @Get('getfind')
-  async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
-    const _datasite = { site: { $regex: parainfo.sitename } } as any;
-    const _dataloca = { location: parseInt(parainfo.location, 10) } as any;
-    const _datas = [_datasite, _dataloca];
-    const respo = await this.contactService.findconditions(_datas);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Get('getbycontact/:id')
-  async find(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.contactService.findOne(id);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Post('addcontact')
-  async create(@Body() Contactdto: Contact, @Res() res: Response) {
-    const respo = await this.contactService.create(Contactdto);
-    res.status(HttpStatus.CREATED).json(respo);
-  }
-  @Put('editcontact')
-  async update(@Body() Contactdto: Contact, @Res() res: Response) {
-    const respo = await this.contactService.update(Contactdto);
-    res.status(HttpStatus.OK).json(respo);
+  // 9. SỬA ROUTE, BỎ @Res, BỎ LOGIC
+  @Get()
+  async get(@Query() serachPara: SerachPara) {
+    // Service "thông minh" sẽ lo việc tạo query
+    return this.contactService.finds(serachPara);
   }
 
-  @Delete('delcontact/:id')
-  async delete(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.contactService.remove(id);
-    res.status(HttpStatus.OK).json(respo);
+  // 11. BỎ @Res
+  @Get('getalls') // (Giữ nguyên route này)
+  async getalls() {
+    return this.contactService.find();
+  }
+
+  // 12. SỬA ROUTE, BỎ @Res
+  @Get(':id')
+  async find(@Param('id') id: string) {
+    return this.contactService.findOne(id);
+  }
+
+  // 13. SỬA ROUTE, BỎ @Res, DÙNG DTO, DÙNG HttpCode
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() createDto: ContactDto) {
+    return this.contactService.create(createDto);
+  }
+
+  // 14. SỬA ROUTE, BỎ @Res, DÙNG DTO, SỬA HÀM "update"
+  @Put(':id')
+  async update(
+    @Param('id') id: string, // <-- Lấy id
+    @Body() updateDto: ContactDto, // <-- Dùng DTO
+  ) {
+    // Gọi hàm update "chuẩn" (id, dto)
+    return this.contactService.update(id, updateDto);
+  }
+
+  // 15. SỬA ROUTE, BỎ @Res, DÙNG HttpCode
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id') id: string) {
+    return this.contactService.remove(id);
   }
 }

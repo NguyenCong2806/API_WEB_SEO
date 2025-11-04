@@ -21,8 +21,7 @@ export class AccordionService
   implements IAccordionService
 {
   constructor(
-    // (Giả sử token của repo là 'IAccordionRepository' - sửa nếu tên khác)
-    @Inject('IAccordionRepository')
+    @Inject('IAccordionRespository')
     private readonly accordion_repository: IAccordionRespository,
   ) {
     super(accordion_repository);

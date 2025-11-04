@@ -24,7 +24,6 @@ const mongoose_1 = require("@nestjs/mongoose");
 const user_module_1 = require("./user.module");
 const logger_middleware_1 = require("../middlewares/logger.middleware");
 const auth_module_1 = require("./auth/auth.module");
-const jwt_1 = require("@nestjs/jwt");
 const serve_static_1 = require("@nestjs/serve-static");
 const path_1 = require("path");
 const throttler_1 = require("@nestjs/throttler");
@@ -59,7 +58,6 @@ exports.AppModule = AppModule = __decorate([
             mongoose_1.MongooseModule.forRoot(process.env.DATABASE_URL + process.env.DATABASE_NAME),
             auth_module_1.AuthModule,
             user_module_1.UsersModule,
-            jwt_1.JwtModule,
             file_module_1.FileModule,
             carousel_module_1.CarouselModule,
             about_module_1.AboutModule,

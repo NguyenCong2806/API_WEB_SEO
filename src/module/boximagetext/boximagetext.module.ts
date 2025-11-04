@@ -17,8 +17,7 @@ import { IBoximagetextService } from 'src/services/boximagetext/IBoximagetextSer
     {
       provide: IBoximagetextService,
       useClass: BoximagetextService,
-    },
-    ,
+    },    
     {
       provide: 'IBoximagetextRepository',
       useClass: BoximagetextRespository,

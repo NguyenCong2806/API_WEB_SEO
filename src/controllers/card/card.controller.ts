@@ -1,73 +1,75 @@
-import { Card } from './../../models/database/Card';
-import { CardService } from './../../services/card/card.service';
 import {
   Body,
   Controller,
   Delete,
   Get,
+  HttpCode, // <-- 1. THÊM HttpCode
   HttpStatus,
+  Inject, // <-- 2. THÊM Inject
   Param,
   Post,
   Put,
   Query,
-  Res,
   UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
-import Paginations from 'src/models/BaseModel/Paginations';
 import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
-import { AuthGuard } from 'src/Guard/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/Guard/jwt-auth.guard'; // <-- 4. DÙNG GUARD "CHUẨN"
 import { AuthMetaData } from 'src/decorator/auth.decorator';
-//@UseGuards(AuthGuard)
+import { ICardService } from 'src/services/card/ICardService'; // <-- 5. DÙNG TOKEN
+import { CardDto } from 'src/models/viewmodel/card/CardDto';
+
+
 @Controller('card')
+@UseGuards(JwtAuthGuard) // <-- 7. Áp dụng Guard
 export class CardController {
-  constructor(private readonly cardService: CardService) {}
+  
+  // 8. SỬA CONSTRUCTOR ĐỂ DÙNG TOKEN
+  constructor(
+    @Inject(ICardService)
+    private readonly cardService: ICardService,
+  ) {}
 
-  @Get('getall')
-  async get(@Query() serachPara: SerachPara, @Res() res: Response) {
-    const pagination = new Paginations<Card>();
-
-    pagination.pageindex = serachPara.pageindex;
-    pagination.pagesize = serachPara.pagesize;
-    if (serachPara.keyword != null) {
-      pagination.condition = { username: { $regex: serachPara.keyword } };
-    }
-    const respo = await this.cardService.finds(pagination);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @AuthMetaData('skipAuthCheck')
-  @Get('getfind')
-  async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
-    const _datasite = { site: { $regex: parainfo.sitename } } as any;
-    const _datas = [_datasite];
-    const respo = await this.cardService.findconditions(_datas);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Get('getalls')
-  async getalls(@Res() res: Response) {
-    const respo = await this.cardService.find();
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Get('getbycard/:id')
-  async find(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.cardService.findOne(id);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Post('addcard')
-  async create(@Body() carddto: Card, @Res() res: Response) {
-    const respo = await this.cardService.create(carddto);
-    res.status(HttpStatus.CREATED).json(respo);
-  }
-  @Put('editcard')
-  async update(@Body() carddto: Card, @Res() res: Response) {
-    const respo = await this.cardService.update(carddto);
-    res.status(HttpStatus.OK).json(respo);
+  // 9. SỬA ROUTE, BỎ @Res, BỎ LOGIC
+  @Get()
+  async get(@Query() serachPara: SerachPara) {
+    // Service "thông minh" sẽ lo việc tạo query
+    return this.cardService.finds(serachPara);
   }
 
-  @Delete('delcard/:id')
-  async delete(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.cardService.remove(id);
-    res.status(HttpStatus.OK).json(respo);
+  // 11. BỎ @Res
+  @Get('getalls') // (Giữ nguyên route này)
+  async getalls() {
+    return this.cardService.find();
+  }
+
+  // 12. SỬA ROUTE, BỎ @Res
+  @Get(':id')
+  async find(@Param('id') id: string) {
+    return this.cardService.findOne(id);
+  }
+
+  // 13. SỬA ROUTE, BỎ @Res, DÙNG DTO, DÙNG HttpCode
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() createDto: CardDto) {
+    return this.cardService.create(createDto);
+  }
+
+  // 14. SỬA ROUTE, BỎ @Res, DÙNG DTO, SỬA HÀM "update"
+  @Put(':id')
+  async update(
+    @Param('id') id: string, // <-- Lấy id
+    @Body() updateDto: CardDto, // <-- Dùng DTO
+  ) {
+    // Gọi hàm update "chuẩn" (id, dto)
+    return this.cardService.update(id, updateDto);
+  }
+
+  // 15. SỬA ROUTE, BỎ @Res, DÙNG HttpCode
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id') id: string) {
+    return this.cardService.remove(id);
   }
 }

@@ -5,9 +5,6 @@ class BaseService {
     constructor(repository) {
         this.repository = repository;
     }
-    async deletefile(condition) {
-        return await this.repository.deletefile(condition);
-    }
     async findconditions(condition) {
         return await this.repository.findconditions(condition);
     }
@@ -26,8 +23,8 @@ class BaseService {
     async create(item) {
         return await this.repository.create(item);
     }
-    async update(item) {
-        return await this.repository.update(item._id, item);
+    async update(id, item) {
+        return await this.repository.update(id, item);
     }
     async remove(id) {
         return await this.repository.delete(id);

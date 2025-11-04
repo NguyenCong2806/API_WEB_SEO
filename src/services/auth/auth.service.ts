@@ -3,6 +3,7 @@ import { authvm } from './../../models/viewmodel/auth/authvm';
 import { userlogin } from './../../models/viewmodel/auth/userlogin';
 import {
   BadRequestException,
+  ForbiddenException,
   Inject, // <-- 1. Import 'Inject'
   Injectable,
   NotImplementedException, // (Dùng cho các hàm chưa làm)
@@ -89,7 +90,67 @@ export class AuthService implements IAuthService {
    */
   async refreshToken(userId: string, rt: string): Promise<ResultData> {
     // Bạn sẽ code logic refresh token ở đây
-    throw new NotImplementedException('Chức năng chưa được triển khai');
+    // 1. Tìm user (để đảm bảo user còn tồn tại)
+    const userResult = await this.usersService.findOne(userId);
+    if (!userResult.status || !userResult.item) {
+      throw new ForbiddenException('User không còn tồn tại');
+    }
+
+    const user = userResult.item;
+
+    // 2. (Nâng cao/Bắt buộc): Xác thực Refresh Token
+    //    RefreshTokenStrategy đã "verify" chữ ký (signature)
+    //    Nhưng bạn CẦN kiểm tra xem token này có bị "thu hồi" (revoked)
+    //    hoặc có khớp với token đã lưu trong DB hay không.
+    //    (Giả sử bạn có lưu hashedRefreshToken trong 'user')
+    //
+    //    const rtMatches = await argon2.verify(user.hashedRefreshToken, rt);
+    //    if (!rtMatches) {
+    //      throw new ForbiddenException('Access Denied: Refresh token không hợp lệ');
+    //    }
+
+    // 3. TẠO TOKENS MỚI
+    // (Nếu 2 bước trên OK)
+    const payload = {
+      sub: user._id.toString(),
+      username: user.username,
+      role: user.role,
+    };
+
+    const newAccessToken = this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET,
+      expiresIn: process.env.JWT_EXPIRE,
+    });
+
+    // (Tùy chọn: Bạn có thể tạo cả Refresh Token mới - "Rotating Refresh Tokens")
+    // const newRefreshToken = this.jwtService.sign(payload, {
+    //   secret: process.env.JWT_SECRET_REFRESH,
+    //   expiresIn: process.env.JWT_EXPIRE_REFRESH,
+    // });
+
+    // (Và lưu newRefreshToken (đã hash) vào DB)
+
+    // 4. Đóng gói dữ liệu trả về
+    const authData = new authvm();
+    authData.accessToken = newAccessToken;
+    // authData.refreshToken = newRefreshToken; // (Nếu bạn tạo mới)
+    authData.refreshToken = rt; // (Nếu bạn dùng lại token cũ)
+
+    // (Gán các thông tin user khác)
+    authData.message = 'Cấp lại token thành công';
+    authData.role = user.role;
+    authData.status = true;
+    authData.statuscode = 200;
+    authData.userid = user._id.toString();
+    authData.username = user.username;
+
+    const res = new ResultData();
+    res.status = true;
+    res.message = authData.message;
+    res.statuscode = 200;
+    res.item = authData;
+
+    return res;
   }
 
   /**
@@ -97,7 +158,9 @@ export class AuthService implements IAuthService {
    * (Hàm này thường được dùng bởi LocalStrategy của Passport)
    */
   async validateUser(username: string, pass: string): Promise<any> {
-    const userResult = await this.usersService.findOneValue({ username: username });
+    const userResult = await this.usersService.findOneValue({
+      username: username,
+    });
 
     if (userResult.status && userResult.item) {
       const user = userResult.item;

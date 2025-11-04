@@ -1,15 +1,13 @@
-import { Response } from 'express';
-import { UserService } from 'src/services/user/user.service';
-import { UpdateTodoDto } from '../models/viewmodel/user/UpdateUserDto';
-import { CreateTodoDto } from '../models/viewmodel/user/CreateUserDto';
+import { CreateUserDto } from '../models/viewmodel/user/CreateUserDto';
 import SerachPara from 'src/models/BaseModel/SerachPara';
+import { IUserService } from 'src/services/user/IUserService';
+import { UpdateUserDto } from 'src/models/viewmodel/user/UpdateUserDto';
 export declare class UsersController {
     private readonly usersService;
-    constructor(usersService: UserService);
-    get(serachPara: SerachPara, res: Response): Promise<void>;
-    find(id: string, res: Response): Promise<void>;
-    create(createUserDto: CreateTodoDto, res: Response): Promise<void>;
-    update(updateTodoDto: UpdateTodoDto, res: Response): Promise<void>;
-    changpassword(updateTodoDto: UpdateTodoDto, res: Response): Promise<void>;
-    delete(id: string, res: Response): Promise<void>;
+    constructor(usersService: IUserService);
+    get(serachPara: SerachPara): Promise<import("../models/BaseModel/Results").default<import("../models/database/User").User>>;
+    find(id: string): Promise<import("../models/BaseModel/ResultData").default>;
+    create(createUserDto: CreateUserDto): Promise<import("../models/BaseModel/ResultData").default>;
+    update(id: string, updateTodoDto: UpdateUserDto): Promise<import("../models/BaseModel/ResultData").default>;
+    delete(id: string): Promise<import("../models/BaseModel/ResultData").default>;
 }

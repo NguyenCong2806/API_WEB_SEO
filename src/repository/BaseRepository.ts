@@ -5,7 +5,6 @@ import Paginations from 'src/models/BaseModel/Paginations';
 import Results from 'src/models/BaseModel/Results';
 import { FilterQuery, Model } from 'mongoose';
 import { message } from 'src/constants/message';
-import { httpstatus } from 'src/constants/httpStatus';
 
 export abstract class BaseRepository<T extends BaseEntity>
   implements IBaseRepository<T> {
@@ -17,12 +16,10 @@ export abstract class BaseRepository<T extends BaseEntity>
     try {
       _data.status = true;
       _data.message = message.Download_data_successfully;
-      _data.statuscode = httpstatus.Successful_responses;
       _data.item = await this._model.find({ $or: conditions });
     } catch (error: any) {
       _data.status = false;
       _data.message = error.message as string;
-      _data.statuscode = httpstatus.Server_errors;
       _data.item = false;
     }
     return _data;
@@ -32,12 +29,10 @@ export abstract class BaseRepository<T extends BaseEntity>
     try {
       _data.status = true;
       _data.message = message.Download_data_successfully;
-      _data.statuscode = httpstatus.Successful_responses;
       _data.item = await this._model.find(condition);
     } catch (error: any) {
       _data.status = false;
       _data.message = error.message as string;
-      _data.statuscode = httpstatus.Server_errors;
       _data.item = false;
     }
     return _data;
@@ -49,8 +44,6 @@ export abstract class BaseRepository<T extends BaseEntity>
       const docExists = await this._model.exists(condition);
 
       _data.status = true;
-      _data.statuscode = httpstatus.Successful_responses;
-
       if (docExists) {
         _data.message = message.Exist_Message;
         _data.item = true; // Tồn tại -> true
@@ -61,7 +54,6 @@ export abstract class BaseRepository<T extends BaseEntity>
     } catch (error: any) {
       _data.status = false;
       _data.message = error.message as string;
-      _data.statuscode = httpstatus.Server_errors;
       _data.item = false; // Mặc định là false khi có lỗi
     }
     return _data;
@@ -72,12 +64,10 @@ export abstract class BaseRepository<T extends BaseEntity>
       const num = await this._model.countDocuments(condition);
       _data.status = true;
       _data.message = message.Download_data_successfully;
-      _data.statuscode = httpstatus.Successful_responses;
       _data.item = num;
     } catch (error: any) {
       _data.status = false;
       _data.message = error.message as string;
-      _data.statuscode = httpstatus.Server_errors;
       _data.item = false;
     }
     return _data;
@@ -106,12 +96,10 @@ export abstract class BaseRepository<T extends BaseEntity>
     try {
       _data.status = true;
       _data.message = message.Download_data_successfully;
-      _data.statuscode = httpstatus.Successful_responses;
       _data.item = await this._model.find();
     } catch (error: any) {
       _data.status = false;
       _data.message = error.message as string;
-      _data.statuscode = httpstatus.Server_errors;
       _data.item = false;
     }
     return _data;
@@ -122,12 +110,10 @@ export abstract class BaseRepository<T extends BaseEntity>
     try {
       _data.status = true;
       _data.message = message.Download_data_successfully;
-      _data.statuscode = httpstatus.Successful_responses;
       _data.item = (await this._model.findById(id).exec()) as T;
     } catch (error: any) {
       _data.status = false;
       _data.message = error.message as string;
-      _data.statuscode = httpstatus.Server_errors;
       _data.item = false;
     }
     return _data;
@@ -137,12 +123,10 @@ export abstract class BaseRepository<T extends BaseEntity>
     try {
       _data.status = true;
       _data.message = message.Download_data_successfully;
-      _data.statuscode = httpstatus.Successful_responses;
       _data.item = (await this._model.findOne(condition)) as T;
     } catch (error: any) {
       _data.status = false;
       _data.message = error.message as string;
-      _data.statuscode = httpstatus.Server_errors;
       _data.item = false;
     }
     return _data;
@@ -153,12 +137,10 @@ export abstract class BaseRepository<T extends BaseEntity>
       await this._model.create(item);
       _data.status = true;
       _data.message = message.Add_Successful;
-      _data.statuscode = httpstatus.Successful_responses;
       _data.item = true;
     } catch (error: any) {
       _data.status = false;
       _data.message = error.message as string;
-      _data.statuscode = httpstatus.Server_errors;
       _data.item = false;
     }
     return _data;
@@ -169,12 +151,10 @@ export abstract class BaseRepository<T extends BaseEntity>
       const num = await this._model.countDocuments();
       _data.status = true;
       _data.message = message.Download_data_successfully;
-      _data.statuscode = httpstatus.Successful_responses;
       _data.item = num;
     } catch (error: any) {
       _data.status = false;
       _data.message = error.message as string;
-      _data.statuscode = httpstatus.Server_errors;
       _data.item = false;
     }
     return _data;
@@ -185,12 +165,10 @@ export abstract class BaseRepository<T extends BaseEntity>
       await this._model.findOneAndUpdate({ _id: id }, { $set: item });
       _data.status = true;
       _data.message = message.Edit_Successful;
-      _data.statuscode = httpstatus.Successful_responses;
       _data.item = true;
     } catch (error: any) {
       _data.status = false;
       _data.message = error.message as string;
-      _data.statuscode = httpstatus.Server_errors;
       _data.item = false;
     }
     return _data;
@@ -201,12 +179,10 @@ export abstract class BaseRepository<T extends BaseEntity>
       await this._model.findByIdAndDelete(id);
       _data.status = true;
       _data.message = message.Delete_Successful;
-      _data.statuscode = httpstatus.Successful_responses;
       _data.item = true;
     } catch (error: any) {
       _data.status = false;
       _data.message = error.message as string;
-      _data.statuscode = httpstatus.Server_errors;
       _data.item = false;
     }
     return _data;

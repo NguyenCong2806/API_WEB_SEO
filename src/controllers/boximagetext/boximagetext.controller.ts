@@ -1,73 +1,73 @@
-import { BoxImageText } from './../../models/database/BoxImageText';
 import {
   Body,
   Controller,
   Delete,
   Get,
+  HttpCode, // <-- 1. THÊM HttpCode
   HttpStatus,
+  Inject, // <-- 2. THÊM Inject
   Param,
   Post,
   Put,
   Query,
-  Res,
   UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
-import Paginations from 'src/models/BaseModel/Paginations';
 import SerachPara from 'src/models/BaseModel/SerachPara';
-import SiteParameter from 'src/models/BaseModel/SiteParameter';
-import { BoximagetextService } from 'src/services/boximagetext/boximagetext.service';
-import { AuthGuard } from 'src/Guard/jwt-auth.guard';
-import { AuthMetaData } from 'src/decorator/auth.decorator';
+import { JwtAuthGuard } from 'src/Guard/jwt-auth.guard'; // <-- 4. DÙNG GUARD "CHUẨN"
+import { IBoximagetextService } from 'src/services/boximagetext/IBoximagetextService'; // <-- 5. DÙNG TOKEN
+import { BoxImageTextDto } from 'src/models/viewmodel/boxImagetext/BoxImageTextDto';
+
+
 @Controller('boximagetext')
-@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard) // <-- 7. Áp dụng Guard
 export class BoxImageTextController {
-  constructor(private readonly boxImageTextService: BoximagetextService) {}
 
-  @Get('getall')
-  async get(@Query() serachPara: SerachPara, @Res() res: Response) {
-    const pagination = new Paginations<BoxImageText>();
+  // 8. SỬA CONSTRUCTOR ĐỂ DÙNG TOKEN
+  constructor(
+    @Inject(IBoximagetextService)
+    private readonly boxImageTextService: IBoximagetextService,
+  ) { }
 
-    pagination.pageindex = serachPara.pageindex;
-    pagination.pagesize = serachPara.pagesize;
-    if (serachPara.keyword != null) {
-      pagination.condition = { username: { $regex: serachPara.keyword } };
-    }
-    const respo = await this.boxImageTextService.finds(pagination);
-    res.status(HttpStatus.OK).json(respo);
+  // 9. SỬA ROUTE, BỎ @Res, BỎ LOGIC
+  @Get()
+  async get(@Query() serachPara: SerachPara) {
+    // Service "thông minh" sẽ lo việc tạo query
+    return this.boxImageTextService.finds(serachPara);
   }
-  @Get('getalls')
-  async getalls(@Res() res: Response) {
-    const respo = await this.boxImageTextService.find();
-    res.status(HttpStatus.OK).json(respo);
+
+  // 10. BỎ @Res
+  @Get('getalls') // (Giữ nguyên route này)
+  async getalls() {
+    return this.boxImageTextService.find();
   }
-  @Get('getbyboximagetext/:id')
-  async find(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.boxImageTextService.findOne(id);
-    res.status(HttpStatus.OK).json(respo);
+
+  // 12. SỬA ROUTE, BỎ @Res
+  @Get(':id')
+  async find(@Param('id') id: string) {
+    return this.boxImageTextService.findOne(id);
   }
-  @Post('addboximagetext')
-  async create(@Body() BoxImageTextdto: BoxImageText, @Res() res: Response) {
-    const respo = await this.boxImageTextService.create(BoxImageTextdto);
-    res.status(HttpStatus.CREATED).json(respo);
+
+  // 13. SỬA ROUTE, BỎ @Res, DÙNG DTO, DÙNG HttpCode
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() createDto: BoxImageTextDto) {
+    return this.boxImageTextService.create(createDto);
   }
-  @Put('editboximagetext')
-  async update(@Body() BoxImageTextdto: BoxImageText, @Res() res: Response) {
-    const respo = await this.boxImageTextService.update(BoxImageTextdto);
-    res.status(HttpStatus.OK).json(respo);
+
+  // 14. SỬA ROUTE, BỎ @Res, DÙNG DTO, SỬA HÀM "update"
+  @Put(':id')
+  async update(
+    @Param('id') id: string, // <-- Lấy id
+    @Body() updateDto: BoxImageTextDto, // <-- Dùng DTO
+  ) {
+    // Gọi hàm update "chuẩn" (id, dto)
+    return this.boxImageTextService.update(id, updateDto);
   }
-  @AuthMetaData('skipAuthCheck')
-  @Get('getfind')
-  async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
-    const _datasite = { site: { $regex: parainfo.sitename } } as any;
-    //const _dataloca = { location: parseInt(parainfo.location, 10) } as any;
-    const _datas = [_datasite];
-    const respo = await this.boxImageTextService.findconditions(_datas);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Delete('delboximagetext/:id')
-  async delete(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.boxImageTextService.remove(id);
-    res.status(HttpStatus.OK).json(respo);
+
+  // 15. SỬA ROUTE, BỎ @Res, DÙNG HttpCode
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id') id: string) {
+    return this.boxImageTextService.remove(id);
   }
 }

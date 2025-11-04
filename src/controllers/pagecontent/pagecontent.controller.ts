@@ -1,74 +1,69 @@
-import { PageContent } from './../../models/database/PageContent';
-import { PageContentService } from './../../services/pagecontent/Pagecontent.serice';
 import {
   Body,
   Controller,
   Delete,
   Get,
+  HttpCode, // <-- 1. THÊM HttpCode
   HttpStatus,
+  Inject, // <-- 2. THÊM Inject
   Param,
   Post,
   Put,
   Query,
-  Res,
   UseGuards,
+  // Res, // <-- 3. XÓA BỎ @Res
 } from '@nestjs/common';
-import { Response } from 'express';
-import Paginations from 'src/models/BaseModel/Paginations';
+// import { Response } from 'express'; // <-- 3. XÓA BỎ Response
+
 import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
-import { AuthGuard } from 'src/Guard/jwt-auth.guard';
-import { AuthMetaData } from 'src/decorator/auth.decorator';
-@UseGuards(AuthGuard)
+import { JwtAuthGuard } from 'src/Guard/jwt-auth.guard'; 
+import { MenuDto } from 'src/models/viewmodel/menu/menuDto';
+import { IPageContentservice } from 'src/services/pagecontent/IPagecontent.serice';
+import { PageContentDto } from 'src/models/viewmodel/pagecontent/PageContentDto';
+
+
 @Controller('pagecontent')
+@UseGuards(JwtAuthGuard) // <-- 7. Áp dụng Guard
 export class PageContentController {
-  constructor(private readonly pagecontentService: PageContentService) {}
-
-  @Get('getall')
-  async get(@Query() serachPara: SerachPara, @Res() res: Response) {
-    const pagination = new Paginations<PageContent>();
-
-    pagination.pageindex = serachPara.pageindex;
-    pagination.pagesize = serachPara.pagesize;
-    if (serachPara.keyword != null) {
-      pagination.condition = { username: { $regex: serachPara.keyword } };
-    }
-    const respo = await this.pagecontentService.finds(pagination);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @AuthMetaData('skipAuthCheck')
-  @Get('getfind')
-  async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
-    const _datasite = { site: { $regex: parainfo.sitename } } as any;
-    const _dataloca = { location: parseInt(parainfo.location, 10) } as any;
-    const _datas = [_datasite, _dataloca];
-    const respo = await this.pagecontentService.findconditions(_datas);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Get('getalls')
-  async gets(@Res() res: Response) {
-    const respo = await this.pagecontentService.find();
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Get('getbypagecontent/:id')
-  async find(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.pagecontentService.findOne(id);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Post('addpagecontent')
-  async create(@Body() dto: PageContent, @Res() res: Response) {
-    const respo = await this.pagecontentService.create(dto);
-    res.status(HttpStatus.CREATED).json(respo);
-  }
-  @Put('editpagecontent')
-  async update(@Body() dto: PageContent, @Res() res: Response) {
-    const respo = await this.pagecontentService.update(dto);
-    res.status(HttpStatus.OK).json(respo);
+  
+  // 8. SỬA CONSTRUCTOR ĐỂ DÙNG TOKEN
+  constructor(
+    @Inject(IPageContentservice)
+    private readonly pagecontentService: IPageContentservice,
+  ) {}
+  @Get()
+  async get(@Query() serachPara: SerachPara) {
+    return this.pagecontentService.finds(serachPara);
   }
 
-  @Delete('delpagecontent/:id')
-  async delete(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.pagecontentService.remove(id);
-    res.status(HttpStatus.OK).json(respo);
+  // 12. SỬA ROUTE, BỎ @Res
+  @Get(':id')
+  async find(@Param('id') id: string) {
+    return this.pagecontentService.findOne(id);
+  }
+
+  // 13. SỬA ROUTE, BỎ @Res, DÙNG DTO, DÙNG HttpCode
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() createDto: PageContentDto) {
+    return this.pagecontentService.create(createDto);
+  }
+
+  // 14. SỬA ROUTE, BỎ @Res, DÙNG DTO, SỬA HÀM "update"
+  @Put(':id')
+  async update(
+    @Param('id') id: string, // <-- Lấy id
+    @Body() updateDto: PageContentDto, // <-- Dùng DTO
+  ) {
+    // Gọi hàm update "chuẩn" (id, dto)
+    return this.pagecontentService.update(id, updateDto);
+  }
+
+  // 15. SỬA ROUTE, BỎ @Res, DÙNG HttpCode
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id') id: string) {
+    return this.pagecontentService.remove(id);
   }
 }

@@ -1,75 +1,69 @@
-import { MajorsNote } from './../../models/database/MajorsNote';
-
 import {
   Body,
   Controller,
   Delete,
   Get,
+  HttpCode, // <-- 1. THÊM HttpCode
   HttpStatus,
+  Inject, // <-- 2. THÊM Inject
   Param,
   Post,
   Put,
   Query,
-  Res,
   UseGuards,
+  // Res, // <-- 3. XÓA BỎ @Res
 } from '@nestjs/common';
-import { Response } from 'express';
-import Paginations from 'src/models/BaseModel/Paginations';
+// import { Response } from 'express'; // <-- 3. XÓA BỎ Response
+
 import SerachPara from 'src/models/BaseModel/SerachPara';
 import SiteParameter from 'src/models/BaseModel/SiteParameter';
-import { MajorsNoteService } from 'src/services/majorsnote/majorsnote.service';
-import { AuthGuard } from 'src/Guard/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/Guard/jwt-auth.guard'; // <-- 4. DÙNG GUARD "CHUẨN"
 import { AuthMetaData } from 'src/decorator/auth.decorator';
-@UseGuards(AuthGuard)
+import { LogoDto } from 'src/models/viewmodel/logo/LogoDto';
+import { IMajorsNoteService } from 'src/services/majorsnote/IMajorsNoteService';
+
+
 @Controller('majorsnote')
+@UseGuards(JwtAuthGuard) // <-- 7. Áp dụng Guard
 export class MajorsNoteController {
-  constructor(private readonly majorsnoteService: MajorsNoteService) {}
-
-  @Get('getall')
-  async get(@Query() serachPara: SerachPara, @Res() res: Response) {
-    const pagination = new Paginations<MajorsNote>();
-
-    pagination.pageindex = serachPara.pageindex;
-    pagination.pagesize = serachPara.pagesize;
-    if (serachPara.keyword != null) {
-      pagination.condition = { username: { $regex: serachPara.keyword } };
-    }
-    const respo = await this.majorsnoteService.finds(pagination);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @AuthMetaData('skipAuthCheck')
-  @Get('getfind')
-  async finds(@Query() parainfo: SiteParameter, @Res() res: Response) {
-    const _datasite = { site: { $regex: parainfo.sitename } } as any;
-    const _dataloca = { location: parseInt(parainfo.location, 10) } as any;
-    const _datas = [_datasite, _dataloca];
-    const respo = await this.majorsnoteService.findconditions(_datas);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Get('getalls')
-  async gets(@Res() res: Response) {
-    const respo = await this.majorsnoteService.find();
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Get('getbymajorsnote/:id')
-  async find(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.majorsnoteService.findOne(id);
-    res.status(HttpStatus.OK).json(respo);
-  }
-  @Post('addmajorsnote')
-  async create(@Body() dto: MajorsNote, @Res() res: Response) {
-    const respo = await this.majorsnoteService.create(dto);
-    res.status(HttpStatus.CREATED).json(respo);
-  }
-  @Put('editmajorsnote')
-  async update(@Body() dto: MajorsNote, @Res() res: Response) {
-    const respo = await this.majorsnoteService.update(dto);
-    res.status(HttpStatus.OK).json(respo);
+  
+  // 8. SỬA CONSTRUCTOR ĐỂ DÙNG TOKEN
+  constructor(
+    @Inject(IMajorsNoteService)
+    private readonly majorsnoteService: IMajorsNoteService,
+  ) {}
+  @Get()
+  async get(@Query() serachPara: SerachPara) {
+    return this.majorsnoteService.finds(serachPara);
   }
 
-  @Delete('delmajorsnote/:id')
-  async delete(@Param('id') id: string, @Res() res: Response) {
-    const respo = await this.majorsnoteService.remove(id);
-    res.status(HttpStatus.OK).json(respo);
+  // 12. SỬA ROUTE, BỎ @Res
+  @Get(':id')
+  async find(@Param('id') id: string) {
+    return this.majorsnoteService.findOne(id);
+  }
+
+  // 13. SỬA ROUTE, BỎ @Res, DÙNG DTO, DÙNG HttpCode
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() createDto: LogoDto) {
+    return this.majorsnoteService.create(createDto);
+  }
+
+  // 14. SỬA ROUTE, BỎ @Res, DÙNG DTO, SỬA HÀM "update"
+  @Put(':id')
+  async update(
+    @Param('id') id: string, // <-- Lấy id
+    @Body() updateDto: LogoDto, // <-- Dùng DTO
+  ) {
+    // Gọi hàm update "chuẩn" (id, dto)
+    return this.majorsnoteService.update(id, updateDto);
+  }
+
+  // 15. SỬA ROUTE, BỎ @Res, DÙNG HttpCode
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id') id: string) {
+    return this.majorsnoteService.remove(id);
   }
 }

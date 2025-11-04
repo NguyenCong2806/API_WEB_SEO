@@ -10,36 +10,39 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AllExceptionFilter = void 0;
 const common_1 = require("@nestjs/common");
 let AllExceptionFilter = AllExceptionFilter_1 = class AllExceptionFilter {
+    constructor() {
+        this.logger = new common_1.Logger(AllExceptionFilter_1.name);
+    }
     catch(exception, host) {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse();
         const request = ctx.getRequest();
-        this.handleMessage(exception);
-        AllExceptionFilter_1.handleResponse(request, response, exception);
-    }
-    handleMessage(exception) {
-        let message = 'Internal Server Error';
+        let statusCode;
+        let responseBody;
         if (exception instanceof common_1.HttpException) {
-            message = JSON.stringify(exception.getResponse());
-        }
-        else if (exception instanceof Error) {
-            message = exception.stack.toString();
-        }
-    }
-    static handleResponse(request, response, exception) {
-        let responseBody = { message: 'Internal server error' };
-        let statusCode = common_1.HttpStatus.INTERNAL_SERVER_ERROR;
-        if (exception instanceof common_1.HttpException) {
-            responseBody = exception.getResponse();
             statusCode = exception.getStatus();
-        }
-        else if (exception instanceof Error) {
+            const errorResponse = exception.getResponse();
             responseBody = {
                 statusCode: statusCode,
-                timestamp: new Date().toISOString(),
                 path: request.url,
-                message: exception.stack,
+                message: typeof errorResponse === 'string'
+                    ? errorResponse
+                    : errorResponse.message || 'Lỗi không xác định',
             };
+        }
+        else {
+            statusCode = common_1.HttpStatus.INTERNAL_SERVER_ERROR;
+            responseBody = {
+                statusCode: statusCode,
+                path: request.url,
+                message: 'Lỗi máy chủ nội bộ. Vui lòng thử lại sau.',
+            };
+        }
+        if (statusCode >= 500) {
+            this.logger.error(`[${request.method} ${request.url}] Lỗi 500:`, exception.stack);
+        }
+        else {
+            this.logger.warn(`[${request.method} ${request.url}] Lỗi ${statusCode}: ${responseBody.message}`);
         }
         response.status(statusCode).json(responseBody);
     }

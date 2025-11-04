@@ -1,3 +1,6 @@
-import { User } from '../../database/User';
-export declare class UpdateTodoDto extends User {
+export declare class UpdateUserDto {
+    username?: string;
+    email?: string;
+    role?: string;
+    password?: string;
 }

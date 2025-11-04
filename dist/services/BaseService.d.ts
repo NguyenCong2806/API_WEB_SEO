@@ -32,14 +32,13 @@ import { FilterQuery } from 'mongoose';
 export declare abstract class BaseService<M extends BaseEntity> implements IBaseService<M> {
     private readonly repository;
     constructor(repository: IBaseRepository<M>);
-    deletefile(condition?: FilterQuery<M>): Promise<ResultData>;
     findconditions(condition?: FilterQuery<M>[]): Promise<ResultData>;
     findcondition(condition?: FilterQuery<M>): Promise<ResultData>;
     checkkeyword(condition?: FilterQuery<M>): Promise<ResultData>;
     countcondition(condition?: FilterQuery<M>): Promise<ResultData>;
     find(): Promise<ResultData>;
-    create(item: M | any): Promise<ResultData>;
-    update(item: Partial<M>): Promise<ResultData>;
+    create(item: M): Promise<ResultData>;
+    update(id: string, item: Partial<M>): Promise<ResultData>;
     remove(id: string): Promise<ResultData>;
     finds(item: Paginations<M>): Promise<Results<M>>;
     findOne(id: string): Promise<ResultData>;

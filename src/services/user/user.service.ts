@@ -17,7 +17,7 @@ import Results from 'src/models/BaseModel/Results';
 import ResultData from 'src/models/BaseModel/ResultData';
 import SerachPara from 'src/models/BaseModel/SerachPara';
 import { CreateUserDto } from 'src/models/viewmodel/user/CreateUserDto';
-import { UpdateTodoDto } from 'src/models/viewmodel/user/UpdateUserDto';
+import { UpdateUserDto } from 'src/models/viewmodel/user/UpdateUserDto';
 
 @Injectable()
 export class UserService extends BaseService<User> implements IUserService {
@@ -42,7 +42,7 @@ export class UserService extends BaseService<User> implements IUserService {
     newUserModel.role = dto.role || 'user';
     return await super.create(newUserModel);
   }
-  async update(id: string, dto: UpdateTodoDto): Promise<ResultData> {
+  async update(id: string, dto: UpdateUserDto): Promise<ResultData> {
     const updateData = plainToInstance(User, dto);
     if (dto.password) {
       updateData.password = await argon2.hash(dto.password);

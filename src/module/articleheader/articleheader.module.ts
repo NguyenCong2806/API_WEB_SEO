@@ -3,8 +3,8 @@ import { ArticleHeaderRespository } from './../../repository/articleheader/Artic
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ArticleHeaderSchema } from 'src/models/database/ArticleHeader';
-import { IAdvertisementService } from 'src/services/advertisement/IAdvertisement.Service';
-import { AdvertisementService } from 'src/services/advertisement/Advertisement.Service';
+import { ArticleHeaderService } from 'src/services/articleheader/articleheader.service';
+import { IArticleHeaderService } from 'src/services/articleheader/IArticleHeaderService';
 
 
 @Module({
@@ -17,14 +17,14 @@ import { AdvertisementService } from 'src/services/advertisement/Advertisement.S
   controllers: [ArticleHeaderController],
   providers: [
     {
-      provide: IAdvertisementService,
-      useClass: AdvertisementService,
+      provide: IArticleHeaderService,
+      useClass: ArticleHeaderService,
     },
     {
       provide: 'IArticleHeaderRespository',
       useClass: ArticleHeaderRespository,
     },
   ],
-  exports: [IAdvertisementService],
+  exports: [IArticleHeaderService],
 })
 export class ArticleHeaderModule { }

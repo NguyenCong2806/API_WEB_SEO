@@ -1,16 +1,12 @@
-import { Carousel } from './../../models/database/Carousel';
-import { Response } from 'express';
 import SerachPara from 'src/models/BaseModel/SerachPara';
-import SiteParameter from 'src/models/BaseModel/SiteParameter';
-import { CarouselService } from 'src/services/carousel/carousel.service';
+import { ICarouselService } from 'src/services/carousel/ICarouselService';
+import { CarouselDto } from 'src/models/viewmodel/carousel/CarouselDto';
 export declare class CarouselController {
     private readonly carouselService;
-    constructor(carouselService: CarouselService);
-    get(serachPara: SerachPara, res: Response): Promise<void>;
-    finds(parainfo: SiteParameter, res: Response): Promise<void>;
-    gets(res: Response): Promise<void>;
-    find(id: string, res: Response): Promise<void>;
-    create(carouseldto: Carousel, res: Response): Promise<void>;
-    update(carouseldto: Carousel, res: Response): Promise<void>;
-    delete(id: string, res: Response): Promise<void>;
+    constructor(carouselService: ICarouselService);
+    get(serachPara: SerachPara): Promise<import("../../models/BaseModel/Results").default<import("../../models/database/Carousel").Carousel>>;
+    find(id: string): Promise<import("../../models/BaseModel/ResultData").default>;
+    create(createDto: CarouselDto): Promise<import("../../models/BaseModel/ResultData").default>;
+    update(id: string, updateDto: CarouselDto): Promise<import("../../models/BaseModel/ResultData").default>;
+    delete(id: string): Promise<import("../../models/BaseModel/ResultData").default>;
 }
