@@ -55,7 +55,11 @@ exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             config_1.ConfigModule.forRoot({ isGlobal: true }),
-            mongoose_1.MongooseModule.forRoot(process.env.DATABASE_URL + process.env.DATABASE_NAME),
+            mongoose_1.MongooseModule.forRoot(process.env.DATABASE_URL + process.env.DATABASE_NAME, {
+                authSource: 'admin',
+                user: process.env.DATABASE_USER,
+                pass: process.env.DATABASE_PASS,
+            }),
             auth_module_1.AuthModule,
             user_module_1.UsersModule,
             file_module_1.FileModule,

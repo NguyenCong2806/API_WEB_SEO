@@ -42,11 +42,8 @@ import { FooterBoxModule } from './footerbox/footerbox.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    // MongooseModule.forRoot(
-    //   process.env.DATABASE_URL + process.env.DATABASE_NAME,
-    // ),
     MongooseModule.forRoot(
-      process.env.DATABASE_HOST + process.env.DATABASE_NAME,
+      process.env.DATABASE_URL + process.env.DATABASE_NAME,
       {
         authSource: 'admin',
         user: process.env.DATABASE_USER,
