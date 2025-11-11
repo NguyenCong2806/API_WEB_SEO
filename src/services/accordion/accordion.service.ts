@@ -65,12 +65,12 @@ export class AccordionService
   async create(dto: AccordionDto): Promise<ResultData> {
     
     // 1. DÙNG AUTOMAPPER (plainToInstance) ĐỂ MAP DTO -> MODEL
-    const newModel = plainToInstance(Accordion, dto);
+    const newData = plainToInstance(Accordion, dto);
 
     // (Thêm logic nghiệp vụ khác nếu cần, ví dụ: kiểm tra trùng lặp)
 
     // 2. GỌI HÀM "NGÂY THƠ" CỦA LỚP CHA
-    return await super.create(newModel);
+    return await super.create(newData);
   }
 
   // ===== GHI ĐÈ HÀM "update" (Smart Logic) =====

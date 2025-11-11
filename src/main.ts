@@ -11,13 +11,16 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionFilter());
   app.use(helmet({ crossOriginResourcePolicy: false }));
   // Cấu hình CORS chi tiết hơn
-  if (process.env.NODE_ENV === 'production') {
-    app.enableCors({
-      origin: process.env.CORS_ORIGIN, // Đọc từ biến môi trường
-    });
-  } else {
-    app.enableCors(); // Cho phép tất cả ở môi trường dev
-  }
+  app.enableCors({
+    // Chỉ cho phép 2 domain này gọi API
+    origin: [
+      'http://localhost:5678',       // Frontend dev của bạn
+      // 'https://my-website.com',      // Frontend production
+      // 'https://admin.my-website.com' // Trang admin
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
   app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(
     new ValidationPipe({
@@ -27,7 +30,7 @@ async function bootstrap() {
       transformOptions: {
         enableImplicitConversion: true,
       },
-  }));
+    }));
   const port = parseInt(process.env.PORT, 10) || 3000;
   await app.listen(port);
 

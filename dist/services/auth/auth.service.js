@@ -26,16 +26,25 @@ let AuthService = class AuthService {
     }
     async signIn(data) {
         const res = new ResultData_1.default();
+        const authData = new authvm_1.authvm();
         const userResult = await this.usersService.findOneValue({
             username: data.username,
         });
         if (!userResult.status || !userResult.item) {
-            throw new common_1.BadRequestException('Tài khoản không tồn tại!');
+            res.status = true;
+            res.message = 'Tài khoản không tồn tại!';
+            res.statuscode = common_1.HttpStatus.BAD_REQUEST;
+            res.item = authData;
+            return res;
         }
         const user = userResult.item;
         const passwordMatches = await argon2.verify(user.password, data.password);
         if (!passwordMatches) {
-            throw new common_1.BadRequestException('Nhập sai mật khẩu!');
+            res.status = true;
+            res.message = 'Nhập sai mật khẩu!';
+            res.statuscode = common_1.HttpStatus.BAD_REQUEST;
+            res.item = authData;
+            return res;
         }
         const payload = {
             sub: user._id.toString(),
@@ -50,7 +59,6 @@ let AuthService = class AuthService {
             secret: process.env.JWT_SECRET_REFRESH,
             expiresIn: process.env.JWT_EXPIRE_REFRESH,
         });
-        const authData = new authvm_1.authvm();
         authData.message = 'Đăng nhập thành công';
         authData.role = user.role;
         authData.status = true;
