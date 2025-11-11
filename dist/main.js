@@ -15,10 +15,17 @@ async function bootstrap() {
     const logger = new common_1.Logger('Bootstrap');
     app.useGlobalFilters(new AllExceptionFilter_1.AllExceptionFilter());
     app.use((0, helmet_1.default)({ crossOriginResourcePolicy: false }));
+    const allowedOrigins = process.env.CORS_ORIGINS
+        ? process.env.CORS_ORIGINS.split(',')
+        : [];
+    if (allowedOrigins.length > 0) {
+        logger.log(`CORS enabled for origins: ${allowedOrigins.join(', ')}`);
+    }
+    else {
+        logger.warn(`CORS is not configured with specific origins.`);
+    }
     app.enableCors({
-        origin: [
-            'http://localhost:5678',
-        ],
+        origin: allowedOrigins,
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         credentials: true,
     });
