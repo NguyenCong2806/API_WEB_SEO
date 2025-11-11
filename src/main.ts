@@ -3,9 +3,14 @@ import { AppModule } from './module/app.module';
 import { AllExceptionFilter } from './Filter/AllExceptionFilter';
 import helmet from 'helmet';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { WinstonModule } from 'nest-winston';
+import { winstonConfig } from './config/winston.config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const winstonLogger = WinstonModule.createLogger(winstonConfig);
+  const app = await NestFactory.create(AppModule, {
+    logger: winstonLogger, 
+  });
   const logger = new Logger('Bootstrap');
 
   app.useGlobalFilters(new AllExceptionFilter());
