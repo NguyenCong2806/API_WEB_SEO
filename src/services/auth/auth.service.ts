@@ -4,6 +4,7 @@ import { userlogin } from './../../models/viewmodel/auth/userlogin';
 import {
   BadRequestException,
   ForbiddenException,
+  HttpStatus,
   Inject, // <-- 1. Import 'Inject'
   Injectable,
   NotImplementedException, // (Dùng cho các hàm chưa làm)
@@ -29,7 +30,7 @@ export class AuthService implements IAuthService {
   async signIn(data: userlogin): Promise<ResultData> {
     // 7. Hàm signIn bây giờ trả về ResultData
     const res = new ResultData();
-
+    const authData = new authvm();
     // 8. Lấy kết quả từ service (luôn là một ResultData)
     const userResult = await this.usersService.findOneValue({
       username: data.username,
@@ -37,7 +38,11 @@ export class AuthService implements IAuthService {
 
     // 9. Kiểm tra xem user có tồn tại không (dựa trên chuẩn ResultData)
     if (!userResult.status || !userResult.item) {
-      throw new BadRequestException('Tài khoản không tồn tại!');
+      res.status = true;
+      res.message = 'Tài khoản không tồn tại!';
+      res.statuscode = HttpStatus.BAD_REQUEST;
+      res.item = authData; // <-- Gán authData vào .item
+      return res;
     }
 
     // Lấy user từ .item
@@ -45,7 +50,11 @@ export class AuthService implements IAuthService {
 
     const passwordMatches = await argon2.verify(user.password, data.password);
     if (!passwordMatches) {
-      throw new BadRequestException('Nhập sai mật khẩu!');
+      res.status = true;
+      res.message = 'Nhập sai mật khẩu!';
+      res.statuscode = HttpStatus.BAD_REQUEST;
+      res.item = authData; // <-- Gán authData vào .item
+      return res;
     }
 
     const payload = {
@@ -65,7 +74,6 @@ export class AuthService implements IAuthService {
     });
 
     // 10. Đóng gói dữ liệu trả về (authvm) VÀO TRONG res.item
-    const authData = new authvm();
     authData.message = 'Đăng nhập thành công';
     authData.role = user.role;
     authData.status = true;

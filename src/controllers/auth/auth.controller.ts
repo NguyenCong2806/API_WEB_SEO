@@ -8,8 +8,10 @@ import {
   Inject,
   Post,
   UseGuards,
-  Req, // (Nếu không muốn dùng Decorator)
+  Req,
+  Res, // (Nếu không muốn dùng Decorator)
 } from '@nestjs/common';
+import { Response } from 'express';
 import ResultData from 'src/models/BaseModel/ResultData';
 import { IAuthService } from 'src/services/auth/IAuthService';
 import { JwtAuthGuard } from 'src/Guard/jwt-auth.guard';
@@ -20,7 +22,7 @@ import { GetCurrentUser } from 'src/decorator/get-current-user.decorator';
 export class AuthController {
   constructor(
     @Inject(IAuthService) private readonly authService: IAuthService,
-  ) {}
+  ) { }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
@@ -46,11 +48,26 @@ export class AuthController {
     return this.authService.refreshToken(userId, refreshToken);
   }
 
-  @Get('logout')
-  @UseGuards(JwtAuthGuard) // <-- Route này vẫn cần AccessToken
+  @Post('logout')
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  async logout(@GetCurrentUser('sub') userId: string) {
-    // (Bạn nên truyền userId xuống để service biết logout user nào)
+  async logout(
+    @GetCurrentUser('sub') userId: string,
+    @Res({ passthrough: true }) response: Response // <-- 3. Inject Response
+  ) {
+    // Gọi service nếu cần xử lý dưới DB (ví dụ xóa hashed token)
+    // await this.authService.logout(userId);
+
+    // 4. Xóa HttpOnly Cookie
+    // LƯU Ý: Các options (path, secure, sameSite) PHẢI KHỚP
+    // với lúc bạn set-cookie thì mới xóa được.
+    response.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: true, // Đặt true nếu chạy HTTPS (production) 
+      sameSite: 'strict',
+      path: '/',    // Phải khớp với path khi set cookie
+    });
+
     const res = new ResultData();
     res.status = true;
     res.message = 'Đăng xuất thành công';

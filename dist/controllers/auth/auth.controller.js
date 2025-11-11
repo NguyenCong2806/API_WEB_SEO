@@ -30,7 +30,13 @@ let AuthController = class AuthController {
     async refreshToken(userId, refreshToken) {
         return this.authService.refreshToken(userId, refreshToken);
     }
-    async logout(userId) {
+    async logout(userId, response) {
+        response.clearCookie('refreshToken', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            path: '/',
+        });
         const res = new ResultData_1.default();
         res.status = true;
         res.message = 'Đăng xuất thành công';
@@ -58,12 +64,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "refreshToken", null);
 __decorate([
-    (0, common_1.Get)('logout'),
+    (0, common_1.Post)('logout'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     __param(0, (0, get_current_user_decorator_1.GetCurrentUser)('sub')),
+    __param(1, (0, common_1.Res)({ passthrough: true })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "logout", null);
 exports.AuthController = AuthController = __decorate([

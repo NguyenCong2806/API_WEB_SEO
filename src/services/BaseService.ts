@@ -29,7 +29,7 @@ export abstract class BaseService<M extends BaseEntity>
     return await this.repository.create(item);
   }
   async update(id: string,item: Partial<M>): Promise<ResultData> {
-    return await this.repository.update(id, item);
+    return await this.repository.update(id, item as Partial<M>);
   }
   async remove(id: string): Promise<ResultData> {
     return await this.repository.delete(id);

@@ -37,10 +37,10 @@ export declare abstract class BaseRepository<T extends BaseEntity> implements IB
     countcondition(condition?: FilterQuery<T>): Promise<ResultData>;
     finds(item: Paginations<T>): Promise<Results<T>>;
     find(): Promise<ResultData>;
-    findOne(id: any): Promise<ResultData>;
+    findOne(id: string): Promise<ResultData>;
     findOneValue(condition?: FilterQuery<T>): Promise<ResultData>;
     create(item: T): Promise<ResultData>;
     count(): Promise<ResultData>;
-    update(id: any, item: Partial<T>): Promise<ResultData>;
-    delete(id: any): Promise<ResultData>;
+    update(id: string, item: Partial<T>): Promise<ResultData>;
+    delete(id: string): Promise<ResultData>;
 }

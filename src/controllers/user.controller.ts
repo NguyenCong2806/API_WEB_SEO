@@ -43,7 +43,7 @@ export class UsersController {
   @AuthMetaData('skipAuthCheck')
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createUserDto: CreateUserDto) { // (Đã sửa tên DTO)
+  async create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 

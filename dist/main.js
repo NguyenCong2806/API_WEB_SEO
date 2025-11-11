@@ -5,19 +5,23 @@ const app_module_1 = require("./module/app.module");
 const AllExceptionFilter_1 = require("./Filter/AllExceptionFilter");
 const helmet_1 = require("helmet");
 const common_1 = require("@nestjs/common");
+const nest_winston_1 = require("nest-winston");
+const winston_config_1 = require("./config/winston.config");
 async function bootstrap() {
-    const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    const winstonLogger = nest_winston_1.WinstonModule.createLogger(winston_config_1.winstonConfig);
+    const app = await core_1.NestFactory.create(app_module_1.AppModule, {
+        logger: winstonLogger,
+    });
     const logger = new common_1.Logger('Bootstrap');
     app.useGlobalFilters(new AllExceptionFilter_1.AllExceptionFilter());
     app.use((0, helmet_1.default)({ crossOriginResourcePolicy: false }));
-    if (process.env.NODE_ENV === 'production') {
-        app.enableCors({
-            origin: process.env.CORS_ORIGIN,
-        });
-    }
-    else {
-        app.enableCors();
-    }
+    app.enableCors({
+        origin: [
+            'http://localhost:5678',
+        ],
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+        credentials: true,
+    });
     app.setGlobalPrefix('api/v1');
     app.useGlobalPipes(new common_1.ValidationPipe({
         whitelist: true,
