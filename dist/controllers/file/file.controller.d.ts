@@ -1,4 +1,3 @@
-/// <reference types="multer" />
 import { IMediaService } from 'src/services/media/IMediaService';
 import SerachPara from 'src/models/BaseModel/SerachPara';
 export declare class UploadController {
