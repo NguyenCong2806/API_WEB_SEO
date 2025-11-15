@@ -1,5 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const buffer_1 = require("buffer");
+if (typeof global.SlowBuffer === 'undefined') {
+    global.SlowBuffer = buffer_1.Buffer;
+}
 const core_1 = require("@nestjs/core");
 const app_module_1 = require("./module/app.module");
 const AllExceptionFilter_1 = require("./Filter/AllExceptionFilter");

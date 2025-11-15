@@ -1,3 +1,8 @@
+import { Buffer } from 'buffer';
+
+if (typeof (global as any).SlowBuffer === 'undefined') {
+  (global as any).SlowBuffer = Buffer;
+}
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './module/app.module';
 import { AllExceptionFilter } from './Filter/AllExceptionFilter';
